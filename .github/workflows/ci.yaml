@@ -9,7 +9,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
+    name: py${{ matrix.python-version }}
 
     runs-on: ubuntu-latest
     strategy:
