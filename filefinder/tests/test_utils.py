@@ -1,4 +1,10 @@
-from filefinder.utils import _find_keys, atoi, natural_keys, product_dict
+from filefinder.utils import (
+    _find_keys,
+    atoi,
+    natural_keys,
+    product_dict,
+    update_dict_with_kwargs,
+)
 
 
 def test_find_keys():
@@ -36,4 +42,27 @@ def test_product_dict():
         {"a": 2, "b": 4, "c": 5},
     ]
 
+    assert result == expected
+
+
+def test_update_dict_with_kwargs():
+
+    result = update_dict_with_kwargs({"a": 1}, a=2)
+    expected = {"a": 2}
+    assert result == expected
+
+    result = update_dict_with_kwargs({"a": 1, "b": 2}, b=3, c=5)
+    expected = {"a": 1, "b": 3, "c": 5}
+    assert result == expected
+
+    result = update_dict_with_kwargs({"a": 1, "b": 2})
+    expected = {"a": 1, "b": 2}
+    assert result == expected
+
+    result = update_dict_with_kwargs(None, a=1, b=2)
+    expected = {"a": 1, "b": 2}
+    assert result == expected
+
+    result = update_dict_with_kwargs(a=1, b=2)
+    expected = {"a": 1, "b": 2}
     assert result == expected
