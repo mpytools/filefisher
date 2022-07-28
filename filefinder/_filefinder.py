@@ -74,7 +74,7 @@ class _Finder(_FinderBase):
 
         """
 
-        keys = update_keys_dict_with_kwargs(dictonary=keys, **keys_kwargs)
+        keys = update_keys_dict_with_kwargs(keys, **keys_kwargs)
 
         # wrap strings in list
         for key, value in keys.items():
