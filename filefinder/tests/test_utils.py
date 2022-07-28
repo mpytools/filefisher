@@ -62,7 +62,3 @@ def test_update_dict_with_kwargs():
     result = update_dict_with_kwargs(None, a=1, b=2)
     expected = {"a": 1, "b": 2}
     assert result == expected
-
-    result = update_dict_with_kwargs(a=1, b=2)
-    expected = {"a": 1, "b": 2}
-    assert result == expected
