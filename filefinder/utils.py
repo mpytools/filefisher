@@ -55,7 +55,7 @@ def product_dict(**kwargs):
         yield dict(zip(keys, instance))
 
 
-def update_keys_dict_with_kwargs(dictonary=None, **kwargs):
+def update_keys_dict_with_kwargs(keys=None, **keys_kwargs):
     """update a dictionary with keyword arguments. The kwargs take precedence
 
     Parameters
@@ -75,16 +75,16 @@ def update_keys_dict_with_kwargs(dictonary=None, **kwargs):
     {'a': 1, 'b': 3, 'c': 5}
     """
 
-    if dictonary is None:
-        dictonary = {}
+    if keys is None:
+        keys = {}
 
-    if not isinstance(dictonary, dict):
-        raise TypeError(f"'keys' must be a dict, got {type(dictonary)}")
+    if not isinstance(keys, dict):
+        raise TypeError(f"'keys' must be a dict, got {type(keys)}")
 
-    # TODO: use ``new_dictionary = dictonary | kwargs`` once we are py3.9+
+    # TODO: use new_keys = keys | keys_kwargs once we are py3.9+
 
     # update is in-place, we need a copy
-    new_dictionary = dictonary.copy()
-    new_dictionary.update(kwargs)
+    new_keys = keys.copy()
+    new_keys.update(keys_kwargs)
 
-    return new_dictionary
+    return new_keys
