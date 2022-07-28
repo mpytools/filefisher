@@ -1,3 +1,5 @@
+import pytest
+
 from filefinder.utils import (
     _find_keys,
     atoi,
@@ -62,3 +64,9 @@ def test_update_dict_with_kwargs():
     result = update_dict_with_kwargs(None, a=1, b=2)
     expected = {"a": 1, "b": 2}
     assert result == expected
+
+    with pytest.raises(TypeError, match="First argument must be a dict"):
+        update_dict_with_kwargs([])
+
+    with pytest.raises(TypeError, match="got 'str'"):
+        update_dict_with_kwargs("")

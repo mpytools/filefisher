@@ -79,7 +79,9 @@ def update_dict_with_kwargs(dictionary, **kwargs):
         dictionary = {}
 
     if not isinstance(dictionary, dict):
-        raise TypeError(f"'keys' must be a dict, got {type(dictionary)}")
+        raise TypeError(
+            f"First argument must be a dict or None, got '{type(dictionary).__name__}'"
+        )
 
     # TODO: use ``return dictionary | kwargs`` once we are py3.9+
 
