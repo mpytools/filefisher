@@ -203,8 +203,6 @@ def test_find_paths_simple(tmp_path, test_paths):
     path_pattern = tmp_path / "a1/{a}/"
     file_pattern = "file_pattern"
 
-    print(f"{tmp_path=}")
-
     ff = FileFinder(
         path_pattern=path_pattern, file_pattern=file_pattern, test_paths=test_paths
     )
