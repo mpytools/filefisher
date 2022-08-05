@@ -132,6 +132,10 @@ class _Finder(_FinderBase):
         out = list()
         for path in paths:
             parsed = self.parser.parse(path)
+
+            if parsed is None:
+                raise ValueError(path)
+
             out.append([path + self._suffix] + list(parsed.named.values()))
 
         keys = ["filename"] + list(parsed.named.keys())
