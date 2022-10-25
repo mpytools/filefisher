@@ -32,11 +32,10 @@ jobs:
         python -m pip install pytest pytest-cov
         python -m pip install -e .
     - name: Test with pytest
-      run: |
-        python -m pytest
-          --cov=filefinder
-          --cov-report=xml
-          --junitxml=test-results/${{ runner.os }}-${{ matrix.python-version }}.xml
+      run: python -m pytest
+        --cov=filefinder
+        --cov-report=xml
+        --junitxml=test-results/${{ runner.os }}-${{ matrix.python-version }}.xml
     - name: Upload code coverage to Codecov
       uses: codecov/codecov-action@v2
       with:
