@@ -5,7 +5,6 @@ from filefinder.cmip import create_ensnumber, ensure_unique_grid, parse_ens
 
 
 def test_parse_ens_cmip5():
-
     # pattern: "r{r}i{i}p{p}"
 
     df = pd.DataFrame.from_records(
@@ -39,7 +38,6 @@ def test_parse_ens_cmip5():
 
 
 def test_parse_ens_cmip6():
-
     # pattern: "r{r}i{i}p{p}f{f}"
 
     df = pd.DataFrame.from_records(
@@ -105,7 +103,6 @@ def test_create_ensnumber():
 
 
 def test_ensure_unique_grid():
-
     columns = ("model", "exp", "table", "varn", "ens", "grid")
 
     # VALID_GRIDS = ("gn", "gr", "gr1", "gm")

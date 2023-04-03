@@ -22,7 +22,6 @@ keys: {repr_keys}
 
 class _FinderBase:
     def __init__(self, pattern, suffix=""):
-
         self.pattern = pattern
         self.keys = _find_keys(pattern)
         self.parser = parse.compile(self.pattern)
@@ -47,7 +46,6 @@ class _FinderBase:
 
 class _Finder(_FinderBase):
     def _create_condition_dict(self, **kwargs):
-
         # add wildcard for all undefinded keys
         cond_dict = {key: "*" for key in self.keys}
         cond_dict.update(**kwargs)
@@ -85,7 +83,6 @@ class _Finder(_FinderBase):
         all_paths = list()
         all_patterns = list()
         for one_search_dict in product_dict(**keys):
-
             cond_dict = self._create_condition_dict(**one_search_dict)
             full_pattern = self.create_name(**cond_dict)
 
@@ -128,7 +125,6 @@ class _Finder(_FinderBase):
         return glob.glob(pattern)
 
     def _parse_paths(self, paths):
-
         out = list()
         for path in paths:
             parsed = self.parser.parse(path)
@@ -173,7 +169,6 @@ class FileFinder:
     def __init__(
         self, path_pattern: str, file_pattern: str, *, test_paths=None
     ) -> None:
-
         if os.path.sep in file_pattern:
             raise ValueError(
                 f"`file_pattern` cannot contain path separator ('{os.path.sep}')"
@@ -197,13 +192,11 @@ class FileFinder:
             self._set_test_paths(test_paths)
 
     def _set_test_paths(self, test_paths):
-
         if isinstance(test_paths, str):
             test_paths = [test_paths]
 
         # use fnmatch.filter to 'glob' pseudo-filenames
         def finder(pat):
-
             # make fnmatch work (almost) the same as glob
             if pat.endswith(os.path.sep):
                 paths_ = [os.path.dirname(s) + os.path.sep for s in test_paths]
@@ -391,7 +384,6 @@ class FileFinder:
         return self.full.find(keys, _allow_empty=_allow_empty, **keys_kwargs)
 
     def __repr__(self):
-
         repr_keys = "', '".join(sorted(self.full.keys))
         repr_keys = f"'{repr_keys}'"
 
@@ -408,16 +400,13 @@ class FileContainer:
     """docstring for FileContainer"""
 
     def __init__(self, df):
-
         self.df = df
 
     def __iter__(self):
-
         for index, element in self.df.iterrows():
             yield element["filename"], element.drop("filename").to_dict()
 
     def __getitem__(self, key):
-
         if isinstance(key, (int, np.integer)):
             # use iloc -> there can be more than one element with index 0
             element = self.df.iloc[key]
@@ -438,7 +427,6 @@ class FileContainer:
         return self.df[list(keys)].apply(lambda x: sep.join(x.map(str)), axis=1)
 
     def search(self, **query):
-
         ret = copy.copy(self)
         ret.df = self._get_subset(**query)
         return ret
@@ -462,6 +450,5 @@ class FileContainer:
         return self.df.__len__()
 
     def __repr__(self):
-
         msg = "<FileContainer>\n"
         return msg + self.df.__repr__()
