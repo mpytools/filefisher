@@ -7,7 +7,6 @@ import pandas as pd
 def _wrap_filecontainer(func):
     @functools.wraps(func)
     def _inner(*args, **kwargs):
-
         from filefinder import FileContainer
 
         obj, *args = args
@@ -29,7 +28,6 @@ def _wrap_filecontainer(func):
 
 @_wrap_filecontainer
 def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
-
     """filter a dataframe on for nonunique entries according to a priority list
 
     Parameters
@@ -67,7 +65,6 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
 
     # there are models with more than one grid
     if mi.has_duplicates:
-
         obj = _prioritize(obj, column, order, on_missing, mi)
 
         # double check
@@ -80,18 +77,15 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
 
 
 def _prioritize(df, key, order, on_missing, multiindex):
-
     out = list()
 
     # loop entries
     for idx in multiindex.unique():
-
         one_ = df.iloc[multiindex.get_locs(idx)]
 
         # select the first that is found
         for element in order:
             if element in one_[key].values:
-
                 selected = one_[one_[key] == element]
 
                 if len(selected) != 1:

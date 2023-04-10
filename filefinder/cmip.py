@@ -8,7 +8,6 @@ VALID_GRIDS = ("gn", "gr", "gr1", "gm")
 
 
 def parse_ens(filelist):
-
     ens = filelist.df["ens"]
 
     # for cmip6
@@ -34,7 +33,6 @@ def parse_ens(filelist):
 
 
 def create_ensnumber(filelist, keys=None):
-
     if keys is None:
         keys = ("exp", "table", "varn", "model")
 
@@ -44,7 +42,6 @@ def create_ensnumber(filelist, keys=None):
     df["ensnumber"] = -1
 
     for comb in combined.unique():
-
         sel = combined == comb
         numbers = list(range(sel.sum()))
         df.loc[sel, "ensnumber"] = numbers
