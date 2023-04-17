@@ -10,7 +10,6 @@ from . import assert_no_warnings
 
 
 def test_priority_filter_errors():
-
     df = pd.DataFrame.from_records(
         [("a", "d")],
         columns=("model", "res"),
@@ -24,7 +23,6 @@ def test_priority_filter_errors():
 
 
 def test_priority_filter_simple():
-
     df = pd.DataFrame.from_records(
         [("a", "d"), ("a", "h"), ("b", "h"), ("b", "d"), ("c", "d")],
         columns=("model", "res"),
@@ -40,7 +38,6 @@ def test_priority_filter_simple():
 
 
 def test_priority_filter_missing():
-
     df = pd.DataFrame.from_records(
         [("a", "d"), ("a", "h"), ("b", "d"), ("c", "z")], columns=("model", "res")
     )
@@ -68,7 +65,6 @@ def test_priority_filter_missing():
 
 
 def test_priority_filter_duplicates():
-
     df = pd.DataFrame.from_records([("a", "d"), ("a", "d")], columns=("model", "res"))
 
     with pytest.raises(ValueError, match="Found more than one"):
@@ -76,7 +72,6 @@ def test_priority_filter_duplicates():
 
 
 def test_priority_filter_multi():
-
     df = pd.DataFrame.from_records(
         [("a", 1, "d"), ("a", 2, "d"), ("a", 1, "h"), ("b", 1, "h")],
         columns=("model", "number", "res"),
@@ -93,7 +88,6 @@ def test_priority_filter_multi():
 
 
 def test_priority_filter_groupby():
-
     df = pd.DataFrame.from_records(
         [("a", 1, "d"), ("a", 2, "h"), ("b", 1, "h"), ("b", 2, "d")],
         columns=("model", "number", "res"),
