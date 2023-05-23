@@ -3,6 +3,7 @@
 
 ## v0.2.0 - unreleased
 
+- Allow passing format spec to the captured names to allow more precise name matching.
 - Add tests for the cmip functionality and fix issue with `filefinder.cmip.ensure_unique_grid`
   ([#35](https://github.com/mathause/filefinder/pull/35)).
 - Removed support for python 3.6.
