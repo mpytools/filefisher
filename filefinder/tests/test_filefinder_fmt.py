@@ -8,7 +8,6 @@ from filefinder import FileFinder
 
 @pytest.fixture(scope="module", params=["from_filesystem", "from_string"])
 def test_paths(request, tmp_path):
-
     if request.param == "from_filesystem":
         return None
 
@@ -19,7 +18,6 @@ def test_paths(request, tmp_path):
 
 
 def test_pattern_no_fmt_spec():
-
     path_pattern = "{path:l}_{pattern:2d}_{no_fmt}/"
     file_pattern = "{file}_{pattern:2d}"
 
@@ -35,7 +33,6 @@ def test_pattern_no_fmt_spec():
 
 
 def test_keys():
-
     file_pattern = "{a:l}_{b}_{c:d}"
     path_pattern = "{ab}_{c:d}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -51,7 +48,6 @@ def test_keys():
 
 
 def test_repr():
-
     path_pattern = "/{a:l}/{b}"
     file_pattern = "{b}_{c:d}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -68,7 +64,6 @@ def test_repr():
 
 
 def test_create_name():
-
     path_pattern = "{a:w}/{b}"
     file_pattern = "{b}_{c:l}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -84,7 +79,6 @@ def test_create_name():
 
 
 def test_create_name_dict():
-
     path_pattern = "{a:w}/{b}"
     file_pattern = "{b}_{c:d}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -100,7 +94,6 @@ def test_create_name_dict():
 
 
 def test_find_paths_fmt():
-
     test_paths = ["a1/a1_abc", "ab200/ab200_aicdef"]
 
     path_pattern = "{letters:l}{num:d}"

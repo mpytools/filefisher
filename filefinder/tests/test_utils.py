@@ -20,21 +20,18 @@ from filefinder.utils import (
     ),
 )
 def test_find_keys(string, expected):
-
     result = _find_keys(string)
 
     assert result == expected
 
 
 def test_atoi():
-
     assert atoi("10") == 10
     assert atoi("a10") == "a10"
     assert atoi("a") == "a"
 
 
 def test_natural_keys_sort():
-
     lst = ["a10", "a1"]
     expected = ["a1", "a10"]
     assert not lst == expected
@@ -44,7 +41,6 @@ def test_natural_keys_sort():
 
 
 def test_product_dict():
-
     result = list(product_dict(a=[1, 2], b=[3, 4], c=[5]))
     expected = [
         {"a": 1, "b": 3, "c": 5},
@@ -57,7 +53,6 @@ def test_product_dict():
 
 
 def test_update_dict_with_kwargs():
-
     result = update_dict_with_kwargs({"a": 1}, a=2)
     expected = {"a": 2}
     assert result == expected

@@ -35,7 +35,6 @@ def path(tmp_path):
 
 @pytest.fixture(scope="module", params=["from_filesystem", "from_string"])
 def test_paths(request, tmp_path):
-
     if request.param == "from_filesystem":
         return None
 
@@ -46,7 +45,6 @@ def test_paths(request, tmp_path):
 
 
 def test_pattern_property():
-
     path_pattern = "path_pattern/"
     file_pattern = "file_pattern"
 
@@ -64,7 +62,6 @@ def test_pattern_property():
 
 
 def test_file_pattern_no_sep():
-
     path_pattern = "path_pattern"
     file_pattern = "file" + os.path.sep + "pattern"
 
@@ -73,7 +70,6 @@ def test_file_pattern_no_sep():
 
 
 def test_pattern_sep_added():
-
     path_pattern = "path_pattern"
     file_pattern = "file_pattern"
 
@@ -82,7 +78,6 @@ def test_pattern_sep_added():
 
 
 def test_keys():
-
     file_pattern = "{a}_{b}_{c}"
     path_pattern = "{ab}_{c}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -98,7 +93,6 @@ def test_keys():
 
 
 def test_repr():
-
     path_pattern = "/{a}/{b}"
     file_pattern = "{b}_{c}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -129,7 +123,6 @@ def test_repr():
 
 
 def test_create_name():
-
     path_pattern = "{a}/{b}"
     file_pattern = "{b}_{c}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -145,7 +138,6 @@ def test_create_name():
 
 
 def test_create_name_dict():
-
     path_pattern = "{a}/{b}"
     file_pattern = "{b}_{c}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -161,7 +153,6 @@ def test_create_name_dict():
 
 
 def test_create_name_kwargs_priority():
-
     path_pattern = "{a}/{b}"
     file_pattern = "{b}_{c}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
@@ -177,7 +168,6 @@ def test_create_name_kwargs_priority():
 
 
 def test_find_path_none_found(tmp_path, test_paths):
-
     path_pattern = tmp_path / "{a}/foo/"
     file_pattern = "file_pattern"
 
@@ -199,7 +189,6 @@ def test_find_path_none_found(tmp_path, test_paths):
 
 
 def test_find_paths_simple(tmp_path, test_paths):
-
     path_pattern = tmp_path / "a1/{a}/"
     file_pattern = "file_pattern"
 
@@ -222,7 +211,6 @@ def test_find_paths_simple(tmp_path, test_paths):
 
 @pytest.mark.parametrize("find_kwargs", [{"b": "foo"}, {"a": "*", "b": "foo"}])
 def test_find_paths_wildcard(tmp_path, test_paths, find_kwargs):
-
     path_pattern = tmp_path / "{a}/{b}"
     file_pattern = "file_pattern"
 
@@ -252,7 +240,6 @@ def test_find_paths_wildcard(tmp_path, test_paths, find_kwargs):
     [{"a": ["a1", "a2"], "b": "foo"}, {"a": ["a1", "a2"], "b": ["foo", "bar"]}],
 )
 def test_find_paths_several(tmp_path, test_paths, find_kwargs):
-
     path_pattern = tmp_path / "{a}/{b}"
     file_pattern = "file_pattern"
 
@@ -282,7 +269,6 @@ def test_find_paths_several(tmp_path, test_paths, find_kwargs):
     [{"a": "a1"}, {"a": "a1", "b": "foo"}, {"a": "a1", "b": ["foo", "bar"]}],
 )
 def test_find_paths_one_of_several(tmp_path, test_paths, find_kwargs):
-
     path_pattern = tmp_path / "{a}/{b}"
     file_pattern = "file_pattern"
 
@@ -308,7 +294,6 @@ def test_find_paths_one_of_several(tmp_path, test_paths, find_kwargs):
 
 
 def test_find_file_none_found(tmp_path, test_paths):
-
     path_pattern = tmp_path / "{a}/foo/"
     file_pattern = "{file_pattern}"
 
@@ -333,7 +318,6 @@ def test_find_file_none_found(tmp_path, test_paths):
 
 
 def test_find_file_simple(tmp_path, test_paths):
-
     path_pattern = tmp_path / "a1/{a}/"
     file_pattern = "file"
 
@@ -356,7 +340,6 @@ def test_find_file_simple(tmp_path, test_paths):
 
 @pytest.mark.parametrize("find_kwargs", [{"b": "file"}, {"a": "*", "b": "file"}])
 def test_find_files_wildcard(tmp_path, test_paths, find_kwargs):
-
     path_pattern = tmp_path / "{a}/foo"
     file_pattern = "{b}"
 
@@ -389,7 +372,6 @@ def test_find_files_wildcard(tmp_path, test_paths, find_kwargs):
     [{"a": ["a1", "a2"], "b": "file"}, {"a": ["a1", "a2"], "b": ["file", "bar"]}],
 )
 def test_find_files_several(tmp_path, test_paths, find_kwargs):
-
     path_pattern = tmp_path / "{a}/foo"
     file_pattern = "{b}"
 
@@ -422,7 +404,6 @@ def test_find_files_several(tmp_path, test_paths, find_kwargs):
     [{"a": "a1"}, {"a": "a1", "b": "file"}, {"a": "a1", "b": ["file", "bar"]}],
 )
 def test_find_files_one_of_several(tmp_path, test_paths, find_kwargs):
-
     path_pattern = tmp_path / "{a}/foo"
     file_pattern = "{b}"
 
@@ -448,7 +429,6 @@ def test_find_files_one_of_several(tmp_path, test_paths, find_kwargs):
 
 
 def test_find_unparsable():
-
     ff = FileFinder("{cat}", "{cat}", test_paths=["a/b"])
 
     with pytest.raises(
