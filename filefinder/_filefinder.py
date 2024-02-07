@@ -61,7 +61,9 @@ class _Finder(_FinderBase):
 
         return cond_dict
 
-    def find(self, keys=None, *, on_parse_error = "raise", _allow_empty=False, **keys_kwargs):
+    def find(
+        self, keys=None, *, on_parse_error="raise", _allow_empty=False, **keys_kwargs
+    ):
         """find files in the file system using the file and path (folder) pattern
 
         Parameters
@@ -148,8 +150,8 @@ class _Finder(_FinderBase):
             if parsed is None:
                 if on_parse_error == "raise":
                     raise ValueError(
-                    f"Could not parse '{path}' with the pattern '{self.pattern}' - are"
-                    " there contradictory values?"
+                        f"Could not parse '{path}' with the pattern '{self.pattern}' - are"
+                        " there contradictory values?"
                     )
                 elif on_parse_error == "warn":
                     warnings.warn(
@@ -157,7 +159,7 @@ class _Finder(_FinderBase):
                         " there contradictory values?"
                     )
                 elif on_parse_error == "skip":
-                    pass                
+                    pass
             else:
                 out.append([path + self._suffix] + list(parsed.named.values()))
 
@@ -329,7 +331,9 @@ class FileFinder:
         # warnings.warn("'create_full_name' is deprecated, use 'full.name' instead")
         return self.full.create_name(keys, **keys_kwargs)
 
-    def find_paths(self, keys=None, *, on_parse_error = "raise", _allow_empty=False, **keys_kwargs):
+    def find_paths(
+        self, keys=None, *, on_parse_error="raise", _allow_empty=False, **keys_kwargs
+    ):
         """find files in the file system using the file and path (folder) pattern
 
 
@@ -371,9 +375,16 @@ class FileFinder:
         - "/root/foo/"
         - "/root/bar/"
         """
-        return self.path.find(keys, on_parse_error=on_parse_error, _allow_empty=_allow_empty, **keys_kwargs)
+        return self.path.find(
+            keys,
+            on_parse_error=on_parse_error,
+            _allow_empty=_allow_empty,
+            **keys_kwargs,
+        )
 
-    def find_files(self, keys=None, on_parse_error = "raise", _allow_empty=False, **keys_kwargs):
+    def find_files(
+        self, keys=None, on_parse_error="raise", _allow_empty=False, **keys_kwargs
+    ):
         """find files in the file system using the file pattern
 
         Parameters
@@ -417,7 +428,12 @@ class FileFinder:
         - "/root/bar/bar_file_2"
 
         """
-        return self.full.find(keys, on_parse_error=on_parse_error, _allow_empty=_allow_empty, **keys_kwargs)
+        return self.full.find(
+            keys,
+            on_parse_error=on_parse_error,
+            _allow_empty=_allow_empty,
+            **keys_kwargs,
+        )
 
     def __repr__(self):
 
