@@ -117,7 +117,7 @@ class _Finder(_FinderBase):
 
         if len_all != len_unique:
             duplicated = fc.df[fc.df.duplicated()]
-            msg = f"This query leads to non-unique metadata. Please adjust your query.\n Head of duplicates: \n {duplicated.head()}"
+            msg = f"This query leads to non-unique metadata. Please adjust your query.\nFirst five duplicates:\n{duplicated.head()}"
 
             raise ValueError(msg)
 
