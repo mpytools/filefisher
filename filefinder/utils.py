@@ -1,5 +1,6 @@
 import itertools
 import re
+import pandas as pd
 
 
 def _find_keys(string):
@@ -22,7 +23,8 @@ def _find_keys(string):
         r"\}"
     )
 
-    keys = set(re.findall(pattern, string))
+    keys = re.findall(pattern, string)
+    keys = tuple(pd.Series(keys).unique())
 
     return keys
 

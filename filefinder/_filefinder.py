@@ -163,7 +163,7 @@ class _Finder(_FinderBase):
             else:
                 out.append([path + self._suffix] + list(parsed.named.values()))
 
-        keys = ["filename"] + sorted(self.keys)
+        keys = ["filename"] + list(self.keys)
 
         df = pd.DataFrame(out, columns=keys)
         return df
