@@ -87,13 +87,13 @@ def test_keys():
     path_pattern = "{ab}_{c}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
 
-    expected = {"a", "b", "c", "ab"}
+    expected = tuple([ "ab", "c", "a", "b"])
     assert ff.keys == expected
 
-    expected = {"a", "b", "c"}
+    expected = tuple(["a", "b", "c"])
     assert ff.keys_file == expected
 
-    expected = {"ab", "c"}
+    expected = tuple(["ab", "c"])
     assert ff.keys_path == expected
 
 
@@ -482,8 +482,8 @@ def test_find_unparsable():
 
     with pytest.warns(match="Could not parse 'a/b' with the pattern '{cat}/{cat}'"):
         ff.find_files(on_parse_error="warn")
-
-    expected = pd.DataFrame(list(), columns=["filename"])
+    
+    expected = pd.DataFrame(list(), columns = ["filename", "cat"])
     result = ff.find_files(on_parse_error="skip")
     pd.testing.assert_frame_equal(result.df, expected)
 
