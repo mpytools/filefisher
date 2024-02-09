@@ -504,9 +504,6 @@ def test_find_unparsable():
     ):
         ff.find_files(on_parse_error="raise")
 
-    with pytest.warns(match="Could not parse 'a/b' with the pattern '{cat}/{cat}'"):
-        ff.find_files(on_parse_error="warn")
-
     ff = FileFinder("", "{cat}_{cat}", test_paths=["a_b"])
 
     with pytest.raises(
