@@ -13,6 +13,7 @@ from filefinder.utils import (
     "string, expected",
     (
         ["/path/{var_name}/{year}", ("var_name", "year")],
+        ["{b:d}{a:d}", ("b", "a")],
         ["{a:d}{b:d}", ("a", "b")],
         ["{a}{b:d}", ("a", "b")],
         ["{a:d}{b}", ("a", "b")],
