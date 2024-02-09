@@ -9,10 +9,10 @@ def _find_keys(string):
 
     find all keys enclosed by curly brackets
 
-    >>> _find_keys("/path/{var_name}/{year}") == tuple(["var_name", "year"])
+    >>> _find_keys("/path/{var_name}/{year}") == ("var_name", "year")
     True
 
-    >>> _find_keys("/path/{var_name}/{year:d}") == tuple(["var_name", "year"])
+    >>> _find_keys("/path/{var_name}/{year:d}") == ("var_name", "year")
     True
     """
 

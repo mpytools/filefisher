@@ -87,13 +87,13 @@ def test_keys():
     path_pattern = "{ab}_{c}"
     ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
 
-    expected = tuple(["ab", "c", "a", "b"])
+    expected = ("ab", "c", "a", "b")
     assert ff.keys == expected
 
-    expected = tuple(["a", "b", "c"])
+    expected = ("a", "b", "c")
     assert ff.keys_file == expected
 
-    expected = tuple(["ab", "c"])
+    expected = ("ab", "c")
     assert ff.keys_path == expected
 
 
