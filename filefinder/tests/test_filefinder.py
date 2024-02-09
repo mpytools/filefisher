@@ -480,10 +480,12 @@ def test_find_unparsable():
     ):
         ff.find_files()
 
-    with pytest.warns(match="Could not parse 'a/b' with the pattern '{cat}/{cat}'"):
-        ff.find_files(on_parse_error="warn")
-
     expected = pd.DataFrame(list(), columns=["filename", "cat"])
+
+    with pytest.warns(match="Could not parse 'a/b' with the pattern '{cat}/{cat}'"):
+        result = ff.find_files(on_parse_error="warn")
+    pd.testing.assert_frame_equal(result.df, expected)
+
     result = ff.find_files(on_parse_error="skip")
     pd.testing.assert_frame_equal(result.df, expected)
 
@@ -493,7 +495,8 @@ def test_find_unparsable():
     result = ff.find_files(on_parse_error="skip")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_files(on_parse_error="warn")
+    with pytest.warns(match="Could not parse 'a/b' with the pattern '{cat}/{cat}'"):
+        result = ff.find_files(on_parse_error="warn")
     pd.testing.assert_frame_equal(result.df, expected)
 
     with pytest.raises(
