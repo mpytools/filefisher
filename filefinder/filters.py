@@ -57,7 +57,7 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
         on_missing = "skip"
 
     if on_missing not in ["error", "warn", "skip"]:
-        raise ValueError("on_missing must be one of 'error', 'warn', 'skip'")
+        raise ValueError(f"Unknown value for 'on_missing': '{on_missing}'. Must be one of 'error', 'warn' or 'skip'.")
 
     if column not in obj.columns:
         raise ValueError(f"column ('{column}') must be available in df")
