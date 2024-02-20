@@ -2,7 +2,8 @@
 
 ## v0.3.0 - unreleased
 
-- Change on_missing option "ignore" to "skip". ([#79](https://github.com/mathause/filefinder/pull/79))
+- Change `on_missing` option in the `priority_filter` from "ignore" to "skip".
+  ([#79](https://github.com/mathause/filefinder/pull/79))
 - Allow passing scalar numbers to `find_paths` and `find_files` ([#58](https://github.com/mathause/filefinder/issues/58)).
 - Show duplicates for non-unique queries
     ([#73](https://github.com/mathause/filefinder/pull/73))
