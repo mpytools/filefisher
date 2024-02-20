@@ -51,7 +51,9 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
     """
 
     if on_missing == "ignore":
-        warnings.warn("on_missing value 'ignore' has been renamed to 'skip'", FutureWarning)
+        warnings.warn(
+            "on_missing value 'ignore' has been renamed to 'skip'", FutureWarning
+        )
         on_missing = "skip"
 
     if column not in obj.columns:
