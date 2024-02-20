@@ -59,10 +59,20 @@ def test_priority_filter_missing():
     ):
         result = priority_filter(df, "res", ["h", "d"], on_missing="warn")
 
+    with pytest.warns(
+        FutureWarning, match="on_missing value 'ignore' has been renamed to 'skip'"
+    ):
+        result = priority_filter(df, "res", ["h", "d"], on_missing="ignore")
+
+    with pytest.raises(
+        ValueError, match="on_missing must be one of 'error', 'warn', 'skip'"
+    ):
+        result = priority_filter(df, "res", ["h", "d"], on_missing="foo")
+
     pd.testing.assert_frame_equal(result, expected)
 
     with assert_no_warnings():
-        res = priority_filter(df, "res", ["h", "d"], on_missing="ignore")
+        res = priority_filter(df, "res", ["h", "d"], on_missing="skip")
 
     pd.testing.assert_frame_equal(res, expected)
 
