@@ -124,7 +124,7 @@ def _prioritize(df, key, order, on_missing, multiindex):
             elif on_missing == "skip":
                 pass
             else:
-                raise ValueError(f"on_missing must be one of 'error', 'warn', 'skip'")
+                raise ValueError("on_missing must be one of 'error', 'warn', 'skip'")
 
     df = pd.concat(out, axis=0)
     df = df.reset_index(drop=True)
