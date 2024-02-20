@@ -6,7 +6,7 @@
 - Show duplicates for non-unique queries
     ([#73](https://github.com/mathause/filefinder/pull/73))
 - Add options on how to handle parsing errors
-    ([75](https://github.com/mathause/filefinder/pull/75))
+    ([#75](https://github.com/mathause/filefinder/pull/75))
 
 ## v0.2.0 - 23.05.2023
 
