@@ -505,7 +505,8 @@ def test_find_unparsable():
         ff.find_files(on_parse_error="raise")
 
     with pytest.raises(
-        ValueError, match="Unknown value for 'on_parse_error': 'foo'. Must be one of 'raise', 'warn' or 'skip'."
+        ValueError,
+        match="Unknown value for 'on_parse_error': 'foo'. Must be one of 'raise', 'warn' or 'skip'.",
     ):
         ff.find_files(on_parse_error="foo")
 
