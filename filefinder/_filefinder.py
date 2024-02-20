@@ -160,6 +160,10 @@ class _Finder(_FinderBase):
                     )
                 elif on_parse_error == "skip":
                     pass
+                else:
+                    raise ValueError(
+                        f"Unknown value for 'on_parse_error': '{on_parse_error}'. Must be one of 'raise', 'warn' or 'skip'."
+                    )
             else:
                 out.append([path + self._suffix] + list(parsed.named.values()))
 
