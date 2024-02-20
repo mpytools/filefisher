@@ -39,7 +39,7 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
         The columt to apply the priority filter to.
     order : list of str
         The priority order.
-    on_missing : "error" | "warn" | "ignore"
+    on_missing : "error" | "warn" | "skip", default "error"
         Behaviour if none of the elements is found.
     groupy : None | list of str, default None
         Which columns to groupby over for the priority filter. Per default it uses all
@@ -49,6 +49,10 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
 
 
     """
+
+    if on_missing == "ignore":
+        warnings.warn("on_missing value 'ignore' has been renamed to 'skip'", FutureWarning)
+        on_missing = "skip"
 
     if column not in obj.columns:
         raise ValueError(f"column ('{column}') must be available in df")
@@ -115,7 +119,7 @@ def _prioritize(df, key, order, on_missing, multiindex):
                 warnings.warn(
                     f"Did not find any element from the priority list for\n{idx_string}"
                 )
-            elif on_missing == "ignore":
+            elif on_missing == "skip":
                 pass
 
     df = pd.concat(out, axis=0)
