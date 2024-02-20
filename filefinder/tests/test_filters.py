@@ -65,7 +65,8 @@ def test_priority_filter_missing():
         result = priority_filter(df, "res", ["h", "d"], on_missing="ignore")
 
     with pytest.raises(
-        ValueError, match="Unknown value for 'on_missing': 'foo'. Must be one of 'error', 'warn' or 'skip'."
+        ValueError,
+        match="Unknown value for 'on_missing': 'foo'. Must be one of 'error', 'warn' or 'skip'.",
     ):
         result = priority_filter(df, "res", ["h", "d"], on_missing="foo")
 
