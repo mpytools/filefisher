@@ -28,7 +28,7 @@ def _wrap_filecontainer(func):
 
 
 @_wrap_filecontainer
-def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
+def priority_filter(obj, column, order, *, on_missing="raise", groupby=None):
     """filter a dataframe on for nonunique entries according to a priority list
 
     Parameters
@@ -39,7 +39,7 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
         The columt to apply the priority filter to.
     order : list of str
         The priority order.
-    on_missing : "error" | "warn" | "skip", default "error"
+    on_missing : "raise" | "warn" | "ignore", default "raise"
         Behaviour if none of the elements is found.
     groupy : None | list of str, default None
         Which columns to groupby over for the priority filter. Per default it uses all
@@ -50,16 +50,14 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
 
     """
 
-    if on_missing == "ignore":
+    if on_missing == "error":
         warnings.warn(
-            "on_missing value 'ignore' has been renamed to 'skip'", FutureWarning
+            "on_missing value 'error' has been renamed to 'raise'", FutureWarning
         )
-        on_missing = "skip"
+        on_missing = "raise"
 
-    if on_missing not in ["error", "warn", "skip"]:
-        raise ValueError(
-            f"Unknown value for 'on_missing': '{on_missing}'. Must be one of 'error', 'warn' or 'skip'."
-        )
+    if on_missing not in ["raise", "warn", "ignore"]:
+        raise ValueError(f"Unknown value for 'on_missing': '{on_missing}'. Must be one of 'raise', 'warn' or 'ignore'.")
 
     if column not in obj.columns:
         raise ValueError(f"column ('{column}') must be available in df")
@@ -117,7 +115,7 @@ def _prioritize(df, key, order, on_missing, multiindex):
         else:
             idx_string = one_.to_string()
 
-            if on_missing == "error":
+            if on_missing == "raise":
                 raise ValueError(
                     f"Did not find any element from the priority list for\n{idx_string}"
                 )
@@ -125,7 +123,7 @@ def _prioritize(df, key, order, on_missing, multiindex):
                 warnings.warn(
                     f"Did not find any element from the priority list for\n{idx_string}"
                 )
-            elif on_missing == "skip":
+            elif on_missing == "ignore":
                 pass
 
     df = pd.concat(out, axis=0)
