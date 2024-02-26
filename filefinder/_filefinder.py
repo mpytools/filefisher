@@ -90,9 +90,9 @@ class _Finder(_FinderBase):
         keys = update_dict_with_kwargs(keys, **keys_kwargs)
 
         if on_parse_error not in ["raise", "warn", "ignore"]:
-         raise ValueError(
-             f"Unknown value for 'on_parse_error': '{on_parse_error}'. Must be one of 'raise', 'warn' or 'ignore'."
-         )
+            raise ValueError(
+                f"Unknown value for 'on_parse_error': '{on_parse_error}'. Must be one of 'raise', 'warn' or 'ignore'."
+            )
 
         # wrap strings and scalars in list
         for key, value in keys.items():
