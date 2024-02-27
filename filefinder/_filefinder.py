@@ -317,7 +317,6 @@ class FileFinder:
     def find_paths(self, keys=None, *, _allow_empty=False, **keys_kwargs):
         """find files in the file system using the file and path (folder) pattern
 
-
         Parameters
         ----------
         keys : dict

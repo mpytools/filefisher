@@ -41,12 +41,9 @@ def priority_filter(obj, column, order, *, on_missing="error", groupby=None):
         The priority order.
     on_missing : "error" | "warn" | "ignore"
         Behaviour if none of the elements is found.
-    groupy : None | list of str, default None
+    groupby : None | list of str, default None
         Which columns to groupby over for the priority filter. Per default it uses all
         columns except `column`.
-
-
-
 
     """
 
