@@ -82,9 +82,8 @@ def test_allow_empty_rename(method):
         with pytest.raises(ValueError):
             meth(_allow_empty=False)
 
-    with pytest.warns(FutureWarning):
-        with pytest.raises(ValueError):
-            meth(allow_empty=False)
+    with pytest.raises(ValueError):
+        meth(allow_empty=False)
 
 
 def test_pattern_property():
