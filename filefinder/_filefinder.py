@@ -144,7 +144,7 @@ class _Finder(_FinderBase):
 
         return fc
 
-    def find_one(self, keys=None, **keys_kwargs):
+    def find_single(self, keys=None, **keys_kwargs):
         """
         find exactly one file/ path in the file system using the file and path pattern
 
@@ -479,7 +479,7 @@ class FileFinder:
             **keys_kwargs,
         )
 
-    def find_one_path(self, keys=None, **keys_kwargs):
+    def find_single_path(self, keys=None, **keys_kwargs):
         """
         find exactly one path in the file system using the path pattern
 
@@ -500,9 +500,9 @@ class FileFinder:
         ValueError : if more or less than one path is found
         """
 
-        return self.path.find_one(keys, **keys_kwargs)
+        return self.path.find_single(keys, **keys_kwargs)
 
-    def find_one_file(self, keys=None, **keys_kwargs):
+    def find_single_file(self, keys=None, **keys_kwargs):
         """
         find exactly one file in the file system using the file and path pattern
 
@@ -523,7 +523,7 @@ class FileFinder:
         ValueError : if more or less than one file is found
         """
 
-        return self.full.find_one(keys, **keys_kwargs)
+        return self.full.find_single(keys, **keys_kwargs)
 
     def __repr__(self):
 

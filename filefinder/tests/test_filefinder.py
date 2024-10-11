@@ -317,7 +317,7 @@ def test_find_paths_one_of_several(tmp_path, test_paths, find_kwargs):
     pd.testing.assert_frame_equal(result.df, expected)
 
 
-def test_find_one_path(tmp_path, test_paths):
+def test_find_single_path(tmp_path, test_paths):
 
     path_pattern = tmp_path / "{a}/foo"
     file_pattern = "file_pattern"
@@ -328,19 +328,19 @@ def test_find_one_path(tmp_path, test_paths):
 
     # error if more than one is found
     with pytest.raises(ValueError, match=r"Found more than one \(2\) files/ paths"):
-        ff.find_one_path()
+        ff.find_single_path()
 
     # error if more than one is found
     with pytest.raises(ValueError, match="Found no files matching criteria"):
-        ff.find_one_path(a="a3")
+        ff.find_single_path(a="a3")
 
     expected = {"filename": {0: str(tmp_path / "a1/foo/*")}, "a": {0: "a1"}}
     expected = pd.DataFrame.from_dict(expected)
 
-    result = ff.find_one_path(a="a1")
+    result = ff.find_single_path(a="a1")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_one_path({"a": "a1"})
+    result = ff.find_single_path({"a": "a1"})
     pd.testing.assert_frame_equal(result.df, expected)
 
 
@@ -484,7 +484,7 @@ def test_find_files_one_of_several(tmp_path, test_paths, find_kwargs):
     pd.testing.assert_frame_equal(result.df, expected)
 
 
-def test_find_one_file(tmp_path, test_paths):
+def test_find_single_file(tmp_path, test_paths):
 
     path_pattern = tmp_path / "{a}/foo"
     file_pattern = "file"
@@ -495,19 +495,19 @@ def test_find_one_file(tmp_path, test_paths):
 
     # error if more than one is found
     with pytest.raises(ValueError, match=r"Found more than one \(2\) files/ paths"):
-        ff.find_one_file()
+        ff.find_single_file()
 
     # error if more than one is found
     with pytest.raises(ValueError, match="Found no files matching criteria"):
-        ff.find_one_file(a="a3")
+        ff.find_single_file(a="a3")
 
     expected = {"filename": {0: str(tmp_path / "a1/foo/file")}, "a": {0: "a1"}}
     expected = pd.DataFrame.from_dict(expected)
 
-    result = ff.find_one_file(a="a1")
+    result = ff.find_single_file(a="a1")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_one_file({"a": "a1"})
+    result = ff.find_single_file({"a": "a1"})
     pd.testing.assert_frame_equal(result.df, expected)
 
 
