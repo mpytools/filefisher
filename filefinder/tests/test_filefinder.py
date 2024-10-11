@@ -45,7 +45,9 @@ def test_paths(request, tmp_path):
     return paths
 
 
-@pytest.mark.parametrize("placeholder", ("keys", "on_parse_error", "_allow_empty"))
+@pytest.mark.parametrize(
+    "placeholder", ("keys", "on_parse_error", "allow_empty", "_allow_empty")
+)
 def test_pattern_invalid_placeholder(placeholder):
 
     with pytest.raises(ValueError, match=f"'{placeholder}' is not a valid placeholder"):
@@ -53,6 +55,36 @@ def test_pattern_invalid_placeholder(placeholder):
 
     with pytest.raises(ValueError, match=f"'{placeholder}' is not a valid placeholder"):
         FileFinder(f"{{{placeholder}}}", "")
+
+
+@pytest.mark.parametrize("method", ("find_files", "find_paths"))
+def test_allow_empty_rename(method):
+
+    path_pattern = "path_pattern/"
+    file_pattern = "file_pattern"
+    ff = FileFinder(path_pattern=path_pattern, file_pattern=file_pattern)
+    meth = getattr(ff, method)
+
+    with pytest.raises(TypeError, match="Cannot pass `allow_empty` and `_allow_empty`"):
+        meth(_allow_empty=True, allow_empty=True)
+
+    with pytest.warns(
+        FutureWarning, match="`_allow_empty` has been renamed to `allow_empty`"
+    ):
+        result = meth(_allow_empty=True)
+
+    assert result == []
+
+    with pytest.raises(ValueError):
+        meth()
+
+    with pytest.warns(FutureWarning):
+        with pytest.raises(ValueError):
+            meth(_allow_empty=False)
+
+    with pytest.warns(FutureWarning):
+        with pytest.raises(ValueError):
+            meth(allow_empty=False)
 
 
 def test_pattern_property():
@@ -201,10 +233,10 @@ def test_find_path_none_found(tmp_path, test_paths):
     with pytest.raises(ValueError, match="Found no files matching criteria"):
         ff.find_paths({"a": "foo"})
 
-    result = ff.find_paths(a="foo", _allow_empty=True)
+    result = ff.find_paths(a="foo", allow_empty=True)
     assert result == []
 
-    result = ff.find_paths({"a": "foo"}, _allow_empty=True)
+    result = ff.find_paths({"a": "foo"}, allow_empty=True)
     assert result == []
 
 
@@ -359,13 +391,13 @@ def test_find_file_none_found(tmp_path, test_paths):
     with pytest.raises(ValueError, match="Found no files matching criteria"):
         ff.find_files({"a": "XXX"})
 
-    result = ff.find_files(a="XXX", _allow_empty=True)
+    result = ff.find_files(a="XXX", allow_empty=True)
     assert result == []
 
-    result = ff.find_files({"a": "XXX"}, _allow_empty=True)
+    result = ff.find_files({"a": "XXX"}, allow_empty=True)
     assert result == []
 
-    result = ff.find_files({"a": "XXX"}, _allow_empty=True, a="XXX")
+    result = ff.find_files({"a": "XXX"}, allow_empty=True, a="XXX")
     assert result == []
 
 

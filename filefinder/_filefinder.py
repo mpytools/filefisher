@@ -21,7 +21,7 @@ file_pattern: '{file_pattern}'
 keys: {repr_keys}
 """
 
-_RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "_allow_empty"}
+_RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "allow_empty", "_allow_empty"}
 
 
 def _assert_valid_keys(keys):
@@ -29,6 +29,28 @@ def _assert_valid_keys(keys):
     for key in _RESERVED_PLACEHOLDERS:
         if key in keys:
             raise ValueError(f"'{key}' is not a valid placeholder")
+
+
+def _rename_allow_empty(allow_empty, **kwargs):
+
+    print(allow_empty)
+    print(kwargs)
+
+    _allow_empty = kwargs.get("_allow_empty")
+
+    if allow_empty is not None and _allow_empty is not None:
+        raise TypeError("Cannot pass `allow_empty` and `_allow_empty`")
+
+    if _allow_empty is not None:
+        warnings.warn(
+            "`_allow_empty` has been renamed to `allow_empty`",
+            FutureWarning,
+        )
+        allow_empty = _allow_empty
+    elif allow_empty is None:
+        allow_empty = False
+
+    return allow_empty
 
 
 class _FinderBase:
@@ -72,7 +94,7 @@ class _Finder(_FinderBase):
         return cond_dict
 
     def find(
-        self, keys=None, *, on_parse_error="raise", _allow_empty=False, **keys_kwargs
+        self, keys=None, *, on_parse_error="raise", allow_empty=None, **keys_kwargs
     ):
         """find files in the file system using the file and path (folder) pattern
 
@@ -84,7 +106,7 @@ class _Finder(_FinderBase):
         on_parse_error : "raise" | "warn" | "ignore", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "ignore" ignores the file.
-        _allow_empty : bool, default: False
+        allow_empty : bool, default: False
             If False (default) raises an error if no files are found. If True returns
             an empty list.
         **keys_kwargs : {key: indexer, ...}, optional
@@ -96,6 +118,7 @@ class _Finder(_FinderBase):
         Missing ``keys`` are replaced with ``"*"``.
 
         """
+        allow_empty = _rename_allow_empty(allow_empty, **keys_kwargs)
 
         keys = update_dict_with_kwargs(keys, **keys_kwargs)
 
@@ -124,7 +147,7 @@ class _Finder(_FinderBase):
 
         if all_paths:
             df = self._parse_paths(all_paths, on_parse_error=on_parse_error)
-        elif _allow_empty:
+        elif allow_empty:
             return []
         else:
             msg = "Found no files matching criteria. Tried the following pattern(s):"
@@ -165,7 +188,7 @@ class _Finder(_FinderBase):
         ValueError : if more or less than one file/ path is found
         """
 
-        fc = self.find(keys, on_parse_error="raise", _allow_empty=False, **keys_kwargs)
+        fc = self.find(keys, on_parse_error="raise", allow_empty=False, **keys_kwargs)
 
         if len(fc) > 1:
             n_found = len(fc)
@@ -377,7 +400,7 @@ class FileFinder:
         return self.full.create_name(keys, **keys_kwargs)
 
     def find_paths(
-        self, keys=None, *, on_parse_error="raise", _allow_empty=False, **keys_kwargs
+        self, keys=None, *, on_parse_error="raise", allow_empty=None, **keys_kwargs
     ):
         """find files in the file system using the file and path (folder) pattern
 
@@ -389,7 +412,7 @@ class FileFinder:
         on_parse_error : "raise" | "warn" | "skip", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "skip" ignores the file.
-        _allow_empty : bool, default: False
+        allow_empty : bool, default: False
             If False (default) raises an error if no files are found. If True returns
             an empty list.
         **keys_kwargs : {key: indexer, ...}, optional
@@ -422,12 +445,12 @@ class FileFinder:
         return self.path.find(
             keys,
             on_parse_error=on_parse_error,
-            _allow_empty=_allow_empty,
+            allow_empty=allow_empty,
             **keys_kwargs,
         )
 
     def find_files(
-        self, keys=None, *, on_parse_error="raise", _allow_empty=False, **keys_kwargs
+        self, keys=None, *, on_parse_error="raise", allow_empty=None, **keys_kwargs
     ):
         """find files in the file system using the file pattern
 
@@ -439,7 +462,7 @@ class FileFinder:
         on_parse_error : "raise" | "warn" | "skip", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "skip" ignores the file.
-        _allow_empty : bool, default: False
+        allow_empty : bool, default: False
             If False (default) raises an error if no files are found. If True returns
             an empty list.
         **keys_kwargs : {key: indexer, ...}, optional
@@ -475,7 +498,7 @@ class FileFinder:
         return self.full.find(
             keys,
             on_parse_error=on_parse_error,
-            _allow_empty=_allow_empty,
+            allow_empty=allow_empty,
             **keys_kwargs,
         )
 
