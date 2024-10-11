@@ -33,9 +33,6 @@ def _assert_valid_keys(keys):
 
 def _rename_allow_empty(allow_empty, **kwargs):
 
-    print(allow_empty)
-    print(kwargs)
-
     _allow_empty = kwargs.get("_allow_empty")
 
     if allow_empty is not None and _allow_empty is not None:
