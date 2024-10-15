@@ -557,7 +557,7 @@ class FileContainer:
     def __iter__(self):
 
         for index, element in self.df.iterrows():
-            yield element["filename"], element.drop("filename").to_dict()
+            yield index, element.to_dict()
 
     def __getitem__(self, key):
 

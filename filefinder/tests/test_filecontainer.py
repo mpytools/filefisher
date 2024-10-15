@@ -3,6 +3,7 @@ import pytest
 
 from filefinder import FileContainer
 
+
 @pytest.fixture
 def example_df():
 
@@ -35,11 +36,26 @@ def test_empty_filecontainer():
     assert fc.df is df
     assert len(fc) == 0
 
+    with pytest.raises(StopIteration):
+        next(iter(fc))
+
 
 def test_filecontainer(example_df, example_fc):
 
     assert example_fc.df is example_df
     assert len(example_fc) == 5
+
+
+def test_fc_iter(example_df, example_fc):
+
+    # test one manually
+    path, meta = next(iter(example_fc))
+    assert path == "file0"
+    assert meta == {"model": "a", "scen": "d", "res": "r"}
+
+    result = list(example_fc)
+    expected = list(zip(example_df.index.to_list(), example_df.to_dict("records")))
+    assert result == expected
 
 
 def test_filecontainer_search(example_df, example_fc):
