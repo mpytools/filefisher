@@ -30,8 +30,6 @@ def _deprecate_allow_empty(on_empty, **kwargs):
         raise TypeError("Cannot pass `_allow_empty` and `on_empty`")
 
 
-
-
 _RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "on_empty", "_allow_empty"}
 
 
