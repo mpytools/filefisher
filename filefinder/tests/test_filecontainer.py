@@ -3,9 +3,6 @@ import pytest
 
 from filefinder import FileContainer
 
-from . import assert_empty_filecontainer
-
-
 @pytest.fixture
 def example_df():
 
@@ -47,8 +44,8 @@ def test_filecontainer(example_df, example_fc):
 
 def test_filecontainer_search(example_df, example_fc):
 
-    assert_empty_filecontainer(example_fc.search())
-    assert_empty_filecontainer(example_fc.search(model="d"))
+    assert len(example_fc.search()) == 0
+    assert len(example_fc.search(model="d")) == 0
 
     result = example_fc.search(model="a")
     expected = example_df.iloc[[0, 1]]
