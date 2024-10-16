@@ -22,5 +22,8 @@ def assert_filecontainer_empty(fc, columns=None):
     assert fc.df.index.name == "path"
     assert len(fc) == 0, f"FileContainer not empty ({len(fc)=})"
 
+    if isinstance(columns, str):
+        columns = {columns}
+
     if columns:
         assert set(fc.df.columns) == set(columns)

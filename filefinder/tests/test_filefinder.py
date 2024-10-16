@@ -214,10 +214,10 @@ def test_find_path_none_found(tmp_path, test_paths):
         ff.find_paths({"a": "foo"})
 
     result = ff.find_paths(a="foo", _allow_empty=True)
-    assert_filecontainer_empty(result, columns=("a"))
+    assert_filecontainer_empty(result, columns="a")
 
     result = ff.find_paths({"a": "foo"}, _allow_empty=True)
-    assert_filecontainer_empty(result, columns=("a"))
+    assert_filecontainer_empty(result, columns="a")
 
 
 def test_find_paths_simple(tmp_path, test_paths):
