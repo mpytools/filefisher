@@ -14,7 +14,7 @@ def assert_no_warnings():
         assert len(record) == 0, "got unexpected warning(s)"
 
 
-def assert_empty_filecontainer(fc, columns=None):
+def assert_filecontainer_empty(fc, columns=None):
 
     assert isinstance(fc, FileContainer)
 
