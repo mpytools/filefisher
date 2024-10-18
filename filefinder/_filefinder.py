@@ -36,11 +36,8 @@ def _assert_unique(df):
     duplicates = df.duplicated()
 
     if duplicates.any():
-        duplicated = df[duplicates]
-        msg = (
-            "This query leads to non-unique metadata. Please adjust your query.\n"
-            f"First five duplicates:\n{duplicated.head()}"
-        )
+        duplicated = df[duplicates].head()
+        msg = f"Non-unique metadata detected.\nFirst five duplicates:\n{duplicated}"
 
         raise ValueError(msg)
 
