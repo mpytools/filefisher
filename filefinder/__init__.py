@@ -2,7 +2,7 @@
 
 from importlib.metadata import version as _get_version
 
-from filefinder import _filefinder, _utils, cmip
+from filefinder import _filefinder, _utils, cmip, filters
 from filefinder._filefinder import FileContainer, FileFinder
 
 __all__ = [
@@ -11,6 +11,7 @@ __all__ = [
     "cmip",
     "FileContainer",
     "FileFinder",
+    "filters",
 ]
 
 try:
