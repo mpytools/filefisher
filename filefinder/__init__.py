@@ -7,10 +7,10 @@ from filefinder._filefinder import FileContainer, FileFinder
 
 __all__ = [
     "_filefinder",
+    "_utils",
     "cmip",
     "FileContainer",
     "FileFinder",
-    "_utils",
 ]
 
 try:
