@@ -105,7 +105,7 @@ class _Finder(_FinderBase):
         return cond_dict
 
     def find(
-        self, keys=None, *, on_parse_error="raise", on_empty="error", **keys_kwargs
+        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
@@ -407,7 +407,7 @@ class FileFinder:
         return self.full.create_name(keys, **keys_kwargs)
 
     def find_paths(
-        self, keys=None, *, on_parse_error="raise", on_empty="error", **keys_kwargs
+        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
@@ -457,7 +457,7 @@ class FileFinder:
         )
 
     def find_files(
-        self, keys=None, *, on_parse_error="raise", on_empty="error", **keys_kwargs
+        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
     ) -> "FileContainer":
         """find files in the file system using the file pattern
 
