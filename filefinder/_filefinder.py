@@ -163,6 +163,7 @@ class _Finder(_FinderBase):
             if on_empty == "raise":
                 raise ValueError(msg)
             elif on_empty == "warn":
+                # TODO: correct stack level
                 warnings.warn(msg)
 
         # NOTE: also creates the correct (empty) df if no paths are found
