@@ -11,6 +11,16 @@
   longer be passed by position ([#99](https://github.com/mathause/filefinder/pull/99)).
 - `FileFinder` now raises an error if an invalid `"{placeholder}"` is used
    ([#99](https://github.com/mathause/filefinder/pull/99)).
+- An empty `FileContainer` is returned instead of an empty list when no files/ paths are
+  found ([#114](https://github.com/mathause/filefinder/pull/114))
+
+- Changes to `FileContainer`:
+
+  - Renamed the `"filename"` column to `"path"` and made it a `pd.Index`, thus removing
+    this column from the underlying `DataFrame` ([#113](https://github.com/mathause/filefinder/pull/113)).
+  - Deprecated `combine_by_key` ([#115](https://github.com/mathause/filefinder/pull/115)).
+  - Added the number of paths to the repr ([#116](https://github.com/mathause/filefinder/pull/116)).
+
 - Explicitly test on python 3.13 ([#103](https://github.com/mathause/filefinder/pull/103)).
 - Drop support for python 3.9 ([#102](https://github.com/mathause/filefinder/pull/102)).
 
