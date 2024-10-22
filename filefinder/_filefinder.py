@@ -27,12 +27,12 @@ keys: {repr_keys}
 """
 
 
-def _deprecate_allow_empty(on_empty, **kwargs):
+def _deprecate_allow_empty(**kwargs):
 
     _allow_empty = kwargs.get("_allow_empty")
 
-    if _allow_empty is not None and on_empty is not None:
-        raise TypeError("Cannot pass `_allow_empty` and `on_empty`")
+    if _allow_empty is not None:
+        raise TypeError("`_allow_empty` has been deprecated in favour of `on_empty`")
 
 
 _RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "on_empty", "_allow_empty"}
@@ -131,11 +131,18 @@ class _Finder(_FinderBase):
 
         """
 
+        _deprecate_allow_empty(**keys_kwargs)
+
         keys = update_dict_with_kwargs(keys, **keys_kwargs)
 
-        if on_parse_error not in ["raise", "warn", "ignore"]:
+        if on_parse_error not in ("raise", "warn", "ignore"):
             raise ValueError(
                 f"Unknown value for 'on_parse_error': '{on_parse_error}'. Must be one of 'raise', 'warn' or 'ignore'."
+            )
+
+        if on_empty not in ("raise", "warn", "allow"):
+            raise ValueError(
+                f"Unknown value for 'on_empty': '{on_empty}'. Must be one of 'raise', 'warn' or 'allow'."
             )
 
         # wrap strings and scalars in list
