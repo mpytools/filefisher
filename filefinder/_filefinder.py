@@ -97,7 +97,7 @@ class _Finder(_FinderBase):
 
     def find(
         self, keys=None, *, on_parse_error="raise", _allow_empty=False, **keys_kwargs
-    )  -> "FileContainer":
+    ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
         Parameters
@@ -256,7 +256,6 @@ class FileFinder:
 
         >>> ff = FileFinder(path_pattern, file_pattern)
         """
-
 
         if os.path.sep in file_pattern:
             raise ValueError(
@@ -556,7 +555,6 @@ class FileFinder:
 
 
 class FileContainer:
-
 
     def __init__(self, df: pd.DataFrame):
         """FileContainer gathers paths and their metadata
