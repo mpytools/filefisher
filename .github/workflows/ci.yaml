@@ -28,6 +28,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Fetch all history for all branches and tags.
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
@@ -48,6 +50,10 @@ jobs:
         python -m pip install pytest pytest-cov
         python -m pip install -r "ci/requirements/${{ env.PIP_ENV_FILE }}"
         python -m pip install -e .
+
+    - name: List dependencies
+      run: |
+        python -m pip list
 
     - name: Test with pytest
       run: python -m pytest
