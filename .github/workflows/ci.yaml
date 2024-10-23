@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    name: py${{ matrix.python-version }}
+    name: py${{ matrix.python-version }} ${{ matrix.env }}
 
     runs-on: ${{ matrix.os }}
     strategy:
