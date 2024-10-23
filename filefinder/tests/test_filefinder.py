@@ -262,6 +262,14 @@ def test_find_path_none_found(tmp_path, test_paths):
     with pytest.raises(ValueError, match="Found no files matching criteria"):
         ff.find_paths({"a": "foo"})
 
+    with pytest.warn(match="Found no files matching criteria"):
+        result = ff.find_paths(a="foo")
+    assert_filecontainer_empty(result, columns="a")
+
+    with pytest.warn(match="Found no files matching criteria"):
+        result = ff.find_paths({"a": "foo"})
+    assert_filecontainer_empty(result, columns="a")
+
     result = ff.find_paths(a="foo", on_empty="allow")
     assert_filecontainer_empty(result, columns="a")
 
@@ -429,6 +437,14 @@ def test_find_file_none_found(tmp_path, test_paths):
 
     with pytest.raises(ValueError, match="Found no files matching criteria"):
         ff.find_files({"a": "XXX"})
+
+    with pytest.warns(match="Found no files matching criteria"):
+        result = ff.find_files(a="XXX")
+    assert_filecontainer_empty(result, columns=("a", "file_pattern"))
+
+    with pytest.warns(match="Found no files matching criteria"):
+        result = ff.find_files({"a": "XXX"})
+    assert_filecontainer_empty(result, columns=("a", "file_pattern"))
 
     result = ff.find_files(a="XXX", on_empty="allow")
     assert_filecontainer_empty(result, columns=("a", "file_pattern"))
