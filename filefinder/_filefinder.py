@@ -5,6 +5,7 @@ import logging
 import os
 import re
 import warnings
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -608,7 +609,7 @@ class FileContainer:
             return ret
 
     @property
-    def meta(self) -> list[dict]:
+    def meta(self) -> list[dict[str, Any]]:
         return self.df.to_dict("records")
 
     @property
