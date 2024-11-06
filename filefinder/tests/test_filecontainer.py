@@ -1,6 +1,5 @@
 import pandas as pd
 import pytest
-from numpy import diff
 
 from filefinder import FileContainer
 

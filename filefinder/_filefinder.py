@@ -675,7 +675,7 @@ class FileContainer:
         if not isinstance(other, FileContainer):
             raise ValueError("Can only concatenate two FileContainers.")
 
-        if not self.df.columns is other.df.columns:
+        if self.df.columns is not other.df.columns:
             raise ValueError("FileContainers must have the same keys.")
 
         ret = copy.copy(self)
