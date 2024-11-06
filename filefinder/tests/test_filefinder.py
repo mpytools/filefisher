@@ -689,20 +689,3 @@ def test_find_unparsable():
         ValueError, match="Could not parse 'a_b/' with the pattern '{cat}_{cat}/'"
     ):
         ff.find_paths()
-
-
-def test_concat_FileContainers():
-    
-        ff = FileFinder("{a}", "{b}", test_paths=["a/b", "c/d"])
-        result1 = ff.find_files()
-        result2 = ff.find_files()
-
-        result = result1.concat(result2)
-        expected = pd.concat([result1.df, result2.df])
-
-        pd.testing.assert_frame_equal(result.df, expected)
-
-        ff1 = FileFinder("{a}", "{c}", test_paths=["a/b", "c/d"])
-        result_diffkeys = ff1.find_files()
-
-

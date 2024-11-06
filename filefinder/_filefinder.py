@@ -652,12 +652,30 @@ class FileContainer:
         return type(self)(df)
     
     def concat(self, other):
-        """concatenate two FileContainers"""
+        """concatenate two FileContainers
+        
+        Parameters
+        ----------
+        other : FileContainer
+            The other FileContainer to concatenate.
+            
+        Returns
+        -------
+        FileContainer
+            The concatenated FileContainer.
+
+        Raises
+        ------
+        ValueError
+            If the other object is not a FileContainer.
+        ValueError
+            If the two FileContainers do not have the same keys.
+        """
         
         if not isinstance(other, FileContainer):
             raise ValueError("Can only concatenate two FileContainers.")
         
-        if not all(self.df.columns == other.df.columns):
+        if not self.df.columns is other.df.columns:
             raise ValueError("FileContainers must have the same keys.")
         
         ret = copy.copy(self)

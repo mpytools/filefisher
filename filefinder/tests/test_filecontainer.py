@@ -1,3 +1,4 @@
+from numpy import diff
 import pandas as pd
 import pytest
 
@@ -138,6 +139,22 @@ def test_filecontainer_search(example_df, example_fc):
     result = example_fc.search(model=("a", "b"), scen="d")
     expected = example_df.iloc[[0, 3]]
     pd.testing.assert_frame_equal(result.df, expected)
+
+
+def test_filecontainer_concat(example_fc):
+        
+    with pytest.raises(ValueError, match="Can only concatenate two FileContainers."):
+        example_fc.concat("not a FileContainer")
+    
+    with pytest.raises(ValueError, match="FileContainers must have the same keys"):
+        different_keys_fc = FileContainer(example_fc.df.loc[:, ["model", "scen"]])
+        example_fc.concat(different_keys_fc)
+
+    result = example_fc.concat(example_fc)
+    expected = pd.concat([example_fc.df, example_fc.df])
+
+    pd.testing.assert_frame_equal(result.df, expected)
+    assert result.__len__() == 10
 
 
 def test_fc_combine_by_key_deprecated(example_fc):
