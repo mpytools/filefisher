@@ -1,5 +1,39 @@
 # Changelog
 
+## v0.4.0 - unreleased
+
+- Added two methods to find _exactly_ one file or path (and raise an error otherwise):
+  `FileFinder.find_single_file` and `FileFinder.find_single_path`
+  ([#101](https://github.com/mathause/filefinder/pull/101)).
+- Raise an error if an unnamed placeholder (e.g., `"{}"`) is passed
+  ([#110](https://github.com/mathause/filefinder/pull/110))
+- The `FileFinder.find_files` arguments `on_parse_error` and `_allow_empty` can no
+  longer be passed by position ([#99](https://github.com/mathause/filefinder/pull/99)).
+- `FileFinder` now raises an error if an invalid `"{placeholder}"` is used
+   ([#99](https://github.com/mathause/filefinder/pull/99)).
+- An empty `FileContainer` is returned instead of an empty list when no files/ paths are
+  found ([#114](https://github.com/mathause/filefinder/pull/114))
+
+- Define and test the minimum supported versions of the dependencies ([#125](https://github.com/mathause/filefinder/pull/125)).
+
+  | Package    | Old     | New    |
+  | ---------- | ------- | ------ |
+  | numpy      | undefined | 1.24 |
+  | pandas     | undefined |  2.0 |
+  | parse      | undefined | 1.19 |
+
+- Changes to `FileContainer`:
+
+  - Renamed the `"filename"` column to `"path"` and made it a `pd.Index`, thus removing
+    this column from the underlying `DataFrame` ([#113](https://github.com/mathause/filefinder/pull/113)).
+  - Added `meta` and `paths` properties to `FileContainer` which allow to iterate over them
+    ([#121](https://github.com/mathause/filefinder/pull/121)).
+  - Deprecated `combine_by_key` ([#115](https://github.com/mathause/filefinder/pull/115)).
+  - Added the number of paths to the repr ([#116](https://github.com/mathause/filefinder/pull/116)).
+
+- Explicitly test on python 3.13 ([#103](https://github.com/mathause/filefinder/pull/103)).
+- Drop support for python 3.9 ([#102](https://github.com/mathause/filefinder/pull/102)).
+
 ## v0.3.0 - 27.03.2024
 
 New release that adds handling for parsing errors. It also drops python 3.7 and 3.8 support.
