@@ -488,6 +488,19 @@ class FileContainer:
         ret = copy.copy(self)
         ret.df = self._get_subset(**query)
         return ret
+    
+    def concat(self, other):
+        """concatenate two FileContainers"""
+        
+        if not isinstance(other, FileContainer):
+            raise ValueError("Can only concatenate two FileContainers.")
+        
+        if not all(self.df.columns == other.df.columns):
+            raise ValueError("FileContainers must have the same keys.")
+        
+        ret = copy.copy(self)
+        ret.df = pd.concat([self.df, other.df])
+        return ret
 
     def _get_subset(self, **query):
         if not query:
