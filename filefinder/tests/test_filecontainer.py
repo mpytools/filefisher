@@ -1,6 +1,6 @@
-from numpy import diff
 import pandas as pd
 import pytest
+from numpy import diff
 
 from filefinder import FileContainer
 
@@ -142,10 +142,10 @@ def test_filecontainer_search(example_df, example_fc):
 
 
 def test_filecontainer_concat(example_fc):
-        
+
     with pytest.raises(ValueError, match="Can only concatenate two FileContainers."):
         example_fc.concat("not a FileContainer")
-    
+
     with pytest.raises(ValueError, match="FileContainers must have the same keys"):
         different_keys_fc = FileContainer(example_fc.df.loc[:, ["model", "scen"]])
         example_fc.concat(different_keys_fc)
