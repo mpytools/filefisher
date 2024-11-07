@@ -1,3 +1,4 @@
+from turtle import Turtle
 import pandas as pd
 import pytest
 
@@ -149,11 +150,17 @@ def test_filecontainer_concat(example_fc):
         different_keys_fc = FileContainer(example_fc.df.loc[:, ["model", "scen"]])
         example_fc.concat(different_keys_fc)
 
-    result = example_fc.concat(example_fc)
+    result = example_fc.concat(example_fc, drop_duplicates=False)
     expected = pd.concat([example_fc.df, example_fc.df])
 
     pd.testing.assert_frame_equal(result.df, expected)
     assert result.__len__() == 10
+
+    result = example_fc.concat(example_fc, drop_duplicates=True)
+    expected = example_fc
+
+    pd.testing.assert_frame_equal(result.df, expected.df)
+    assert result.__len__() == 5
 
 
 def test_fc_combine_by_key_deprecated(example_fc):
