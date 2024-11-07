@@ -651,13 +651,15 @@ class FileContainer:
         df = self._get_subset(**query)
         return type(self)(df)
 
-    def concat(self, other):
+    def concat(self, other, drop_duplicates=True):
         """concatenate two FileContainers
 
         Parameters
         ----------
         other : FileContainer
             The other FileContainer to concatenate.
+        drop_duplicates : bool, default True
+            Drop duplicates after concatenating.
 
         Returns
         -------
@@ -679,6 +681,10 @@ class FileContainer:
             raise ValueError("FileContainers must have the same keys.")
 
         df = pd.concat([self.df, other.df])
+
+        if drop_duplicates:
+            df = df.drop_duplicates()
+            
         return type(self)(df)
 
     def _get_subset(self, **query):
