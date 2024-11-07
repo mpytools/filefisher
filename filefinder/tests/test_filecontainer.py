@@ -1,4 +1,3 @@
-from turtle import Turtle
 import pandas as pd
 import pytest
 

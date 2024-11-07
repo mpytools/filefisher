@@ -684,7 +684,7 @@ class FileContainer:
 
         if drop_duplicates:
             df = df.drop_duplicates()
-            
+
         return type(self)(df)
 
     def _get_subset(self, **query):
