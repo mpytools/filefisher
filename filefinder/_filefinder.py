@@ -623,7 +623,7 @@ class FileContainer:
     def paths(self) -> list[str]:
         return self.df.index.to_list()
 
-    def items(self) -> Generator[tuple[str, dict[str, Any]]]:
+    def items(self) -> Generator[tuple[str, dict[str, Any]], None, None]:
         for index, element in self.df.iterrows():
             yield index, element.to_dict()
 
