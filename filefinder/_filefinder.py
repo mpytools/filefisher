@@ -678,9 +678,8 @@ class FileContainer:
         if self.df.columns is not other.df.columns:
             raise ValueError("FileContainers must have the same keys.")
 
-        ret = copy.copy(self)
-        ret.df = pd.concat([self.df, other.df])
-        return ret
+        df = pd.concat([self.df, other.df])
+        return type(self)(df)
 
     def _get_subset(self, **query):
         if not query:
