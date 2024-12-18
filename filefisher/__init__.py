@@ -1,5 +1,3 @@
-# flake8: noqa
-
 from importlib.metadata import version as _get_version
 
 from filefisher import _filefinder, _utils, cmip, filters
