@@ -13,10 +13,10 @@ __all__ = [
     "filters",
 ]
 
-
-warnings.warn(
+msg = (
     "`filefinder` has been renamed to `filefisher`! Please install filefisher to get "
     "future releases, and update your imports from `import filefinder` to "
-    "`import filefisher`",
-    FutureWarning,
+    "`import filefisher`"
 )
+
+warnings.warn(msg, FutureWarning, stacklevel=2)
