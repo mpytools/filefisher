@@ -48,3 +48,6 @@ nosetests.xml
 *.swp
 
 .ipynb_checkpoints
+
+# vscode folder
+.vscode
