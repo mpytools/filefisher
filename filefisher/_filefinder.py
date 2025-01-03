@@ -585,6 +585,14 @@ class FileContainer:
         ----------
         df : pd.DataFrame
             DataFrame with info about found paths from FileFinder.
+
+        Properties
+        ----------
+        meta : list[dict[str, Any]]
+            List of metadata dictionaries.
+        paths : list[str]
+            List of paths.
+            
         """
 
         self.df = df
