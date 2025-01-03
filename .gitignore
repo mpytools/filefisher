@@ -51,3 +51,6 @@ nosetests.xml
 
 # vscode folder
 .vscode
+
+# generated docs
+generated
