@@ -1,6 +1,6 @@
-# FileFinder
+# Filefisher
 
-_Find and parse file and folder names._
+_A handy tool to find and parse file and folder names._
 
 Define regular folder and file patterns with the intuitive python syntax:
 
