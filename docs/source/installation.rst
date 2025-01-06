@@ -18,7 +18,7 @@ filefisher can be installed conda/mamba:
 
     conda install -c conda-forge filefisher
 
-Alternately, filefisher can be installed with pip:
+or alternately, using pip:
 
 .. code-block:: bash
 
