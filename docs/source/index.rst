@@ -11,6 +11,13 @@
 .. toctree::
    :maxdepth: 2
    :hidden:
+   :caption: For users
+
+   installation
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
    :caption: API Reference
 
    api
