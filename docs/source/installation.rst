@@ -12,7 +12,7 @@ Required dependencies
 Instructions
 ------------
 
-filefisher can be installed conda/mamba:
+filefisher can be installed via conda/mamba:
 
 .. code-block:: bash
 
