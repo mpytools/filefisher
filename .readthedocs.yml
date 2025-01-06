@@ -8,7 +8,7 @@ build:
     pre_install:
         # see https://github.com/readthedocs/readthedocs.org/issues/8201
       - git update-index --assume-unchanged docs/source/conf.py
-      # editable install mesmer with docs extras
+      # editable install with docs extra
       - python -m pip install -e .[docs]
   tools:
     python: "3.12"
