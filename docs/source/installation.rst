@@ -12,8 +12,7 @@ Required dependencies
 Instructions
 ------------
 
-filefisher is a pure Python package, but its dependencies are not. As a result, we recommend
-installing filefisher using conda/mamba:
+filefisher can be installed conda/mamba:
 
 .. code-block:: bash
 
