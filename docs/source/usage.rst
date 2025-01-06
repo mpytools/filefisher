@@ -199,6 +199,7 @@ We can now apply a `priority_filter` as follows:
 Resulting in the desired selection:
 
 .. code-block::
+    
     <FileContainer: 3 paths>
                 model time_res
     path                         
