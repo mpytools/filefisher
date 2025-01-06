@@ -13,8 +13,9 @@
    :hidden:
    :caption: For Users
 
+   installation
    usage
-   
+
 .. toctree::
    :maxdepth: 2
    :hidden:
