@@ -45,23 +45,24 @@ following folder structure:
 
 .. code-block::
 
-    /root/a1/a1_file_1
-    /root/a1/a1_file_2
-    /root/b2/b2_file_1
-    /root/b2/b2_file_2
-    /root/c3/c3_file_1
-    /root/c3/c3_file_2
+    /root/a/a_file_1
+    /root/a/a_file_2
+    /root/b/b_file_1
+    /root/b/b_file_2
+    /root/c/c_file_1
+    /root/c/c_file_2
 
 You can then look for paths:
 
 .. code-block:: python
 
     ff.find_paths()
-    >>> <FileContainer>
-    >>>      filename category
-    >>> 0  /root/a1/*       a1
-    >>> 1  /root/b2/*       b2
-    >>> 2  /root/c3/*       c3
+    >>> <FileContainer: 3 paths>
+    >>>            category
+    >>>  path                 
+    >>>  /root/a/*        a
+    >>>  /root/b/*        b
+    >>>  /root/c/*        c
 
 The placeholders (here `{category}`) is parsed and returned. You can also look for
 files:
@@ -69,33 +70,36 @@ files:
 .. code-block:: python
 
     ff.find_files()
-    >>> <FileContainer>
-    >>>              filename category number
-    >>> 0  /root/a1/a1_file_1       a1      1
-    >>> 1  /root/a1/a1_file_2       a1      2
-    >>> 2  /root/b2/b2_file_1       b2      1
-    >>> 3  /root/b2/b2_file_2       b2      2
-    >>> 4  /root/c3/c3_file_1       c3      1
-    >>> 5  /root/c3/c3_file_2       c3      2
+    >>> <FileContainer: 6 paths>
+    >>>                         category number
+    >>>  path                                   
+    >>>  /root/a/a_file_1.rtf        a  1
+    >>>  /root/a/a_file_2.rtf        a  2
+    >>>  /root/b/b_file_1.rtf        b  1
+    >>>  /root/b/b_file_2.rtf        b  2
+    >>>  /root/c/c_file_1.rtf        c  1
+    >>>  /root/c/c_file_2.rtf        c  2
 
 It's also possible to filter for certain files:
 
 .. code-block:: python
 
-    ff.find_files(category=["a1", "b2"], number=1)
-    >>> <FileContainer>
-    >>>              filename category number
-    >>> 0  /root/a1/a1_file_1       a1      1
-    >>> 2  /root/b2/b2_file_1       b2      1
+    ff.find_files(category=["a", "b"], number=1)
+    >>> <FileContainer: 2 paths>
+    >>>                     category number
+    >>>  path                              
+    >>>  /root/a/a_file_1        a      1
+    >>>  /root/b/b_file_1        b      1
 
 Often we need to be sure to find **exactly one** file or path. This can be achieved using
 
 .. code-block:: python
 
-    ff.find_single_file(category="a1", number=1)
-    >>> <FileContainer>
-    >>>              filename category number
-    >>> 0  /root/a1/a1_file_1       a1      1
+    ff.find_single_file(category="a", number=1)
+    >>> <FileContainer: 1 paths>
+    >>>                     category number
+    >>>  path
+    >>>  /root/a/a_file_1       a      1
 
 
 If none or more than one file is found a `ValueError` is raised.
@@ -126,10 +130,11 @@ which results in the following:
 
 .. code-block:: python
 
-    <FileContainer>
-        filename letters  num beg   end
-    0        a1_abc       a    1  ab     c
-    1  ab200_abcdef      ab  200  ab  cdef
+    <FileContainer: 2 paths>
+                letters  num beg   end
+    path                               
+    a1_abc             a    1  ab     c
+    ab200_abcdef      ab  200  ab  cdef
 
 
 Note that `fc.df.num` has now a data type of `int` while without the `:d` it would be an
@@ -172,14 +177,15 @@ which yields:
 
 .. code-block::
 
-    <FileContainer>
-        filename model time_res
-    0  /root/a/a_1d     a       1d
-    1  /root/a/a_1h     a       1h
-    2  /root/a/a_6h     a       6h
-    3  /root/b/b_1h     b       1h
-    4  /root/b/b_6h     b       6h
-    5  /root/c/c_1h     c       1h
+    <FileContainer: 6 paths>
+                model time_res
+    path                         
+    /root/a/a_1d     a       1d
+    /root/a/a_1h     a       1h
+    /root/a/a_6h     a       6h
+    /root/b/b_1h     b       1h
+    /root/b/b_6h     b       6h
+    /root/c/c_1h     c       1h
 
 We can now apply a `priority_filter` as follows:
 
@@ -193,11 +199,12 @@ We can now apply a `priority_filter` as follows:
 Resulting in the desired selection:
 
 .. code-block::
-
-            filename model time_res
-    0  /root/a/a_1d     a       1d
-    1  /root/b/b_6h     b       6h
-    2  /root/c/c_1h     c       1h
+    <FileContainer: 3 paths>
+                model time_res
+    path                         
+    /root/a/a_1d     a       1d
+    /root/b/b_6h     b       6h
+    /root/c/c_1h     c       1h
 
 
 .. _API reference: API.html
