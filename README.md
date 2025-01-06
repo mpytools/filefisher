@@ -12,7 +12,7 @@ Learn more about filefisher in it's official documentation at https://filefisher
 
 ## Get in touch
 
-Dont hesitate to ask usage questions, report bugs, suggest features or view the source
+Don't hesitate to ask usage questions, report bugs, suggest features or view the source
 code on GitHub under [mpytools/filefisher](https://github.com/mpytools/filefisher).
 
 ## License
