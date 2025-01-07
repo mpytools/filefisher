@@ -534,7 +534,8 @@ class FileFinder:
 
         Raises
         ------
-        ValueError : if more or less than one path is found
+        ValueError
+            if more or less than one path is found.
         """
 
         return self.path.find_single(keys, **keys_kwargs)
@@ -557,7 +558,8 @@ class FileFinder:
 
         Raises
         ------
-        ValueError : if more or less than one file is found
+        ValueError
+            if more or less than one file is found.
         """
 
         return self.full.find_single(keys, **keys_kwargs)
@@ -585,14 +587,6 @@ class FileContainer:
         ----------
         df : pd.DataFrame
             DataFrame with info about found paths from FileFinder.
-
-        Properties
-        ----------
-        meta : list[dict[str, Any]]
-            List of metadata dictionaries.
-        paths : list[str]
-            List of paths.
-            
         """
 
         self.df = df
@@ -623,17 +617,35 @@ class FileContainer:
 
     @property
     def meta(self) -> list[dict[str, Any]]:
+        """Return metadata as list of dictionaries"""
         return self.df.to_dict("records")
 
     @property
     def paths(self) -> list[str]:
+        """Return paths as list"""
         return self.df.index.to_list()
 
     def items(self) -> Generator[tuple[str, dict[str, Any]], None, None]:
+        """Return a generator of (path, metadata) tuples"""
         for index, element in self.df.iterrows():
             yield index, element.to_dict()
 
     def combine_by_key(self, keys=None, sep="."):
+        """combine columns
+
+        Parameters
+        ----------
+        keys : list[str], optional
+            List of keys to combine. If None, all keys are combined.
+        sep : str, default "."
+            Separator between the keys.
+
+        Returns
+        -------
+        pd.Series
+            pd.Series with combined columns where the keys are seperated by `sep`.
+
+        """
         warnings.warn(
             "`combine_by_key` has been deprecated and will be removed in a future version",
             FutureWarning,
@@ -642,7 +654,21 @@ class FileContainer:
         return self._combine_by_keys(keys=keys, sep=sep)
 
     def _combine_by_keys(self, keys=None, sep="."):
-        """combine columns"""
+        """combine columns
+
+        Parameters
+        ----------
+        keys : list[str], optional
+            List of keys to combine. If None, all keys are combined.
+        sep : str, default "."
+            Separator between the keys.
+
+        Returns
+        -------
+        pd.Series
+            pd.Series with combined columns where the keys are seperated by `sep`.
+
+        """
 
         if keys is None:
             keys = list(self.df.columns)
@@ -654,7 +680,7 @@ class FileContainer:
 
         Parameters
         ----------
-        **query: Mapping[str, str | int | list[str | int]]
+        **query : Mapping[str, str | int | list[str | int]]
             Search query.
 
         Notes

@@ -29,6 +29,9 @@ FileContainer
    :toctree: generated/
 
    ~FileContainer
+   ~FileContainer.meta
+   ~FileContainer.paths
+   ~FileContainer.items
    ~FileContainer.search
    ~FileContainer.concat
 
