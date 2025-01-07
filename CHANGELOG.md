@@ -1,6 +1,7 @@
 # Changelog
 
 ## v1.0.0 - 07.01.2025
+
 The package was renamed to filefisher (from filefinder). First release to pypi. Includes some modifications of the FileContainer class to be more user friendly. Defines and tests minimum supported versions of the dependencies and drops support for python 3.9, while testing explicitly on python 3.13. Moreover, adds documentation and some handy functionalities like concatenating two FileContainers or finding exactly one path or file.
 
 - Renamed from filefinder to filefisher ([#131](https://github.com/mpytools/filefisher/pull/131)) and deprecated
