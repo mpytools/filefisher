@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.0.1 - unreleased
+
+
 ## v1.0.0 - 07.01.2025
 
 Version 1.0.0 renames the package to filefisher (from filefinder) and makes the first release to pypi. It includes some modifications of the `FileContainer` class to be more user friendly, allows concatenating two `FileContainers` and adds methods to find exactly one path or file. Defines and tests minimum supported versions of the dependencies and adds documentation on readthedocs.
