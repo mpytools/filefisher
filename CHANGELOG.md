@@ -7,8 +7,8 @@ Version 1.0.0 renames the package to filefisher (from filefinder) and makes the 
 - Renamed from filefinder to filefisher ([#131](https://github.com/mpytools/filefisher/pull/131)) and deprecated
   filefinder ([#132](https://github.com/mpytools/filefisher/pull/132))
 - Added documentation for readthedocs ([#134](https://github.com/mpytools/filefisher/pull/134))
-  and extended the documentation with usage ([#135](https://github.com/mpytools/filefisher/pull/135)),
-  and installation instructions ([#136](https://github.com/mpytools/filefisher/pull/136))
+  and extended the documentation with usage ([#135](https://github.com/mpytools/filefisher/pull/135)), as well as extension of the api documentation ([#141](https://github.com/mpytools/filefisher/pull/141))
+  installation instructions ([#136](https://github.com/mpytools/filefisher/pull/136))
 - Added method to concatenate two FileContainers ([#126](https://github.com/mpytools/filefisher/pull/126))
 - Added two methods to find _exactly_ one file or path (and raise an error otherwise):
   `FileFinder.find_single_file` and `FileFinder.find_single_path`
