@@ -2,8 +2,7 @@
 
 ## v0.4.0 - unreleased
 - Added documentation files for readthedocs ([#134](https://github.com/mpytools/filefisher/pull/134))
-  and extended the documentation with usage ([#135](https://github.com/mpytools/filefisher/pull/135)),
-  and installation instructions ([#136](https://github.com/mpytools/filefisher/pull/136))
+  and extended the documentation with usage ([#135](https://github.com/mpytools/filefisher/pull/135)), installation instructions ([#136](https://github.com/mpytools/filefisher/pull/136)), as well as extension of the api documentation ([#141](https://github.com/mpytools/filefisher/pull/141))
 - Added two methods to find _exactly_ one file or path (and raise an error otherwise):
   `FileFinder.find_single_file` and `FileFinder.find_single_path`
   ([#101](https://github.com/mpytools/filefisher/pull/101)).
