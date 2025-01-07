@@ -8,7 +8,7 @@ predefined naming structure.
 
 ## Documentation
 
-Learn more about filefisher in its official documentation at https://filefisher.readthedocs.io/
+Learn more about filefisher in its official documentation at [https://filefisher.readthedocs.io/](https://filefisher.readthedocs.io)
 
 ## Get in touch
 
