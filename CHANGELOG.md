@@ -1,8 +1,15 @@
 # Changelog
 
-## v0.4.0 - unreleased
-- Added documentation files for readthedocs ([#134](https://github.com/mpytools/filefisher/pull/134))
-  and extended the documentation with usage ([#135](https://github.com/mpytools/filefisher/pull/135)), installation instructions ([#136](https://github.com/mpytools/filefisher/pull/136)), as well as extension of the api documentation ([#141](https://github.com/mpytools/filefisher/pull/141))
+## v1.0.0 - 07.01.2025
+
+Version 1.0.0 renames the package to filefisher (from filefinder) and makes the first release to pypi. It includes some modifications of the `FileContainer` class to be more user friendly, allows concatenating two `FileContainers` and adds methods to find exactly one path or file. Defines and tests minimum supported versions of the dependencies and adds documentation on readthedocs.
+
+- Renamed from filefinder to filefisher ([#131](https://github.com/mpytools/filefisher/pull/131)) and deprecated
+  filefinder ([#132](https://github.com/mpytools/filefisher/pull/132))
+- Added documentation for readthedocs ([#134](https://github.com/mpytools/filefisher/pull/134))
+  and extended the documentation with usage ([#135](https://github.com/mpytools/filefisher/pull/135)) and
+  installation instructions ([#136](https://github.com/mpytools/filefisher/pull/136)), as well as extension of the api documentation ([#141](https://github.com/mpytools/filefisher/pull/141))
+- Added method to concatenate two FileContainers ([#126](https://github.com/mpytools/filefisher/pull/126))
 - Added two methods to find _exactly_ one file or path (and raise an error otherwise):
   `FileFinder.find_single_file` and `FileFinder.find_single_path`
   ([#101](https://github.com/mpytools/filefisher/pull/101)).
@@ -12,9 +19,6 @@
   longer be passed by position ([#99](https://github.com/mpytools/filefisher/pull/99)).
 - `FileFinder` now raises an error if an invalid `"{placeholder}"` is used
    ([#99](https://github.com/mpytools/filefisher/pull/99)).
-- An empty `FileContainer` is returned instead of an empty list when no files/ paths are
-  found ([#114](https://github.com/mpytools/filefisher/pull/114))
-
 - Define and test the minimum supported versions of the dependencies ([#125](https://github.com/mpytools/filefisher/pull/125)).
 
   | Package    | Old     | New    |
@@ -24,7 +28,8 @@
   | parse      | undefined | 1.19 |
 
 - Changes to `FileContainer`:
-
+  - An empty `FileContainer` is returned instead of an empty list when no files/ paths are
+    found ([#114](https://github.com/mpytools/filefisher/pull/114))
   - Renamed the `"filename"` column to `"path"` and made it a `pd.Index`, thus removing
     this column from the underlying `DataFrame` ([#113](https://github.com/mpytools/filefisher/pull/113)).
   - Added `meta` and `paths` properties to `FileContainer` which allow to iterate over them

@@ -208,4 +208,4 @@ Resulting in the desired selection:
     /root/c/c_1h     c       1h
 
 
-.. _API reference: API.html
+.. _API reference: api.html
