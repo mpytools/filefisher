@@ -714,13 +714,13 @@ class FileContainer:
         ValueError
             If the other object is not a FileContainer.
         ValueError
-            If the two FileContainers do not have the same keys.
+            If the two FileContainers do not have the same keys (in the same order).
         """
 
         if not isinstance(other, FileContainer):
             raise ValueError("Can only concatenate two FileContainers.")
 
-        if self.df.columns is not other.df.columns:
+        if not self.df.columns.equals(other.df.columns):
             raise ValueError("FileContainers must have the same keys.")
 
         df = pd.concat([self.df, other.df])
