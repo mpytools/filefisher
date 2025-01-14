@@ -164,17 +164,18 @@ def test_filecontainer_concat(example_fc):
     with pytest.raises(ValueError, match="Can only concatenate two FileContainers."):
         example_fc.concat("not a FileContainer")
 
+    example_fc_2 = FileContainer(example_fc.df)
     with pytest.raises(ValueError, match="FileContainers must have the same keys"):
-        different_keys_fc = FileContainer(example_fc.df.loc[:, ["model", "scen"]])
+        different_keys_fc = FileContainer(example_fc_2.df.loc[:, ["model", "scen"]])
         example_fc.concat(different_keys_fc)
 
-    result = example_fc.concat(example_fc, drop_duplicates=False)
-    expected = pd.concat([example_fc.df, example_fc.df])
+    result = example_fc.concat(example_fc_2, drop_duplicates=False)
+    expected = pd.concat([example_fc.df, example_fc_2.df])
 
     pd.testing.assert_frame_equal(result.df, expected)
     assert len(result) == 10
 
-    result = example_fc.concat(example_fc, drop_duplicates=True)
+    result = example_fc.concat(example_fc_2, drop_duplicates=True)
     expected = example_fc
 
     pd.testing.assert_frame_equal(result.df, expected.df)
