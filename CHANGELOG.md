@@ -2,6 +2,7 @@
 
 ## v1.0.1 - unreleased
 
+- compare keys of two `FileContainer`s with `pandas.Index.equals()` instead of `is` in `FileContainer.concat()` ([#145](https://github.com/mpytools/filefisher/pull/145)) - this fixes a bug where no two FileContainers that are not the same object could be concatenated together, see [Github issue](https://github.com/mpytools/filefisher/issues/143).
 
 ## v1.0.0 - 07.01.2025
 
