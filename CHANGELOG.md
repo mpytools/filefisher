@@ -1,4 +1,6 @@
 # Changelog
+## v1.0.2 - unreleased
+
 
 ## v1.0.1 - 16.01.205
 This version patches a bug from v1.0.0. that broke `FileContainer.concat()`. 
