@@ -675,13 +675,17 @@ class FileContainer:
 
         return self.df[list(keys)].apply(lambda x: sep.join(x.map(str)), axis=1)
 
-    def search(self, **query):
+    def search(self, **query) -> "FileContainer":
         """subset paths given a search query
 
         Parameters
         ----------
         **query : Mapping[str, str | int | list[str | int]]
             Search query.
+
+        Returns
+        -------
+        search_result : FileContainer
 
         Notes
         -----
@@ -694,6 +698,39 @@ class FileContainer:
 
         df = self._get_subset(**query)
         return type(self)(df)
+
+    def search_single(self, **query) -> "FileContainer":
+        """find exactly one path given a search query - raises an error otherwise
+
+        Parameters
+        ----------
+        **query : Mapping[str, str | int | list[str | int]]
+            Search query.
+
+        Returns
+        -------
+        search_result : FileContainer
+
+        See also
+        --------
+        FileContainer.search
+        """
+
+        fc = self.search(**query)
+
+        if len(fc) == 0:
+            msg = "Found no paths"
+            raise ValueError(msg)
+
+        if len(fc) > 1:
+            n_found = len(fc)
+            msg = (
+                f"Found more than one ({n_found}) paths. Please adjust your"
+                f" query.\nFirst five paths:\n{fc.df.head()}"
+            )
+            raise ValueError(msg)
+
+        return fc
 
     def concat(self, other, drop_duplicates=True):
         """concatenate two FileContainers
