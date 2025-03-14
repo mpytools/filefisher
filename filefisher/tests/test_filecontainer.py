@@ -176,10 +176,10 @@ def test_filecontainer_search_single(example_df, example_fc):
     with pytest.raises(ValueError, match="Found no paths"):
         example_fc.search_single()
 
-    with pytest.raises(ValueError, match="Found more than one \(5\) paths"):
+    with pytest.raises(ValueError, match=r"Found more than one \(5\) paths"):
         example_fc.search_single(model=None)
 
-    with pytest.raises(ValueError, match="Found more than one \(2\) paths"):
+    with pytest.raises(ValueError, match=r"Found more than one \(2\) paths"):
         example_fc.search_single(model="a")
 
     result = example_fc.search_single(model="a", scen="h")

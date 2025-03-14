@@ -4,7 +4,8 @@ import logging
 import os
 import re
 import warnings
-from typing import Any, Generator
+from typing import Any
+from collections.abc import Generator
 
 import numpy as np
 import pandas as pd
@@ -98,7 +99,7 @@ class _FinderBase:
 class _Finder(_FinderBase):
     def _create_condition_dict(self, **kwargs):
 
-        # add wildcard for all undefinded keys
+        # add wildcard for all undefined keys
         cond_dict = dict.fromkeys(self.keys, "*")
         cond_dict.update(**kwargs)
 
@@ -643,7 +644,7 @@ class FileContainer:
         Returns
         -------
         pd.Series
-            pd.Series with combined columns where the keys are seperated by `sep`.
+            pd.Series with combined columns where the keys are separated by `sep`.
 
         """
         warnings.warn(
@@ -666,7 +667,7 @@ class FileContainer:
         Returns
         -------
         pd.Series
-            pd.Series with combined columns where the keys are seperated by `sep`.
+            pd.Series with combined columns where the keys are separated by `sep`.
 
         """
 
