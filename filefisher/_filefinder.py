@@ -689,6 +689,7 @@ class FileContainer:
           requires the model to be "a" and the experiment to be "b".
         - conditions for a key are combined with "or", e.g., ``model=["a", "b"]``
           matches for both.
+        - passing ``None`` as condition ignores it, e.g., ``model=None``.
         """
 
         df = self._get_subset(**query)
@@ -736,7 +737,10 @@ class FileContainer:
                 [], columns=self.df.columns, index=pd.Index([], name="path")
             )
 
-        sel = True
+        # ignore None values
+        query = {key: value for key, value in query.items() if value is not None}
+
+        sel = np.ones_like(self.df.index, dtype=bool)
         for key, value in query.items():
             # isin does not handle scalars
             value = [value] if np.ndim(value) == 0 else value
