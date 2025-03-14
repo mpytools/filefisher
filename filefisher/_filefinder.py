@@ -300,12 +300,16 @@ class FileFinder:
         self._full_pattern = self.full.pattern
 
         if test_paths is not None:
+
+            if isinstance(test_paths, str):
+                test_paths = [test_paths]
+
+            if len(test_paths) != len(set(test_paths)):
+                raise ValueError("`test_paths` are not unique")
+
             self._set_test_paths(test_paths)
 
     def _set_test_paths(self, test_paths):
-
-        if isinstance(test_paths, str):
-            test_paths = [test_paths]
 
         self._test_paths = test_paths
 
@@ -314,7 +318,10 @@ class FileFinder:
 
             # make fnmatch work (almost) the same as glob
             if pat.endswith(os.path.sep):
-                paths_ = [os.path.dirname(s) + os.path.sep for s in test_paths]
+                # remove duplicate paths (i.e. if the filename made it non-unique)
+                paths_ = sorted(
+                    set(os.path.dirname(s) + os.path.sep for s in test_paths)
+                )
             else:
                 paths_ = test_paths
 

@@ -134,6 +134,18 @@ def test_test_path_property():
     assert ff._test_paths == ["a", "b"]
 
 
+def test_test_path_assert_nonunique():
+
+    with pytest.raises(ValueError, match="`test_paths` are not unique"):
+        FileFinder("a", "", test_paths=["a", "a"])
+
+    with pytest.raises(ValueError, match="`test_paths` are not unique"):
+        FileFinder("a", "", test_paths=["a/", "a/"])
+
+    with pytest.raises(ValueError, match="`test_paths` are not unique"):
+        FileFinder("a", "", test_paths=["a/b", "a/b"])
+
+
 def test_file_pattern_no_sep():
 
     path_pattern = "path_pattern"
@@ -279,12 +291,15 @@ def test_find_path_none_found(tmp_path, test_paths):
 
 def test_find_paths_non_unique():
 
-    # test raises error for non-unique metadata - AFAIK not possible for real paths
+    # ensure find_paths works for duplicated folder names (made unique by the file name)
 
-    ff = FileFinder("{cat}", "", test_paths=["a/", "a/"])
+    ff = FileFinder("{cat}", "", test_paths=["a/a", "a/b"])
 
-    with pytest.raises(ValueError, match="Non-unique metadata detected"):
-        ff.find_paths()
+    result = ff.find_paths()
+
+    expected = {"path": {0: "a/*"}, "cat": {0: "a"}}
+    expected = pd.DataFrame.from_dict(expected).set_index("path")
+    pd.testing.assert_frame_equal(result.df, expected)
 
 
 def test_find_paths_simple(tmp_path, test_paths):
@@ -460,7 +475,9 @@ def test_find_files_non_unique():
 
     # test raises error for non-unique metadata - AFAIK not possible for real paths
 
-    ff = FileFinder("", "{cat}", test_paths=["/a", "/a"])
+    ff = FileFinder("", "{cat}")
+    # need to set via `_set_test_paths` to avoid duplicate check
+    ff._set_test_paths(test_paths=["/a", "/a"])
 
     with pytest.raises(ValueError, match="Non-unique metadata detected"):
         ff.find_files()

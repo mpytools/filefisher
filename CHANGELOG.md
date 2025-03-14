@@ -2,8 +2,9 @@
 
 ## v1.0.2 - unreleased
 
-- Restore behavior of `FileContainer.search(key=None)` - passing `None` to `search` is ignored again [#143](https://github.com/mpytools/filefisher/issues/143).
+- Restore behavior of `FileContainer.search(key=None)` - passing `None` to `search` is ignored again ([#143](https://github.com/mpytools/filefisher/issues/143)).
 - Added `FileContainer.search_single` to search for _exactly_ one path in a `FileContainer` ([#158](https://github.com/mpytools/filefisher/pull/158)).
+- Fixed issues of non-unique `test_path` ([#139](https://github.com/mpytools/filefisher/issues/139)).
 
 ## v1.0.1 - 16.01.205
 This version patches a bug from v1.0.0. that broke `FileContainer.concat()`.
