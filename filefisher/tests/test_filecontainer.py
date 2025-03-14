@@ -170,6 +170,23 @@ def test_filecontainer_search_none_key(example_df, example_fc):
     pd.testing.assert_frame_equal(result.df, expected)
 
 
+def test_filecontainer_search_single(example_df, example_fc):
+
+    # empty search query results in an empty FileContainer
+    with pytest.raises(ValueError, match="Found no paths"):
+        example_fc.search_single()
+
+    with pytest.raises(ValueError, match="Found more than one \(5\) paths"):
+        example_fc.search_single(model=None)
+
+    with pytest.raises(ValueError, match="Found more than one \(2\) paths"):
+        example_fc.search_single(model="a")
+
+    result = example_fc.search_single(model="a", scen="h")
+    expected = example_df.iloc[[1]]
+    pd.testing.assert_frame_equal(result.df, expected)
+
+
 def test_filecontainer_concat(example_fc):
 
     with pytest.raises(ValueError, match="Can only concatenate two FileContainers."):
