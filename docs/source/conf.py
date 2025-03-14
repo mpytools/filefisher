@@ -37,9 +37,7 @@ if on_rtd:
 
 project = "filefisher"
 copyright_year = datetime.date.today().year
-copyright = (
-    f"(c) 2024-{copyright_year} Mathias Hauser"
-)
+copyright = f"(c) 2024-{copyright_year} Mathias Hauser"
 
 authors = "Mathias Hauser"
 author = authors
