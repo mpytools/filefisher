@@ -159,6 +159,17 @@ def test_filecontainer_search(example_df, example_fc):
     pd.testing.assert_frame_equal(result.df, expected)
 
 
+def test_filecontainer_search_none_key(example_df, example_fc):
+    # https://github.com/mpytools/filefisher/issues/156
+
+    result = example_fc.search(model=None)
+    pd.testing.assert_frame_equal(result.df, example_df)
+
+    result = example_fc.search(model="a", scen=None)
+    expected = example_df.iloc[[0, 1]]
+    pd.testing.assert_frame_equal(result.df, expected)
+
+
 def test_filecontainer_concat(example_fc):
 
     with pytest.raises(ValueError, match="Can only concatenate two FileContainers."):
