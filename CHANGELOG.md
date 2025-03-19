@@ -1,6 +1,8 @@
 # Changelog
 
-## v1.0.2 - unreleased
+## v1.1.0 - 19.03.2025
+
+Version v1.1.0 fixes a regression from v1.0.0 and adds `FileContainer.search_single`.
 
 - Restore behavior of `FileContainer.search(key=None)` - passing `None` to `search` is ignored again ([#143](https://github.com/mpytools/filefisher/issues/143)).
 - Added `FileContainer.search_single` to search for _exactly_ one path in a `FileContainer` ([#158](https://github.com/mpytools/filefisher/pull/158)).
