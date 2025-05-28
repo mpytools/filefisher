@@ -739,6 +739,56 @@ class FileContainer:
             raise ValueError(msg)
 
         return fc
+    
+    def search_intersection(self, search_key, intersect_key) -> "FileContainer":
+        """subset paths that have the same value for `intersect_key` along `search_key`
+        
+        Parameters
+        ----------
+        search_key : str
+            Key along wich to search for intersecting values of `intersect_key`.
+        
+        intersect_key : str
+            Key whose values are intersected between the values found for each value of `search_key`.
+
+        Returns
+        -------
+        search_result : FileContainer
+        
+        Examples
+        --------
+        >>> fc = FileContainer(pd.DataFrame({
+        ... "path": ["folder1/file_1.txt", "folder1/file_2.txt", "folder2/file_1.txt"],
+        ... "folder": ["folder1", "folder1", "folder2"],
+        ... "file": ["file_1.txt", "file_2.txt", "file_1.txt"],
+        ... }).set_index("path"))
+        >>> fc.search_intersection(search_key = "folder", intersection_key = "file") # returns FileContainer with paths that have the same value for `files` along `folders`.
+        <FileContainer: 2 paths>
+                               folder      file
+        path                                           
+        ./folder1/file_1.txt  folder_1  file_1
+        ./folder2/file_1.txt  folder_2  file_1
+        
+        Raises
+        ------
+        ValueError
+            If no intersecting values of `intersect_key` are found along `search_key`.
+            Or if `search_key` or `intersect_key` are not in the DataFrame.
+
+        """
+
+        intersect_key_values = {}
+        for key in self.df[search_key].values:
+            intersect_key_values[key] = set(self.search(**{search_key: key}).df[intersect_key].values)
+
+        intersection = set.intersection(*intersect_key_values.values())
+
+        if intersection == set():
+            msg = f"No intersecting values of '{intersect_key}' found along '{search_key}'."
+            raise ValueError(msg)
+        
+        df = self._get_subset(**{intersect_key: list(intersection)})
+        return type(self)(df)
 
     def concat(self, other, drop_duplicates=True):
         """concatenate two FileContainers
