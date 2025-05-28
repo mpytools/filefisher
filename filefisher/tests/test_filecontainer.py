@@ -194,7 +194,7 @@ def test_filecontainer_search_intersection():
         "file": ["file_1.txt", "file_2.txt", "file_1.txt"],
         }).set_index("path"))
     
-    result = fc.search_intersection("folder", "file")
+    result = fc.search_intersection(search_key="folder", intersect_key="file")
     expected = pd.DataFrame({
         "folder": ["folder1", "folder2"],
         "file": ["file_1.txt", "file_1.txt"],
@@ -210,7 +210,7 @@ def test_filecontainer_search_intersection_error():
         }).set_index("path"))
     
     with pytest.raises(ValueError, match="No intersecting values of 'file' found along 'folder'."):
-        fc.search_intersection("folder", "file")
+        fc.search_intersection(search_key="folder", intersect_key="file")
     
 
 def test_filecontainer_concat(example_fc):

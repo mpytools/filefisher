@@ -762,7 +762,7 @@ class FileContainer:
         ... "folder": ["folder1", "folder1", "folder2"],
         ... "file": ["file_1.txt", "file_2.txt", "file_1.txt"],
         ... }).set_index("path"))
-        >>> fc.search_intersection(search_key = "folder", intersection_key = "file") # returns FileContainer with paths that have the same value for `files` along `folders`.
+        >>> fc.search_intersection(search_key = "folder", intersect_key = "file") # returns FileContainer with paths that have the same value for `files` along `folders`.
         <FileContainer: 2 paths>
                                folder      file
         path                                           
