@@ -758,7 +758,7 @@ class FileContainer:
         Examples
         --------
         >>> fc = FileContainer(pd.DataFrame({
-        ... "path": ["folder1/file_1.txt", "folder1/file_2.txt", "folder2/file_1.txt"],
+        ... "path": ["./folder1/file_1.txt", "./folder1/file_2.txt", "./folder2/file_1.txt"],
         ... "folder": ["folder1", "folder1", "folder2"],
         ... "file": ["file_1.txt", "file_2.txt", "file_1.txt"],
         ... }).set_index("path"))
