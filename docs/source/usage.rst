@@ -11,7 +11,7 @@ Setup
 Define regular folder and file patterns with the intuitive python syntax:
 
 .. code-block:: python
-    
+
     from filefisher import FileFinder
 
     path_pattern = "/root/{category}"
@@ -59,7 +59,7 @@ You can then look for paths:
     ff.find_paths()
     >>> <FileContainer: 3 paths>
     >>>            category
-    >>>  path                 
+    >>>  path
     >>>  /root/a/*        a
     >>>  /root/b/*        b
     >>>  /root/c/*        c
@@ -72,7 +72,7 @@ files:
     ff.find_files()
     >>> <FileContainer: 6 paths>
     >>>                         category number
-    >>>  path                                   
+    >>>  path
     >>>  /root/a/a_file_1.rtf        a  1
     >>>  /root/a/a_file_2.rtf        a  2
     >>>  /root/b/b_file_1.rtf        b  1
@@ -87,7 +87,7 @@ It's also possible to filter for certain files:
     ff.find_files(category=["a", "b"], number=1)
     >>> <FileContainer: 2 paths>
     >>>                     category number
-    >>>  path                              
+    >>>  path
     >>>  /root/a/a_file_1        a      1
     >>>  /root/b/b_file_1        b      1
 
@@ -132,7 +132,7 @@ which results in the following:
 
     <FileContainer: 2 paths>
                 letters  num beg   end
-    path                               
+    path
     a1_abc             a    1  ab     c
     ab200_abcdef      ab  200  ab  cdef
 
@@ -179,7 +179,7 @@ which yields:
 
     <FileContainer: 6 paths>
                 model time_res
-    path                         
+    path
     /root/a/a_1d     a       1d
     /root/a/a_1h     a       1h
     /root/a/a_6h     a       6h
@@ -199,10 +199,10 @@ We can now apply a `priority_filter` as follows:
 Resulting in the desired selection:
 
 .. code-block::
-    
+
     <FileContainer: 3 paths>
                 model time_res
-    path                         
+    path
     /root/a/a_1d     a       1d
     /root/b/b_6h     b       6h
     /root/c/c_1h     c       1h

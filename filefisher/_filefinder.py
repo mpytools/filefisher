@@ -4,8 +4,8 @@ import logging
 import os
 import re
 import warnings
-from typing import Any
 from collections.abc import Generator
+from typing import Any
 
 import numpy as np
 import pandas as pd
