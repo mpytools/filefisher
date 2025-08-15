@@ -1,7 +1,12 @@
 import warnings
 
-from filefisher import __version__  # noqa: F401
-from filefisher import _filefinder, _utils, cmip, filters
+from filefisher import (
+    __version__,  # noqa: F401
+    _filefinder,
+    _utils,
+    cmip,
+    filters,
+)
 from filefisher._filefinder import FileContainer, FileFinder
 
 __all__ = [
