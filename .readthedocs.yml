@@ -8,6 +8,7 @@ build:
     pre_install:
         # see https://github.com/readthedocs/readthedocs.org/issues/8201
       - git update-index --assume-unchanged docs/source/conf.py
+    post_install:
       # editable install with the docs dependency-group
       - python -m pip install -e . --group docs
   tools:
