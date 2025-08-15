@@ -1,6 +1,6 @@
 import warnings
-from contextlib import contextmanager
 from collections.abc import Iterable
+from contextlib import contextmanager
 
 import pandas as pd
 
