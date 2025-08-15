@@ -613,7 +613,7 @@ class FileContainer:
 
     def __getitem__(self, key):
 
-        if isinstance(key, (int, np.integer)):
+        if isinstance(key, int | np.integer):
             # use iloc -> there can be more than one element with index 0
             element = self.df.iloc[key]
 

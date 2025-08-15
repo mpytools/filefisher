@@ -87,7 +87,7 @@ def update_dict_with_kwargs(dictionary, /, **kwargs):
     {'a': 1, 'b': 3, 'c': 5}
     """
 
-    if not isinstance(dictionary, (dict, type(None))):
+    if not isinstance(dictionary, dict | type(None)):
         raise TypeError(
             f"First argument must be a dict or None, got '{type(dictionary).__name__}'"
         )
