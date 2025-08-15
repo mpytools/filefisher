@@ -1,6 +1,6 @@
 version: 2
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   jobs:
     post_checkout:
       # unshallow so the version works
@@ -11,6 +11,6 @@ build:
       # editable install with the docs dependency-group
       - python -m pip install -e . --group docs
   tools:
-    python: "3.12"
+    python: "3.13"
 sphinx:
   configuration: docs/source/conf.py
