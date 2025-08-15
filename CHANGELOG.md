@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.2.0 - unreleased
+
+- Consolidate package metadata and configuration in *pyproject.toml* ([#174](https://github.com/mpytools/filefisher/pull/174)).
+
+
 ## v1.1.0 - 19.03.2025
 
 Version v1.1.0 fixes a regression from v1.0.0 and adds `FileContainer.search_single`.
