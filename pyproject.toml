@@ -50,7 +50,8 @@ tests = [
     "pytest",
 ]
 dev = [
-    "regionmask[docs, tests]",
+    {include-group = "docs"},
+    {include-group = "tests"},
     "black !=23",
     "ruff",
 ]
