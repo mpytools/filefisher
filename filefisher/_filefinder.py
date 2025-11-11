@@ -121,7 +121,6 @@ class _Finder(_FinderBase):
         on_empty : "raise" | "warn" | "allow", default: "raise"
             Behaviour when no files are found: "raise" (default) raises a ValueError,
             "warn" raises a warning. For "warn" and "allow" an empty FileContainer is returned.
-            an empty list.
         **keys_kwargs : {key: indexer, ...}, optional
             The keyword arguments form of ``keys``. When the same key is passed in
             ``keys`` and ``keys_kwargs`` the latter takes priority.
