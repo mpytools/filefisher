@@ -125,7 +125,7 @@ def test_test_path_property():
     ff = FileFinder("a", "b")
 
     with pytest.raises(AttributeError):
-        ff._test_paths
+        ff._test_paths  # noqa: B018
 
     ff = FileFinder("a", "b", test_paths="path")
     assert ff._test_paths == ["path"]

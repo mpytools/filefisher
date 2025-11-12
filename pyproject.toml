@@ -81,6 +81,7 @@ ignore = [
   "E731",
 ]
 select = [
+  "B", # Bugbear
   "F", # Pyflakes
   "E", # Pycodestyle
   "W", # warnings
