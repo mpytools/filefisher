@@ -4,7 +4,17 @@
 
 - Passing `key=None` is now ignored in all `find*` methods, and is now equivalent to passing `key="*"` or not
   passing the key. Previously this was interpreted as `"None"` ([#192](https://github.com/mpytools/filefisher/issues/192)).
+
 - Drop support for python 3.9 ([#195](https://github.com/mpytools/filefisher/pull/195)).
+
+- Bump minimum supported versions of the dependencies ([#197](https://github.com/mpytools/filefisher/pull/197)):
+
+  | Package | Old  | New  |
+  | ------- | -----| ---- |
+  | numpy   | 1.24 | 1.26 |
+  | pandas  | 2.0  | 2.2  |
+  | parse   | 1.19 | 1.20 |
+
 - Consolidate package metadata and configuration in *pyproject.toml* ([#174](https://github.com/mpytools/filefisher/pull/174)).
 
 ## v1.1.0 - 19.03.2025
@@ -41,8 +51,8 @@ Version 1.0.0 renames the package to filefisher (from filefinder) and makes the 
    ([#99](https://github.com/mpytools/filefisher/pull/99)).
 - Define and test the minimum supported versions of the dependencies ([#125](https://github.com/mpytools/filefisher/pull/125)).
 
-  | Package    | Old     | New    |
-  | ---------- | ------- | ------ |
+  | Package    | Old       | New  |
+  | ---------- | --------- | ---- |
   | numpy      | undefined | 1.24 |
   | pandas     | undefined |  2.0 |
   | parse      | undefined | 1.19 |
