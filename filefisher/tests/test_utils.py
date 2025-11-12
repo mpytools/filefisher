@@ -3,6 +3,7 @@ import pytest
 from filefisher._utils import (
     _find_keys,
     atoi,
+    find_stack_level,
     natural_keys,
     product_dict,
     update_dict_with_kwargs,
@@ -83,3 +84,13 @@ def test_update_dict_with_kwargs():
 
     with pytest.raises(TypeError, match="missing 1 required positional argument"):
         update_dict_with_kwargs(dictionary={})
+
+
+def test_find_stack_level():
+    assert find_stack_level() == 1
+    assert find_stack_level(test_mode=True) == 2
+
+    def f():
+        return find_stack_level(test_mode=True)
+
+    assert f() == 3

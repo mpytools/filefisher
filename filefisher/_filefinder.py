@@ -13,6 +13,7 @@ import parse
 
 from filefisher._utils import (
     _find_keys,
+    emit_user_level_warning,
     natural_keys,
     product_dict,
     update_dict_with_kwargs,
@@ -173,8 +174,7 @@ class _Finder(_FinderBase):
             if on_empty == "raise":
                 raise ValueError(msg)
             elif on_empty == "warn":
-                # TODO: correct stack level
-                warnings.warn(msg)
+                emit_user_level_warning(msg)
 
         # NOTE: also creates the correct (empty) df if no paths are found
         df = self._parse_paths(all_paths, on_parse_error=on_parse_error)
@@ -240,7 +240,7 @@ class _Finder(_FinderBase):
                         " there contradictory values?"
                     )
                 elif on_parse_error == "warn":
-                    warnings.warn(
+                    emit_user_level_warning(
                         f"Could not parse '{path}' with the pattern '{self.pattern}' - are"
                         " there contradictory values?"
                     )
@@ -656,7 +656,7 @@ class FileContainer:
             pd.Series with combined columns where the keys are separated by `sep`.
 
         """
-        warnings.warn(
+        emit_user_level_warning(
             "`combine_by_key` has been deprecated and will be removed in a future version",
             FutureWarning,
         )
