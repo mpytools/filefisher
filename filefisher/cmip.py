@@ -19,8 +19,10 @@ def parse_ens(filelist):
         parser = parse.compile("r{r}i{i}p{p}")
 
     out = list()
-    for i, one_ens in zip(ens.index, ens):
+    for one_ens in ens:
         parsed = parser.parse(one_ens)
+
+        # TODO: assumes this always works
         out.append(list(parsed.named.values()))
 
     keys = list(parsed.named.keys())
