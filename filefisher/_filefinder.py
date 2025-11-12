@@ -114,7 +114,7 @@ class _Finder(_FinderBase):
         ----------
         keys : dict
             Dictionary containing keys to create the search pattern. Several names can
-            be passed for each key as list.
+            be passed for each key as list (interpreted as or). None is ignored.
         on_parse_error : "raise" | "warn" | "ignore", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "ignore" ignores the file.
@@ -134,6 +134,9 @@ class _Finder(_FinderBase):
         _deprecate_allow_empty(**keys_kwargs)
 
         keys = update_dict_with_kwargs(keys, **keys_kwargs)
+
+        # ignore None values
+        keys = {key: value for key, value in keys.items() if value is not None}
 
         if on_parse_error not in ("raise", "warn", "ignore"):
             raise ValueError(
@@ -429,7 +432,7 @@ class FileFinder:
         ----------
         keys : dict
             Dictionary containing keys to create the search pattern. Several names can
-            be passed for each key as list.
+            be passed for each key as list (interpreted as or). None is ignored.
         on_parse_error : "raise" | "warn" | "skip", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "skip" ignores the file.
@@ -479,7 +482,7 @@ class FileFinder:
         ----------
         keys : dict
             Dictionary containing keys to create the search pattern. Several names can
-            be passed for each key as list.
+            be passed for each key as list (interpreted as or). None is ignored.
         on_parse_error : "raise" | "warn" | "skip", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "skip" ignores the file.
