@@ -63,7 +63,7 @@ def test_fc_iter(example_df, example_fc):
         FutureWarning, match="iterating over a `FileContainer` is deprecated"
     ):
         result = list(example_fc)
-    expected = list(zip(example_df.index.to_list(), example_df.to_dict("records")))
+    expected = list(zip(example_df.index.to_list(), example_df.to_dict("records"), strict=True))
     assert result == expected
 
 
@@ -75,7 +75,7 @@ def test_fc_items(example_df, example_fc):
     assert meta == {"model": "a", "scen": "d", "res": "r"}
 
     result = list(example_fc.items())
-    expected = list(zip(example_df.index.to_list(), example_df.to_dict("records")))
+    expected = list(zip(example_df.index.to_list(), example_df.to_dict("records"), strict=True))
     assert result == expected
 
 

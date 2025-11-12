@@ -66,7 +66,7 @@ def product_dict(**kwargs):
 
     keys = kwargs.keys()
     for instance in itertools.product(*kwargs.values()):
-        yield dict(zip(keys, instance))
+        yield dict(zip(keys, instance, strict=True))
 
 
 def update_dict_with_kwargs(dictionary, /, **kwargs):
