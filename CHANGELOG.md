@@ -2,8 +2,9 @@
 
 ## v1.2.0 - unreleased
 
+- Passing `key=None` is now ignored in all `find*` methods, and is now equivalent to passing `key="*"` or not
+  passing the key. Previously this was interpreted as `"None"` ([#192](https://github.com/mpytools/filefisher/issues/192)).
 - Consolidate package metadata and configuration in *pyproject.toml* ([#174](https://github.com/mpytools/filefisher/pull/174)).
-
 
 ## v1.1.0 - 19.03.2025
 

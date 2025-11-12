@@ -324,6 +324,17 @@ def test_find_paths_simple(tmp_path, test_paths):
     pd.testing.assert_frame_equal(result.df, expected)
 
 
+def test_find_paths_none_key_ignored():
+
+    ff = FileFinder("{folder}", "", test_paths=["a/"])
+
+    expected = {"path": {0: "a/*"}, "folder": {0: "a"}}
+    expected = pd.DataFrame.from_dict(expected).set_index("path")
+
+    result = ff.find_paths(path=None)
+    pd.testing.assert_frame_equal(result.df, expected)
+
+
 @pytest.mark.parametrize("find_kwargs", [{"b": "foo"}, {"a": "*", "b": "foo"}])
 def test_find_paths_wildcard(tmp_path, test_paths, find_kwargs):
 
@@ -502,6 +513,18 @@ def test_find_file_simple(tmp_path, test_paths):
     pd.testing.assert_frame_equal(result.df, expected)
 
     result = ff.find_files({"a": "XXX"}, a="foo")
+    pd.testing.assert_frame_equal(result.df, expected)
+
+
+def test_find_file_none_key_ignored():
+
+    ff = FileFinder("", "{file}", test_paths=["a"])
+
+    expected = {"path": {0: "a"}, "file": {0: "a"}}
+    expected = pd.DataFrame.from_dict(expected).set_index("path")
+
+    result = ff.find_files(file=None)
+
     pd.testing.assert_frame_equal(result.df, expected)
 
 
