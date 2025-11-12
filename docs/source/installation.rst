@@ -4,7 +4,7 @@ Installation
 Required dependencies
 ---------------------
 
-- Python (3.10 or later)
+- Python (3.11 or later)
 - `numpy <http://www.numpy.org/>`__
 - `pandas <https://pandas.pydata.org/>`__
 - `parse <https://pypi.org/project/parse/>`__
