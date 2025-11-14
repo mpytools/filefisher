@@ -721,7 +721,7 @@ class FileContainer:
         -------
         search_result : FileContainer
 
-        See also
+        See Also
         --------
         FileContainer.search
         """
