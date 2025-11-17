@@ -17,6 +17,7 @@
 
 - Ensure warnings are raised for user code and not internally ([#199](https://github.com/mpytools/filefisher/pull/199)).
 - Consolidate package metadata and configuration in *pyproject.toml* ([#174](https://github.com/mpytools/filefisher/pull/174)).
+- The `repr` now indicates when `test_paths` were passed ([#202](https://github.com/mpytools/filefisher/pull/202)).
 - Enable "bugbear" linting rules ([#198](https://github.com/mpytools/filefisher/pull/198), and [#200](https://github.com/mpytools/filefisher/pull/200)).
 
 ## v1.1.0 - 19.03.2025
