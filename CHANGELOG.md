@@ -1,5 +1,7 @@
 # Changelog
 
+## v1.3.0 - unreleased
+
 ## v1.2.0 - 17.11.2025
 
 Version v1.2.0 ignores `key=None` in all `find*` methods and bumps the required dependencies.
