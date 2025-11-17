@@ -124,8 +124,7 @@ def test_test_path_property():
 
     ff = FileFinder("a", "b")
 
-    with pytest.raises(AttributeError):
-        ff._test_paths  # noqa: B018
+    assert ff._test_paths is None
 
     ff = FileFinder("a", "b", test_paths="path")
     assert ff._test_paths == ["path"]
@@ -202,6 +201,46 @@ def test_repr():
 
     expected = """\
     <FileFinder>
+    path_pattern: '{a}/'
+    file_pattern: 'file_pattern'
+
+    keys: 'a'
+    """
+    expected = textwrap.dedent(expected)
+    assert expected == ff.__repr__()
+
+
+def test_repr_test_paths():
+
+    path_pattern = "/{a}/{b}"
+    file_pattern = "{b}_{c}"
+    ff = FileFinder(
+        path_pattern=path_pattern, file_pattern=file_pattern, test_paths=["a"]
+    )
+
+    expected = """\
+    <FileFinder (1 test_paths)>
+    path_pattern: '/{a}/{b}/'
+    file_pattern: '{b}_{c}'
+
+    keys: 'a', 'b', 'c'
+    """
+    expected = textwrap.dedent(expected)
+
+    print(expected)
+
+    print(ff.__repr__())
+
+    assert expected == ff.__repr__()
+
+    path_pattern = "{a}"
+    file_pattern = "file_pattern"
+    ff = FileFinder(
+        path_pattern=path_pattern, file_pattern=file_pattern, test_paths=["a", "b"]
+    )
+
+    expected = """\
+    <FileFinder (2 test_paths)>
     path_pattern: '{a}/'
     file_pattern: 'file_pattern'
 

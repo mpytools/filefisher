@@ -21,7 +21,7 @@ from filefisher._utils import (
 
 logger = logging.getLogger(__name__)
 
-_FILE_FINDER_REPR = """<FileFinder>
+_FILE_FINDER_REPR = """<FileFinder{maybe_test_paths}>
 path_pattern: '{path_pattern}'
 file_pattern: '{file_pattern}'
 
@@ -310,6 +310,8 @@ class FileFinder:
                 raise ValueError("`test_paths` are not unique")
 
             self._set_test_paths(test_paths)
+        else:
+            self._test_paths = None
 
     def _set_test_paths(self, test_paths):
 
@@ -579,7 +581,11 @@ class FileFinder:
         repr_keys = "', '".join(sorted(self.full.keys))
         repr_keys = f"'{repr_keys}'"
 
+        tp = self._test_paths
+        maybe_test_paths = "" if tp is None else f" ({len(tp)} test_paths)"
+
         msg = _FILE_FINDER_REPR.format(
+            maybe_test_paths=maybe_test_paths,
             path_pattern=self.path.pattern,
             file_pattern=self.file.pattern,
             repr_keys=repr_keys,
