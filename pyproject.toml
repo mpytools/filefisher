@@ -104,3 +104,21 @@ extend-ignore-identifiers-re = [
 omit = [
   "*/filefisher/tests/*",
 ]
+
+[tool.mypy]
+exclude = [
+  'build', "dist"
+]
+files = "filefisher"
+
+show_error_context = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = [
+  "parse.*",
+]
