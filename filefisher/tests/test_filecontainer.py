@@ -191,6 +191,32 @@ def test_filecontainer_search_single(example_df, example_fc):
     pd.testing.assert_frame_equal(result.df, expected)
 
 
+def test_filecontainer_search_intersection():
+    fc = FileContainer(pd.DataFrame({
+        "path": ["folder1/file_1.txt", "folder1/file_2.txt", "folder2/file_1.txt"],
+        "folder": ["folder1", "folder1", "folder2"],
+        "file": ["file_1.txt", "file_2.txt", "file_1.txt"],
+        }).set_index("path"))
+    
+    result = fc.search_intersection(search_key="folder", intersect_key="file")
+    expected = pd.DataFrame({
+        "folder": ["folder1", "folder2"],
+        "file": ["file_1.txt", "file_1.txt"],
+    }, index=pd.Index(["folder1/file_1.txt", "folder2/file_1.txt"], name="path"))
+
+    pd.testing.assert_frame_equal(result.df, expected)
+
+def test_filecontainer_search_intersection_error():
+    fc = FileContainer(pd.DataFrame({
+        "path": ["folder1/file_1.txt", "folder2/file_2.txt"],
+        "folder": ["folder1", "folder2"],
+        "file": ["file_1.txt", "file_2.txt"],
+        }).set_index("path"))
+    
+    with pytest.raises(ValueError, match="No intersecting values of 'file' found along 'folder'."):
+        fc.search_intersection(search_key="folder", intersect_key="file")
+    
+
 def test_filecontainer_concat(example_fc):
 
     with pytest.raises(ValueError, match="Can only concatenate two FileContainers."):
