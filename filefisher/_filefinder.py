@@ -739,22 +739,22 @@ class FileContainer:
             raise ValueError(msg)
 
         return fc
-    
+
     def search_intersection(self, search_key, intersect_key) -> "FileContainer":
         """subset paths that have the same value for `intersect_key` along `search_key`
-        
+
         Parameters
         ----------
         search_key : str
             Key along wich to search for intersecting values of `intersect_key`.
-        
+
         intersect_key : str
             Key whose values are intersected between the values found for each value of `search_key`.
 
         Returns
         -------
         search_result : FileContainer
-        
+
         Examples
         --------
         >>> fc = FileContainer(pd.DataFrame({
@@ -765,10 +765,10 @@ class FileContainer:
         >>> fc.search_intersection(search_key = "folder", intersect_key = "file") # returns FileContainer with paths that have the same value for `files` along `folders`.
         <FileContainer: 2 paths>
                                folder        file
-        path                                     
+        path
         ./folder1/file_1.txt  folder1  file_1.txt
         ./folder2/file_1.txt  folder2  file_1.txt
-        
+
         Raises
         ------
         ValueError
@@ -779,14 +779,16 @@ class FileContainer:
 
         intersect_key_values = {}
         for key in self.df[search_key].values:
-            intersect_key_values[key] = set(self.search(**{search_key: key}).df[intersect_key].values)
+            intersect_key_values[key] = set(
+                self.search(**{search_key: key}).df[intersect_key].values
+            )
 
         intersection = set.intersection(*intersect_key_values.values())
 
         if intersection == set():
             msg = f"No intersecting values of '{intersect_key}' found along '{search_key}'."
             raise ValueError(msg)
-        
+
         df = self._get_subset(**{intersect_key: list(intersection)})
         return type(self)(df)
 
