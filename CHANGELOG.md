@@ -2,6 +2,9 @@
 
 ## v1.4.0 - unreleased
 
+- Importing the deprecated `filefinder` now raises an `ImportError`, use `import filefisher` instead
+  ([#262](https://github.com/mpytools/filefisher/pull/262)).
+
 ## v1.3.0 - 12.08.2026
 
 Version v1.3.0 adds a html repr for `FileContainer`, improves typing, and updates the required dependencies.
