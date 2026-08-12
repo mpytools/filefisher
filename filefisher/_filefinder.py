@@ -224,7 +224,7 @@ class _Finder(_FinderBase):
         return fc
 
     @staticmethod
-    def _glob(pattern:str) -> list[str]:
+    def _glob(pattern: str) -> list[str]:
         """Return a list of paths matching a pathname pattern
 
         Notes
