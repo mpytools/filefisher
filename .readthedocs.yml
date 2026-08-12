@@ -12,6 +12,6 @@ build:
       # editable install with the docs dependency-group
       - python -m pip install -e . --group docs
   tools:
-    python: "3.13"
+    python: "3.14"
 sphinx:
   configuration: docs/source/conf.py

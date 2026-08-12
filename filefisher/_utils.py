@@ -100,8 +100,6 @@ def update_dict_with_kwargs(dictionary, /, **kwargs):
 def emit_user_level_warning(message: str, category=None) -> None:
     """emit a warning at the user level"""
 
-    # skip_file_prefixes only defined in python 3.12
-
     import filefisher
 
     pkg_dir = pathlib.Path(filefisher.__file__).parent.as_posix()
