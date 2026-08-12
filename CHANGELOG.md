@@ -1,6 +1,8 @@
 # Changelog
 
-## v1.3.0 - unreleased
+## v1.3.0 - 12.08.2026
+
+Version v1.3.0 adds a html repr for `FileContainer`, improves typing, and updates the required dependencies.
 
 - Fix folder names when an empty string is passed as `file_pattern`. Now correctly sets it
   as `folder/` while it was `folder` previously ([#254](https://github.com/mpytools/filefisher/pull/254)).
