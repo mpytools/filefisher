@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  FORCE_COLOR: 3
+
 jobs:
   test:
     name: py${{ matrix.python-version }} ${{ matrix.env }}
@@ -92,3 +95,22 @@ jobs:
     - name: Test with pytest
       run: |
         python -m pytest --doctest-modules filefisher --ignore filefisher/tests
+
+  min-version-policy:
+    name: Minimum Version Policy
+    runs-on: "ubuntu-latest"
+
+    env:
+      COLUMNS: 120
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+          cache: 'pip' # caching pip dependencies
+      - name: install deps
+        run: pip install xarray-minimum-dependency-policy
+      - name: validate minimum versions
+        run: |
+          minimum-versions validate --policy ci/minimum-dependency-versions-policy.yml ci/requirements/min-all-deps.yml
