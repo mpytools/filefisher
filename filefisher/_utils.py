@@ -1,7 +1,6 @@
 import itertools
 import pathlib
 import re
-import sys
 import warnings
 
 import pandas as pd
@@ -102,14 +101,9 @@ def emit_user_level_warning(message: str, category=None) -> None:
     """emit a warning at the user level"""
 
     # skip_file_prefixes only defined in python 3.12
-    if sys.version_info >= (3, 12):
 
-        import filefisher
+    import filefisher
 
-        pkg_dir = pathlib.Path(filefisher.__file__).parent.as_posix()
+    pkg_dir = pathlib.Path(filefisher.__file__).parent.as_posix()
 
-        warnings.warn(message, category=category, skip_file_prefixes=(pkg_dir,))
-
-    else:
-
-        warnings.warn(message, category=category, stacklevel=3)
+    warnings.warn(message, category=category, skip_file_prefixes=(pkg_dir,))
