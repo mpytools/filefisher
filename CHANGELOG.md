@@ -6,7 +6,7 @@
   ([#262](https://github.com/mpytools/filefisher/pull/262)).
 - Removed `combine_by_keys`, deprecated in v1.0.0 - use a `pd.MultiIndex` instead
   ([#263](https://github.com/mpytools/filefisher/pull/263)).
-- Finalized the `_allow_empty` deprecation of the `FileFinder.find*` method deprecated in v1.0.0. Use 
+- Finalized the `_allow_empty` deprecation of the `FileFinder.find*` method deprecated in v1.0.0. Use
   `on_empty` instead ([#264](https://github.com/mpytools/filefisher/pull/264)).
 
 ## v1.3.0 - 12.08.2026
