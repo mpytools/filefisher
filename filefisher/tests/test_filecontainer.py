@@ -253,6 +253,7 @@ def test_filecontainer_repr(example_fc):
 
     assert example_fc.__repr__().startswith("<FileContainer: 5 paths>")
 
+
 def test_filecontainer_html_repr(example_fc):
 
     # NOTE: does not test the pd.DataFrame part of the html repr
@@ -263,4 +264,3 @@ def test_filecontainer_html_repr(example_fc):
 
     repr = example_fc._repr_html_()
     assert repr.startswith("<pre>&lt;FileContainer: 5 paths&gt;</pre>")
-
