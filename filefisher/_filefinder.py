@@ -671,7 +671,6 @@ class FileContainer:
             index = cast(str, index)
             yield index, element.to_dict()
 
-
     def search(self, **query) -> "FileContainer":
         """subset paths given a search query
 

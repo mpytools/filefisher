@@ -214,9 +214,6 @@ def test_filecontainer_concat(example_fc) -> None:
     assert len(result) == 5
 
 
-
-
-
 def test_filecontainer_repr(example_fc) -> None:
 
     # NOTE: does not test the pd.DataFrame part of the repr
