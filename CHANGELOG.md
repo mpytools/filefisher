@@ -1,5 +1,7 @@
 # Changelog
 
+## v1.4.0 - unreleased
+
 ## v1.3.0 - 12.08.2026
 
 Version v1.3.0 adds a html repr for `FileContainer`, improves typing, and updates the required dependencies.
