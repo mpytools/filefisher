@@ -224,7 +224,7 @@ class _Finder(_FinderBase):
         return fc
 
     @staticmethod
-    def _glob(pattern) -> list[str]:
+    def _glob(pattern:str) -> list[str]:
         """Return a list of paths matching a pathname pattern
 
         Notes
@@ -239,7 +239,8 @@ class _Finder(_FinderBase):
         self, paths, on_parse_error: ON_PARSE_ERROR_OPTIONS
     ) -> pd.DataFrame:
 
-        valid_paths, out = list(), list()
+        valid_paths: list[str] = list()
+        out = list()
         for path in paths:
             parsed = self.parser.parse(path)
 
@@ -258,6 +259,7 @@ class _Finder(_FinderBase):
                     pass
             else:
                 valid_paths.append(path)
+                parsed = cast(parse.Result, parsed)
                 out.append(list(parsed.named.values()))
 
         index = pd.Index(valid_paths, name="path") + self._suffix
@@ -328,10 +330,10 @@ class FileFinder:
         self._test_paths = test_paths
 
         # use fnmatch.filter to 'glob' pseudo-filenames
-        def finder(pat):
+        def finder(pattern: str) -> list[str]:
 
             # make fnmatch work (almost) the same as glob
-            if pat.endswith(os.path.sep):
+            if pattern.endswith(os.path.sep):
                 # remove duplicate paths (i.e. if the filename made it non-unique)
                 paths_ = sorted(
                     set(os.path.dirname(s) + os.path.sep for s in test_paths)
@@ -339,7 +341,7 @@ class FileFinder:
             else:
                 paths_ = test_paths
 
-            return fnmatch.filter(paths_, pat)
+            return fnmatch.filter(paths_, pattern)
 
         # overwrite the glob implementation
         self.path._glob = finder
@@ -835,9 +837,9 @@ class FileContainer:
         msg = f"<FileContainer: {n_paths} paths>\n"
         return msg + self.df.__repr__()
 
-    def _repr_html_(self):
+    def _repr_html_(self) -> str:
 
         n_paths = len(self)
 
         msg = f"filefisher.FileContainer: {n_paths} paths<br><hr><br>"
-        return msg + self.df._repr_html_()
+        return msg + self.df._repr_html_() # type: ignore[operator]

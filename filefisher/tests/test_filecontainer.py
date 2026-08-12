@@ -229,17 +229,17 @@ def test_fc_combine_by_keys(example_fc) -> None:
     pd.testing.assert_series_equal(result, expected)
 
     result = example_fc._combine_by_keys()
-    expected = map(".".join, example_fc.df.values)
+    expected = list(map(".".join, example_fc.df.values))
     expected = pd.Series(expected, index=example_fc.df.index)
 
     # different sep
     result = example_fc._combine_by_keys(sep="|")
-    expected = map("|".join, example_fc.df.values)
+    expected = list(map("|".join, example_fc.df.values))
     expected = pd.Series(expected, index=example_fc.df.index)
 
     # not all columns
     result = example_fc._combine_by_keys(keys=("model", "res"))
-    expected = map(".".join, example_fc.df[["model", "res"]].values)
+    expected = list(map(".".join, example_fc.df[["model", "res"]].values))
     expected = pd.Series(expected, index=example_fc.df.index)
 
 
