@@ -17,7 +17,7 @@ def assert_no_warnings():
 
 def assert_filecontainer_empty(
     fc: FileContainer, columns: str | Iterable[str] | None = None
-):
+) -> None:
     """checks passed object is an empty `FileContainer`
 
     Parameters

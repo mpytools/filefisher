@@ -5,7 +5,7 @@ import os
 import re
 import warnings
 from collections.abc import Generator
-from typing import Any
+from typing import Any, Literal, cast
 
 import numpy as np
 import pandas as pd
@@ -28,8 +28,11 @@ file_pattern: '{file_pattern}'
 keys: {repr_keys}
 """
 
+ON_PARSE_ERROR_OPTIONS = Literal["raise", "warn", "ignore"]
+ON_EMPTY_OPTIONS = Literal["raise", "warn", "allow"]
 
-def _deprecate_allow_empty(**kwargs):
+
+def _deprecate_allow_empty(**kwargs) -> None:
 
     _allow_empty = kwargs.get("_allow_empty")
 
@@ -59,7 +62,7 @@ def _assert_unique(df) -> None:
 
 
 class _FinderBase:
-    def __init__(self, pattern, suffix=""):
+    def __init__(self, pattern, suffix="") -> None:
 
         self.pattern = pattern
         self.keys = _find_keys(pattern)
@@ -107,7 +110,12 @@ class _Finder(_FinderBase):
         return cond_dict
 
     def find(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
@@ -227,7 +235,9 @@ class _Finder(_FinderBase):
 
         return glob.glob(pattern)
 
-    def _parse_paths(self, paths, on_parse_error) -> pd.DataFrame:
+    def _parse_paths(
+        self, paths, on_parse_error: ON_PARSE_ERROR_OPTIONS
+    ) -> pd.DataFrame:
 
         valid_paths, out = list(), list()
         for path in paths:
@@ -258,7 +268,7 @@ class _Finder(_FinderBase):
 class FileFinder:
 
     def __init__(
-        self, path_pattern: str, file_pattern: str, *, test_paths=None
+        self, path_pattern: str | os.PathLike, file_pattern: str, *, test_paths=None
     ) -> None:
         """find and create file names based on python format syntax
 
@@ -291,7 +301,7 @@ class FileFinder:
         self.file = _FinderBase(file_pattern)
         # ensure path_pattern ends with a /
         self.path = _Finder(os.path.join(path_pattern, ""), suffix="*")
-        self.full = _Finder(os.path.join(*filter(None, (path_pattern, file_pattern))))
+        self.full = _Finder(os.path.join(path_pattern, file_pattern))
 
         self.keys_path = self.path.keys
         self.keys_file = self.file.keys
@@ -426,7 +436,12 @@ class FileFinder:
         return self.full.create_name(keys, **keys_kwargs)
 
     def find_paths(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
@@ -476,7 +491,12 @@ class FileFinder:
         )
 
     def find_files(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file pattern
 
@@ -596,7 +616,7 @@ class FileFinder:
 
 class FileContainer:
 
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame) -> None:
         """FileContainer gathers paths and their metadata
 
         Parameters
@@ -634,7 +654,9 @@ class FileContainer:
     @property
     def meta(self) -> list[dict[str, Any]]:
         """Return metadata as list of dictionaries"""
-        return self.df.to_dict("records")
+        records = self.df.to_dict("records")
+        records = cast(list[dict[str, Any]], records)
+        return records
 
     @property
     def paths(self) -> list[str]:
@@ -644,6 +666,7 @@ class FileContainer:
     def items(self) -> Generator[tuple[str, dict[str, Any]], None, None]:
         """Return a generator of (path, metadata) tuples"""
         for index, element in self.df.iterrows():
+            index = cast(str, index)
             yield index, element.to_dict()
 
     def combine_by_key(self, keys=None, sep="."):
@@ -748,7 +771,7 @@ class FileContainer:
 
         return fc
 
-    def concat(self, other, drop_duplicates=True):
+    def concat(self, other, drop_duplicates=True) -> "FileContainer":
         """concatenate two FileContainers
 
         Parameters
@@ -784,7 +807,7 @@ class FileContainer:
 
         return type(self)(df)
 
-    def _get_subset(self, **query):
+    def _get_subset(self, **query) -> pd.DataFrame:
         if not query:
             return pd.DataFrame(
                 [], columns=self.df.columns, index=pd.Index([], name="path")
@@ -802,12 +825,19 @@ class FileContainer:
 
         return self.df[sel]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.df.__len__()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
 
         n_paths = len(self)
 
         msg = f"<FileContainer: {n_paths} paths>\n"
         return msg + self.df.__repr__()
+
+    def _repr_html_(self):
+
+        n_paths = len(self)
+
+        msg = f"filefisher.FileContainer: {n_paths} paths<br><hr><br>"
+        return msg + self.df._repr_html_()
