@@ -32,15 +32,7 @@ ON_PARSE_ERROR_OPTIONS = Literal["raise", "warn", "ignore"]
 ON_EMPTY_OPTIONS = Literal["raise", "warn", "allow"]
 
 
-def _deprecate_allow_empty(**kwargs) -> None:
-
-    _allow_empty = kwargs.get("_allow_empty")
-
-    if _allow_empty is not None:
-        raise TypeError("`_allow_empty` has been deprecated in favour of `on_empty`")
-
-
-_RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "on_empty", "_allow_empty"}
+_RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "on_empty"}
 
 
 def _assert_valid_keys(keys) -> None:
@@ -139,8 +131,6 @@ class _Finder(_FinderBase):
         Missing ``keys`` are replaced with ``"*"``.
 
         """
-
-        _deprecate_allow_empty(**keys_kwargs)
 
         keys = update_dict_with_kwargs(keys, **keys_kwargs)
 
@@ -374,7 +364,7 @@ class FileFinder:
         '/root/bar/'
         """
 
-        # warnings.warn("'create_path_name' is deprecated, use 'path.name' instead")
+        # warnings.warn("'create_path_name' is deprecated, use 'path.create_name' instead")
         return self.path.create_name(keys, **keys_kwargs)
 
     def create_file_name(self, keys=None, **keys_kwargs) -> str:
@@ -404,7 +394,7 @@ class FileFinder:
         'bar_file_1'
         """
 
-        # warnings.warn("'create_file_name' is deprecated, use 'file.name' instead")
+        # warnings.warn("'create_file_name' is deprecated, use 'file.create_name' instead")
         return self.file.create_name(keys, **keys_kwargs)
 
     def create_full_name(self, keys=None, **keys_kwargs) -> str:
@@ -434,7 +424,7 @@ class FileFinder:
         '/root/bar/bar_file_1'
         """
 
-        # warnings.warn("'create_full_name' is deprecated, use 'full.name' instead")
+        # warnings.warn("'create_full_name' is deprecated, use 'full.create_name' instead")
         return self.full.create_name(keys, **keys_kwargs)
 
     def find_paths(

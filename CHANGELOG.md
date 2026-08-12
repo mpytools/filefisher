@@ -6,6 +6,8 @@
   ([#262](https://github.com/mpytools/filefisher/pull/262)).
 - Removed `combine_by_keys`, deprecated in v1.0.0 - use a `pd.MultiIndex` instead
   ([#263](https://github.com/mpytools/filefisher/pull/263)).
+- Finalized the `_allow_empty` deprecation of the `FileFinder.find*` method deprecated in v1.0.0. Use
+  `on_empty` instead ([#264](https://github.com/mpytools/filefisher/pull/264)).
 
 ## v1.3.0 - 12.08.2026
 
@@ -81,6 +83,8 @@ Version 1.0.0 renames the package to filefisher (from filefinder) and makes the 
   ([#110](https://github.com/mpytools/filefisher/pull/110))
 - The `FileFinder.find_files` arguments `on_parse_error` and `_allow_empty` can no
   longer be passed by position ([#99](https://github.com/mpytools/filefisher/pull/99)).
+- Renamed the `_allow_empty` keword of `FileFinder.find*` to `on_empty`
+   ([#112](https://github.com/mpytools/filefisher/pull/112)).
 - `FileFinder` now raises an error if an invalid `"{placeholder}"` is used
    ([#99](https://github.com/mpytools/filefisher/pull/99)).
 - Define and test the minimum supported versions of the dependencies ([#125](https://github.com/mpytools/filefisher/pull/125)).
