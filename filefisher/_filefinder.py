@@ -291,7 +291,7 @@ class FileFinder:
         self.file = _FinderBase(file_pattern)
         # ensure path_pattern ends with a /
         self.path = _Finder(os.path.join(path_pattern, ""), suffix="*")
-        self.full = _Finder(os.path.join(*filter(None, (path_pattern, file_pattern))))
+        self.full = _Finder(os.path.join(path_pattern, file_pattern))
 
         self.keys_path = self.path.keys
         self.keys_file = self.file.keys

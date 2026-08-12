@@ -265,6 +265,30 @@ def test_create_name():
     result = ff.create_full_name(a="a", b="b", c="c")
     assert result == "a/b/b_c"
 
+    # empty file pattern
+    ff = FileFinder(path_pattern=path_pattern, file_pattern="")
+
+    result = ff.create_path_name(a="a", b="b")
+    assert result == "a/b/"
+
+    result = ff.create_file_name()
+    assert result == ""
+
+    result = ff.create_full_name(a="a", b="b")
+    assert result == "a/b/"
+
+    # empty path pattern
+    ff = FileFinder(path_pattern="", file_pattern=file_pattern)
+
+    result = ff.create_path_name()
+    assert result == ""
+
+    result = ff.create_file_name(b="b", c="c")
+    assert result == "b_c"
+
+    result = ff.create_full_name(a="a", b="b", c="c")
+    assert result == "b_c"
+
 
 def test_create_name_dict():
 
@@ -760,7 +784,7 @@ def test_find_unparsable():
     ff = FileFinder("{cat}_{cat}", "", test_paths=["a_b/"])
 
     with pytest.raises(
-        ValueError, match="Could not parse 'a_b/' with the pattern '{cat}_{cat}'"
+        ValueError, match="Could not parse 'a_b/' with the pattern '{cat}_{cat}/'"
     ):
         ff.find_files()
 
