@@ -224,7 +224,7 @@ class _Finder(_FinderBase):
         return fc
 
     @staticmethod
-    def _glob(pattern:str) -> list[str]:
+    def _glob(pattern: str) -> list[str]:
         """Return a list of paths matching a pathname pattern
 
         Notes
@@ -842,4 +842,4 @@ class FileContainer:
         n_paths = len(self)
 
         msg = f"filefisher.FileContainer: {n_paths} paths<br><hr><br>"
-        return msg + self.df._repr_html_() # type: ignore[operator]
+        return msg + self.df._repr_html_()  # type: ignore[operator]
