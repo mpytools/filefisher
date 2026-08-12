@@ -671,50 +671,6 @@ class FileContainer:
             index = cast(str, index)
             yield index, element.to_dict()
 
-    def combine_by_key(self, keys=None, sep="."):
-        """combine columns
-
-        Parameters
-        ----------
-        keys : list[str], optional
-            List of keys to combine. If None, all keys are combined.
-        sep : str, default "."
-            Separator between the keys.
-
-        Returns
-        -------
-        pd.Series
-            pd.Series with combined columns where the keys are separated by `sep`.
-
-        """
-        emit_user_level_warning(
-            "`combine_by_key` has been deprecated and will be removed in a future version",
-            FutureWarning,
-        )
-
-        return self._combine_by_keys(keys=keys, sep=sep)
-
-    def _combine_by_keys(self, keys=None, sep="."):
-        """combine columns
-
-        Parameters
-        ----------
-        keys : list[str], optional
-            List of keys to combine. If None, all keys are combined.
-        sep : str, default "."
-            Separator between the keys.
-
-        Returns
-        -------
-        pd.Series
-            pd.Series with combined columns where the keys are separated by `sep`.
-
-        """
-
-        if keys is None:
-            keys = list(self.df.columns)
-
-        return self.df[list(keys)].apply(lambda x: sep.join(x.map(str)), axis=1)
 
     def search(self, **query) -> "FileContainer":
         """subset paths given a search query

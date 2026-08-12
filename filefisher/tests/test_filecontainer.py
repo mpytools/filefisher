@@ -214,33 +214,7 @@ def test_filecontainer_concat(example_fc) -> None:
     assert len(result) == 5
 
 
-def test_fc_combine_by_key_deprecated(example_fc) -> None:
 
-    with pytest.warns(FutureWarning, match="`combine_by_key` has been deprecated"):
-        example_fc[[0]].combine_by_key()
-
-
-def test_fc_combine_by_keys(example_fc) -> None:
-
-    result = example_fc[[0]]._combine_by_keys()
-
-    # create one manually
-    expected = pd.Series(["a.d.r"], index=pd.Index(["file0"], name="path"))
-    pd.testing.assert_series_equal(result, expected)
-
-    result = example_fc._combine_by_keys()
-    expected = list(map(".".join, example_fc.df.values))
-    expected = pd.Series(expected, index=example_fc.df.index)
-
-    # different sep
-    result = example_fc._combine_by_keys(sep="|")
-    expected = list(map("|".join, example_fc.df.values))
-    expected = pd.Series(expected, index=example_fc.df.index)
-
-    # not all columns
-    result = example_fc._combine_by_keys(keys=("model", "res"))
-    expected = list(map(".".join, example_fc.df[["model", "res"]].values))
-    expected = pd.Series(expected, index=example_fc.df.index)
 
 
 def test_filecontainer_repr(example_fc) -> None:
