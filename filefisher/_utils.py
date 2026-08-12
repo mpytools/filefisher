@@ -7,7 +7,7 @@ import warnings
 import pandas as pd
 
 
-def _find_keys(string):
+def _find_keys(string) -> tuple[str]:
     """find keys in a format string
 
     find all keys enclosed by curly brackets
@@ -33,11 +33,11 @@ def _find_keys(string):
     return keys
 
 
-def atoi(text):
+def atoi(text: str) -> int | str:
     return int(text) if text.isdigit() else text
 
 
-def natural_keys(text):
+def natural_keys(text: str) -> list[int | str]:
     """key for natural sorting order
 
     Examples
@@ -98,7 +98,7 @@ def update_dict_with_kwargs(dictionary, /, **kwargs):
     return (dictionary or {}) | kwargs
 
 
-def emit_user_level_warning(message, category=None) -> None:
+def emit_user_level_warning(message: str, category=None) -> None:
     """emit a warning at the user level"""
 
     # skip_file_prefixes only defined in python 3.12

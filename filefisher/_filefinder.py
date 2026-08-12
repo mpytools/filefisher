@@ -62,7 +62,7 @@ def _assert_unique(df) -> None:
 
 
 class _FinderBase:
-    def __init__(self, pattern, suffix="") -> None:
+    def __init__(self, pattern: str, suffix: str="") -> None:
 
         self.pattern = pattern
         self.keys = _find_keys(pattern)
@@ -162,8 +162,8 @@ class _Finder(_FinderBase):
             if isinstance(value, str) or np.ndim(value) == 0:
                 keys[key] = [value]
 
-        all_paths = list()
-        all_patterns = list()
+        all_paths: list[str] = list()
+        all_patterns: list[str] = list()
         for one_search_dict in product_dict(**keys):
 
             cond_dict = self._create_condition_dict(**one_search_dict)
