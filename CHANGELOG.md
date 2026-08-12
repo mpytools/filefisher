@@ -2,9 +2,9 @@
 
 ## v1.3.0 - unreleased
 
+- Fix folder names when an empty string is passed as `file_pattern`. Now correctly sets it
+  as `folder/` while it was `folder` previously ([#254](https://github.com/mpytools/filefisher/pull/254)).
 - Added a html repr for `FileContainer` ([#144](https://github.com/mpytools/filefisher/issues/144)).
-
-
 
 ## v1.2.0 - 17.11.2025
 
