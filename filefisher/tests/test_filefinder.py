@@ -48,7 +48,7 @@ def test_paths(request, tmp_path):
     return paths
 
 
-@pytest.mark.parametrize("placeholder", ("keys", "on_parse_error", "_allow_empty"))
+@pytest.mark.parametrize("placeholder", ("keys", "on_parse_error"))
 def test_pattern_invalid_placeholder(placeholder) -> None:
 
     with pytest.raises(ValueError, match=f"'{placeholder}' is not a valid placeholder"):
@@ -77,18 +77,6 @@ def test_assert_unique() -> None:
     df = pd.DataFrame.from_records([("a", "d"), ("a", "d")], columns=("model", "res"))
     with pytest.raises(ValueError, match="Non-unique metadata detected"):
         _assert_unique(df)
-
-
-@pytest.mark.parametrize("_allow_empty", (False, True))
-def test_deprecate_allow_empty(_allow_empty) -> None:
-
-    ff = FileFinder("", "a")
-    msg = "`_allow_empty` has been deprecated in favour of `on_empty`"
-    with pytest.raises(TypeError, match=msg):
-        ff.find_files(_allow_empty=_allow_empty)
-
-    with pytest.raises(TypeError, match=msg):
-        ff.find_paths(_allow_empty=_allow_empty)
 
 
 def test_wrong_on_empty() -> None:

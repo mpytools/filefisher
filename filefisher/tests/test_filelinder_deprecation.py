@@ -11,4 +11,4 @@ def test_filefinder_deprecation() -> None:
     with pytest.raises(
         ImportError, match="`filefinder` has been renamed to `filefisher`"
     ):
-        from filefinder import FileFinder  # noqa: F401
+        from filefinder import FileFinder  # type: ignore[attr-defined] # noqa: F401
