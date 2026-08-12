@@ -841,5 +841,5 @@ class FileContainer:
 
         n_paths = len(self)
 
-        msg = f"<pre>&lt;filefisher.FileContainer: {n_paths} paths&gt;</pre>"
-        return msg + self.df._repr_html_() # type: ignore[operator]
+        msg = f"<pre>&lt;FileContainer: {n_paths} paths&gt;</pre>"
+        return msg + self.df._repr_html_()  # type: ignore[operator]
