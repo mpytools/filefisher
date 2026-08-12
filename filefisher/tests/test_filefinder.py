@@ -265,6 +265,30 @@ def test_create_name() -> None:
     result = ff.create_full_name(a="a", b="b", c="c")
     assert result == "a/b/b_c"
 
+    # empty file pattern
+    ff = FileFinder(path_pattern=path_pattern, file_pattern="")
+
+    result = ff.create_path_name(a="a", b="b")
+    assert result == "a/b/"
+
+    result = ff.create_file_name()
+    assert result == ""
+
+    result = ff.create_full_name(a="a", b="b")
+    assert result == "a/b/"
+
+    # empty path pattern
+    ff = FileFinder(path_pattern="", file_pattern=file_pattern)
+
+    result = ff.create_path_name()
+    assert result == ""
+
+    result = ff.create_file_name(b="b", c="c")
+    assert result == "b_c"
+
+    result = ff.create_full_name(a="a", b="b", c="c")
+    assert result == "b_c"
+
 
 def test_create_name_dict() -> None:
 
