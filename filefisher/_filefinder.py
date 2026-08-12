@@ -62,7 +62,7 @@ def _assert_unique(df) -> None:
 
 
 class _FinderBase:
-    def __init__(self, pattern: str, suffix: str="") -> None:
+    def __init__(self, pattern: str, suffix: str = "") -> None:
 
         self.pattern = pattern
         self.keys = _find_keys(pattern)
