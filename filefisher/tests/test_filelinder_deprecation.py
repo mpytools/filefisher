@@ -5,7 +5,7 @@ import pytest
 from . import assert_no_warnings
 
 
-def test_filefinder_deprecation():
+def test_filefinder_deprecation() -> None:
 
     with pytest.warns(
         FutureWarning, match="`filefinder` has been renamed to `filefisher`"

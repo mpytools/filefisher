@@ -5,7 +5,7 @@ import os
 import re
 import warnings
 from collections.abc import Generator
-from typing import Any
+from typing import Any, Literal, cast
 
 import numpy as np
 import pandas as pd
@@ -28,8 +28,11 @@ file_pattern: '{file_pattern}'
 keys: {repr_keys}
 """
 
+ON_PARSE_ERROR_OPTIONS = Literal["raise", "warn", "ignore"]
+ON_EMPTY_OPTIONS = Literal["raise", "warn", "allow"]
 
-def _deprecate_allow_empty(**kwargs):
+
+def _deprecate_allow_empty(**kwargs) -> None:
 
     _allow_empty = kwargs.get("_allow_empty")
 
@@ -59,7 +62,7 @@ def _assert_unique(df) -> None:
 
 
 class _FinderBase:
-    def __init__(self, pattern, suffix=""):
+    def __init__(self, pattern: str, suffix: str = "") -> None:
 
         self.pattern = pattern
         self.keys = _find_keys(pattern)
@@ -107,7 +110,12 @@ class _Finder(_FinderBase):
         return cond_dict
 
     def find(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
@@ -154,8 +162,8 @@ class _Finder(_FinderBase):
             if isinstance(value, str) or np.ndim(value) == 0:
                 keys[key] = [value]
 
-        all_paths = list()
-        all_patterns = list()
+        all_paths: list[str] = list()
+        all_patterns: list[str] = list()
         for one_search_dict in product_dict(**keys):
 
             cond_dict = self._create_condition_dict(**one_search_dict)
@@ -216,7 +224,7 @@ class _Finder(_FinderBase):
         return fc
 
     @staticmethod
-    def _glob(pattern) -> list[str]:
+    def _glob(pattern: str) -> list[str]:
         """Return a list of paths matching a pathname pattern
 
         Notes
@@ -227,9 +235,12 @@ class _Finder(_FinderBase):
 
         return glob.glob(pattern)
 
-    def _parse_paths(self, paths, on_parse_error) -> pd.DataFrame:
+    def _parse_paths(
+        self, paths, on_parse_error: ON_PARSE_ERROR_OPTIONS
+    ) -> pd.DataFrame:
 
-        valid_paths, out = list(), list()
+        valid_paths: list[str] = list()
+        out = list()
         for path in paths:
             parsed = self.parser.parse(path)
 
@@ -248,6 +259,7 @@ class _Finder(_FinderBase):
                     pass
             else:
                 valid_paths.append(path)
+                parsed = cast(parse.Result, parsed)
                 out.append(list(parsed.named.values()))
 
         index = pd.Index(valid_paths, name="path") + self._suffix
@@ -258,7 +270,7 @@ class _Finder(_FinderBase):
 class FileFinder:
 
     def __init__(
-        self, path_pattern: str, file_pattern: str, *, test_paths=None
+        self, path_pattern: str | os.PathLike, file_pattern: str, *, test_paths=None
     ) -> None:
         """find and create file names based on python format syntax
 
@@ -318,10 +330,10 @@ class FileFinder:
         self._test_paths = test_paths
 
         # use fnmatch.filter to 'glob' pseudo-filenames
-        def finder(pat):
+        def finder(pattern: str) -> list[str]:
 
             # make fnmatch work (almost) the same as glob
-            if pat.endswith(os.path.sep):
+            if pattern.endswith(os.path.sep):
                 # remove duplicate paths (i.e. if the filename made it non-unique)
                 paths_ = sorted(
                     set(os.path.dirname(s) + os.path.sep for s in test_paths)
@@ -329,7 +341,7 @@ class FileFinder:
             else:
                 paths_ = test_paths
 
-            return fnmatch.filter(paths_, pat)
+            return fnmatch.filter(paths_, pattern)
 
         # overwrite the glob implementation
         self.path._glob = finder
@@ -426,7 +438,12 @@ class FileFinder:
         return self.full.create_name(keys, **keys_kwargs)
 
     def find_paths(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
@@ -476,7 +493,12 @@ class FileFinder:
         )
 
     def find_files(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file pattern
 
@@ -596,7 +618,7 @@ class FileFinder:
 
 class FileContainer:
 
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame) -> None:
         """FileContainer gathers paths and their metadata
 
         Parameters
@@ -634,7 +656,9 @@ class FileContainer:
     @property
     def meta(self) -> list[dict[str, Any]]:
         """Return metadata as list of dictionaries"""
-        return self.df.to_dict("records")
+        records = self.df.to_dict("records")
+        records = cast(list[dict[str, Any]], records)
+        return records
 
     @property
     def paths(self) -> list[str]:
@@ -644,6 +668,7 @@ class FileContainer:
     def items(self) -> Generator[tuple[str, dict[str, Any]], None, None]:
         """Return a generator of (path, metadata) tuples"""
         for index, element in self.df.iterrows():
+            index = cast(str, index)
             yield index, element.to_dict()
 
     def combine_by_key(self, keys=None, sep="."):
@@ -748,7 +773,7 @@ class FileContainer:
 
         return fc
 
-    def concat(self, other, drop_duplicates=True):
+    def concat(self, other, drop_duplicates=True) -> "FileContainer":
         """concatenate two FileContainers
 
         Parameters
@@ -784,7 +809,7 @@ class FileContainer:
 
         return type(self)(df)
 
-    def _get_subset(self, **query):
+    def _get_subset(self, **query) -> pd.DataFrame:
         if not query:
             return pd.DataFrame(
                 [], columns=self.df.columns, index=pd.Index([], name="path")
@@ -802,10 +827,10 @@ class FileContainer:
 
         return self.df[sel]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.df.__len__()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
 
         n_paths = len(self)
 

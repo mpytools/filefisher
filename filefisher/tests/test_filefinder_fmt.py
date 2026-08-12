@@ -1,24 +1,11 @@
 import textwrap
 
 import pandas as pd
-import pytest
 
 from filefisher import FileFinder
 
 
-@pytest.fixture(scope="module", params=["from_filesystem", "from_string"])
-def test_paths(request, tmp_path):
-
-    if request.param == "from_filesystem":
-        return None
-
-    paths = ["a1/foo/file", "a2/foo/file"]
-    paths = [str(tmp_path / path) for path in paths]
-
-    return paths
-
-
-def test_pattern_no_fmt_spec():
+def test_pattern_no_fmt_spec() -> None:
 
     path_pattern = "{path:l}_{pattern:2d}_{no_fmt}/"
     file_pattern = "{file}_{pattern:2d}"
@@ -34,7 +21,7 @@ def test_pattern_no_fmt_spec():
     assert ff.full._pattern_no_fmt_spec == path_pattern_no_fmt + file_pattern_no_fmt
 
 
-def test_keys():
+def test_keys() -> None:
 
     file_pattern = "{a:l}_{b}_{c:d}"
     path_pattern = "{ab}_{c:d}"
@@ -50,7 +37,7 @@ def test_keys():
     assert ff.keys_path == expected
 
 
-def test_repr():
+def test_repr() -> None:
 
     path_pattern = "/{a:l}/{b}"
     file_pattern = "{b}_{c:d}"
@@ -67,7 +54,7 @@ def test_repr():
     assert expected == ff.__repr__()
 
 
-def test_create_name():
+def test_create_name() -> None:
 
     path_pattern = "{a:w}/{b}"
     file_pattern = "{b}_{c:l}"
@@ -83,7 +70,7 @@ def test_create_name():
     assert result == "a/b/b_c"
 
 
-def test_create_name_dict():
+def test_create_name_dict() -> None:
 
     path_pattern = "{a:w}/{b}"
     file_pattern = "{b}_{c:d}"
@@ -99,7 +86,7 @@ def test_create_name_dict():
     assert result == "a/b/b_c"
 
 
-def test_find_paths_fmt():
+def test_find_paths_fmt() -> None:
 
     test_paths = ["a1/a1_abc", "ab200/ab200_aicdef"]
 

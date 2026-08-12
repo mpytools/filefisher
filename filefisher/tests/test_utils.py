@@ -20,21 +20,21 @@ from filefisher._utils import (
         ["{a:d}{b:d}{c:d}", ("a", "b", "c")],
     ),
 )
-def test_find_keys(string, expected):
+def test_find_keys(string, expected) -> None:
 
     result = _find_keys(string)
 
     assert result == expected
 
 
-def test_atoi():
+def test_atoi() -> None:
 
     assert atoi("10") == 10
     assert atoi("a10") == "a10"
     assert atoi("a") == "a"
 
 
-def test_natural_keys_sort():
+def test_natural_keys_sort() -> None:
 
     lst = ["a10", "a1"]
     expected = ["a1", "a10"]
@@ -44,7 +44,7 @@ def test_natural_keys_sort():
     assert lst == expected
 
 
-def test_product_dict():
+def test_product_dict() -> None:
 
     result = list(product_dict(a=[1, 2], b=[3, 4], c=[5]))
     expected = [
@@ -57,7 +57,7 @@ def test_product_dict():
     assert result == expected
 
 
-def test_update_dict_with_kwargs():
+def test_update_dict_with_kwargs() -> None:
 
     result = update_dict_with_kwargs({"a": 1}, a=2)
     expected = {"a": 2}
@@ -82,4 +82,4 @@ def test_update_dict_with_kwargs():
         update_dict_with_kwargs("")
 
     with pytest.raises(TypeError, match="missing 1 required positional argument"):
-        update_dict_with_kwargs(dictionary={})
+        update_dict_with_kwargs(dictionary={})  # type: ignore[call-arg]
