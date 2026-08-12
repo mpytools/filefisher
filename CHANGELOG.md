@@ -2,6 +2,10 @@
 
 ## v1.3.0 - unreleased
 
+- Added a html repr for `FileContainer` ([#144](https://github.com/mpytools/filefisher/issues/144)).
+
+
+
 ## v1.2.0 - 17.11.2025
 
 Version v1.2.0 ignores `key=None` in all `find*` methods and bumps the required dependencies.

@@ -243,7 +243,7 @@ def test_fc_combine_by_keys(example_fc):
     expected = pd.Series(expected, index=example_fc.df.index)
 
 
-def test_filefinder_repr(example_fc):
+def test_filecontainer_repr(example_fc):
 
     # NOTE: does not test the pd.DataFrame part of the repr
 
@@ -252,3 +252,15 @@ def test_filefinder_repr(example_fc):
     assert fc.__repr__().startswith("<FileContainer: 0 paths>")
 
     assert example_fc.__repr__().startswith("<FileContainer: 5 paths>")
+
+def test_filecontainer_html_repr(example_fc):
+
+    # NOTE: does not test the pd.DataFrame part of the html repr
+
+    df = pd.DataFrame([], columns=["cat"], index=pd.Index([], name="path"))
+    repr = FileContainer(df)._repr_html_()
+    assert repr.startswith("<pre>&lt;FileContainer: 0 paths&gt;</pre>")
+
+    repr = example_fc._repr_html_()
+    assert repr.startswith("<pre>&lt;FileContainer: 5 paths&gt;</pre>")
+

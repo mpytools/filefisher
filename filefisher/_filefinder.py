@@ -811,3 +811,10 @@ class FileContainer:
 
         msg = f"<FileContainer: {n_paths} paths>\n"
         return msg + self.df.__repr__()
+
+    def _repr_html_(self) -> str:
+
+        n_paths = len(self)
+
+        msg = f"<pre>&lt;FileContainer: {n_paths} paths&gt;</pre>"
+        return msg + self.df._repr_html_()  # type: ignore[operator]
