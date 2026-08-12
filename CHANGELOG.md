@@ -6,6 +6,8 @@
   as `folder/` while it was `folder` previously ([#254](https://github.com/mpytools/filefisher/pull/254)).
 - Added a html repr for `FileContainer` ([#144](https://github.com/mpytools/filefisher/issues/144)).
 - Added more type hints for filefisher and is now discoverable by type checkers ([#252](https://github.com/mpytools/filefisher/pull/252)).
+- Explicitly test on python 3.14 ([#257](https://github.com/mathause/filefinder/pull/257)).
+- Drop python 3.11 support ([#256](https://github.com/mathause/filefinder/pull/256)).
 
 ## v1.2.0 - 17.11.2025
 
