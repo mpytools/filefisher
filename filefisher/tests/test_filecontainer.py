@@ -7,7 +7,7 @@ from . import assert_filecontainer_empty
 
 
 @pytest.fixture
-def example_df():
+def example_df() -> pd.DataFrame:
 
     df = pd.DataFrame.from_records(
         [
@@ -24,12 +24,12 @@ def example_df():
 
 
 @pytest.fixture
-def example_fc(example_df):
+def example_fc(example_df) -> FileContainer:
 
     return FileContainer(example_df)
 
 
-def test_empty_filecontainer():
+def test_empty_filecontainer() -> None:
 
     df = pd.DataFrame([], columns=["cat"], index=pd.Index([], name="path"))
 
@@ -42,13 +42,13 @@ def test_empty_filecontainer():
         next(iter(fc.items()))
 
 
-def test_filecontainer(example_df, example_fc):
+def test_filecontainer(example_df, example_fc) -> None:
 
     assert example_fc.df is example_df
     assert len(example_fc) == 5
 
 
-def test_fc_iter(example_df, example_fc):
+def test_fc_iter(example_df, example_fc) -> None:
 
     # test one manually
     with pytest.warns(
@@ -63,11 +63,13 @@ def test_fc_iter(example_df, example_fc):
         FutureWarning, match="iterating over a `FileContainer` is deprecated"
     ):
         result = list(example_fc)
-    expected = list(zip(example_df.index.to_list(), example_df.to_dict("records")))
+    expected = list(
+        zip(example_df.index.to_list(), example_df.to_dict("records"), strict=True)
+    )
     assert result == expected
 
 
-def test_fc_items(example_df, example_fc):
+def test_fc_items(example_df, example_fc) -> None:
 
     # test one manually
     path, meta = next(iter(example_fc.items()))
@@ -75,11 +77,13 @@ def test_fc_items(example_df, example_fc):
     assert meta == {"model": "a", "scen": "d", "res": "r"}
 
     result = list(example_fc.items())
-    expected = list(zip(example_df.index.to_list(), example_df.to_dict("records")))
+    expected = list(
+        zip(example_df.index.to_list(), example_df.to_dict("records"), strict=True)
+    )
     assert result == expected
 
 
-def test_fc_getitem(example_df, example_fc):
+def test_fc_getitem(example_df, example_fc) -> None:
 
     # indexing by scalar currently returns path, meta (analog to the loop)
     # not sure if this is the best way but keep for now
@@ -99,7 +103,7 @@ def test_fc_getitem(example_df, example_fc):
     assert_filecontainer_empty(result, columns=["model", "scen", "res"])
 
 
-def test_filecontainer_paths(example_fc):
+def test_filecontainer_paths(example_fc) -> None:
 
     result = example_fc.paths
     expected = [
@@ -113,7 +117,7 @@ def test_filecontainer_paths(example_fc):
     assert result == expected
 
 
-def test_filecontainer_meta(example_fc):
+def test_filecontainer_meta(example_fc) -> None:
 
     result = example_fc.meta
 
@@ -128,7 +132,7 @@ def test_filecontainer_meta(example_fc):
     assert result == expected
 
 
-def test_filecontainer_search(example_df, example_fc):
+def test_filecontainer_search(example_df, example_fc) -> None:
 
     with pytest.raises(KeyError):
         example_fc.search(not_in_example_fc="a")
@@ -159,7 +163,7 @@ def test_filecontainer_search(example_df, example_fc):
     pd.testing.assert_frame_equal(result.df, expected)
 
 
-def test_filecontainer_search_none_key(example_df, example_fc):
+def test_filecontainer_search_none_key(example_df, example_fc) -> None:
     # https://github.com/mpytools/filefisher/issues/156
 
     result = example_fc.search(model=None)
@@ -170,7 +174,7 @@ def test_filecontainer_search_none_key(example_df, example_fc):
     pd.testing.assert_frame_equal(result.df, expected)
 
 
-def test_filecontainer_search_single(example_df, example_fc):
+def test_filecontainer_search_single(example_df, example_fc) -> None:
 
     # empty search query results in an empty FileContainer
     with pytest.raises(ValueError, match="Found no paths"):
@@ -231,7 +235,7 @@ def test_filecontainer_search_intersection_error():
         fc.search_intersection(search_key="folder", intersect_key="file")
 
 
-def test_filecontainer_concat(example_fc):
+def test_filecontainer_concat(example_fc) -> None:
 
     with pytest.raises(ValueError, match="Can only concatenate two FileContainers."):
         example_fc.concat("not a FileContainer")
@@ -254,36 +258,7 @@ def test_filecontainer_concat(example_fc):
     assert len(result) == 5
 
 
-def test_fc_combine_by_key_deprecated(example_fc):
-
-    with pytest.warns(FutureWarning, match="`combine_by_key` has been deprecated"):
-        example_fc[[0]].combine_by_key()
-
-
-def test_fc_combine_by_keys(example_fc):
-
-    result = example_fc[[0]]._combine_by_keys()
-
-    # create one manually
-    expected = pd.Series(["a.d.r"], index=pd.Index(["file0"], name="path"))
-    pd.testing.assert_series_equal(result, expected)
-
-    result = example_fc._combine_by_keys()
-    expected = map(".".join, example_fc.df.values)
-    expected = pd.Series(expected, index=example_fc.df.index)
-
-    # different sep
-    result = example_fc._combine_by_keys(sep="|")
-    expected = map("|".join, example_fc.df.values)
-    expected = pd.Series(expected, index=example_fc.df.index)
-
-    # not all columns
-    result = example_fc._combine_by_keys(keys=("model", "res"))
-    expected = map(".".join, example_fc.df[["model", "res"]].values)
-    expected = pd.Series(expected, index=example_fc.df.index)
-
-
-def test_filefinder_repr(example_fc):
+def test_filecontainer_repr(example_fc) -> None:
 
     # NOTE: does not test the pd.DataFrame part of the repr
 
@@ -292,3 +267,15 @@ def test_filefinder_repr(example_fc):
     assert fc.__repr__().startswith("<FileContainer: 0 paths>")
 
     assert example_fc.__repr__().startswith("<FileContainer: 5 paths>")
+
+
+def test_filecontainer_html_repr(example_fc):
+
+    # NOTE: does not test the pd.DataFrame part of the html repr
+
+    df = pd.DataFrame([], columns=["cat"], index=pd.Index([], name="path"))
+    repr = FileContainer(df)._repr_html_()
+    assert repr.startswith("<pre>&lt;FileContainer: 0 paths&gt;</pre>")
+
+    repr = example_fc._repr_html_()
+    assert repr.startswith("<pre>&lt;FileContainer: 5 paths&gt;</pre>")

@@ -4,8 +4,8 @@ import logging
 import os
 import re
 import warnings
-from typing import Any
 from collections.abc import Generator
+from typing import Any, Literal, cast
 
 import numpy as np
 import pandas as pd
@@ -13,6 +13,7 @@ import parse
 
 from filefisher._utils import (
     _find_keys,
+    emit_user_level_warning,
     natural_keys,
     product_dict,
     update_dict_with_kwargs,
@@ -20,23 +21,18 @@ from filefisher._utils import (
 
 logger = logging.getLogger(__name__)
 
-_FILE_FINDER_REPR = """<FileFinder>
+_FILE_FINDER_REPR = """<FileFinder{maybe_test_paths}>
 path_pattern: '{path_pattern}'
 file_pattern: '{file_pattern}'
 
 keys: {repr_keys}
 """
 
-
-def _deprecate_allow_empty(**kwargs):
-
-    _allow_empty = kwargs.get("_allow_empty")
-
-    if _allow_empty is not None:
-        raise TypeError("`_allow_empty` has been deprecated in favour of `on_empty`")
+ON_PARSE_ERROR_OPTIONS = Literal["raise", "warn", "ignore"]
+ON_EMPTY_OPTIONS = Literal["raise", "warn", "allow"]
 
 
-_RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "on_empty", "_allow_empty"}
+_RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "on_empty"}
 
 
 def _assert_valid_keys(keys) -> None:
@@ -58,7 +54,7 @@ def _assert_unique(df) -> None:
 
 
 class _FinderBase:
-    def __init__(self, pattern, suffix=""):
+    def __init__(self, pattern: str, suffix: str = "") -> None:
 
         self.pattern = pattern
         self.keys = _find_keys(pattern)
@@ -106,7 +102,12 @@ class _Finder(_FinderBase):
         return cond_dict
 
     def find(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
@@ -114,14 +115,13 @@ class _Finder(_FinderBase):
         ----------
         keys : dict
             Dictionary containing keys to create the search pattern. Several names can
-            be passed for each key as list.
+            be passed for each key as list (interpreted as or). None is ignored.
         on_parse_error : "raise" | "warn" | "ignore", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "ignore" ignores the file.
         on_empty : "raise" | "warn" | "allow", default: "raise"
             Behaviour when no files are found: "raise" (default) raises a ValueError,
             "warn" raises a warning. For "warn" and "allow" an empty FileContainer is returned.
-            an empty list.
         **keys_kwargs : {key: indexer, ...}, optional
             The keyword arguments form of ``keys``. When the same key is passed in
             ``keys`` and ``keys_kwargs`` the latter takes priority.
@@ -132,9 +132,10 @@ class _Finder(_FinderBase):
 
         """
 
-        _deprecate_allow_empty(**keys_kwargs)
-
         keys = update_dict_with_kwargs(keys, **keys_kwargs)
+
+        # ignore None values
+        keys = {key: value for key, value in keys.items() if value is not None}
 
         if on_parse_error not in ("raise", "warn", "ignore"):
             raise ValueError(
@@ -151,8 +152,8 @@ class _Finder(_FinderBase):
             if isinstance(value, str) or np.ndim(value) == 0:
                 keys[key] = [value]
 
-        all_paths = list()
-        all_patterns = list()
+        all_paths: list[str] = list()
+        all_patterns: list[str] = list()
         for one_search_dict in product_dict(**keys):
 
             cond_dict = self._create_condition_dict(**one_search_dict)
@@ -171,8 +172,7 @@ class _Finder(_FinderBase):
             if on_empty == "raise":
                 raise ValueError(msg)
             elif on_empty == "warn":
-                # TODO: correct stack level
-                warnings.warn(msg)
+                emit_user_level_warning(msg)
 
         # NOTE: also creates the correct (empty) df if no paths are found
         df = self._parse_paths(all_paths, on_parse_error=on_parse_error)
@@ -214,7 +214,7 @@ class _Finder(_FinderBase):
         return fc
 
     @staticmethod
-    def _glob(pattern) -> list[str]:
+    def _glob(pattern: str) -> list[str]:
         """Return a list of paths matching a pathname pattern
 
         Notes
@@ -225,9 +225,12 @@ class _Finder(_FinderBase):
 
         return glob.glob(pattern)
 
-    def _parse_paths(self, paths, on_parse_error) -> pd.DataFrame:
+    def _parse_paths(
+        self, paths, on_parse_error: ON_PARSE_ERROR_OPTIONS
+    ) -> pd.DataFrame:
 
-        valid_paths, out = list(), list()
+        valid_paths: list[str] = list()
+        out = list()
         for path in paths:
             parsed = self.parser.parse(path)
 
@@ -238,7 +241,7 @@ class _Finder(_FinderBase):
                         " there contradictory values?"
                     )
                 elif on_parse_error == "warn":
-                    warnings.warn(
+                    emit_user_level_warning(
                         f"Could not parse '{path}' with the pattern '{self.pattern}' - are"
                         " there contradictory values?"
                     )
@@ -246,6 +249,7 @@ class _Finder(_FinderBase):
                     pass
             else:
                 valid_paths.append(path)
+                parsed = cast(parse.Result, parsed)
                 out.append(list(parsed.named.values()))
 
         index = pd.Index(valid_paths, name="path") + self._suffix
@@ -256,7 +260,7 @@ class _Finder(_FinderBase):
 class FileFinder:
 
     def __init__(
-        self, path_pattern: str, file_pattern: str, *, test_paths=None
+        self, path_pattern: str | os.PathLike, file_pattern: str, *, test_paths=None
     ) -> None:
         """find and create file names based on python format syntax
 
@@ -289,7 +293,7 @@ class FileFinder:
         self.file = _FinderBase(file_pattern)
         # ensure path_pattern ends with a /
         self.path = _Finder(os.path.join(path_pattern, ""), suffix="*")
-        self.full = _Finder(os.path.join(*filter(None, (path_pattern, file_pattern))))
+        self.full = _Finder(os.path.join(path_pattern, file_pattern))
 
         self.keys_path = self.path.keys
         self.keys_file = self.file.keys
@@ -308,16 +312,18 @@ class FileFinder:
                 raise ValueError("`test_paths` are not unique")
 
             self._set_test_paths(test_paths)
+        else:
+            self._test_paths = None
 
     def _set_test_paths(self, test_paths):
 
         self._test_paths = test_paths
 
         # use fnmatch.filter to 'glob' pseudo-filenames
-        def finder(pat):
+        def finder(pattern: str) -> list[str]:
 
             # make fnmatch work (almost) the same as glob
-            if pat.endswith(os.path.sep):
+            if pattern.endswith(os.path.sep):
                 # remove duplicate paths (i.e. if the filename made it non-unique)
                 paths_ = sorted(
                     set(os.path.dirname(s) + os.path.sep for s in test_paths)
@@ -325,7 +331,7 @@ class FileFinder:
             else:
                 paths_ = test_paths
 
-            return fnmatch.filter(paths_, pat)
+            return fnmatch.filter(paths_, pattern)
 
         # overwrite the glob implementation
         self.path._glob = finder
@@ -358,7 +364,7 @@ class FileFinder:
         '/root/bar/'
         """
 
-        # warnings.warn("'create_path_name' is deprecated, use 'path.name' instead")
+        # warnings.warn("'create_path_name' is deprecated, use 'path.create_name' instead")
         return self.path.create_name(keys, **keys_kwargs)
 
     def create_file_name(self, keys=None, **keys_kwargs) -> str:
@@ -388,7 +394,7 @@ class FileFinder:
         'bar_file_1'
         """
 
-        # warnings.warn("'create_file_name' is deprecated, use 'file.name' instead")
+        # warnings.warn("'create_file_name' is deprecated, use 'file.create_name' instead")
         return self.file.create_name(keys, **keys_kwargs)
 
     def create_full_name(self, keys=None, **keys_kwargs) -> str:
@@ -418,11 +424,16 @@ class FileFinder:
         '/root/bar/bar_file_1'
         """
 
-        # warnings.warn("'create_full_name' is deprecated, use 'full.name' instead")
+        # warnings.warn("'create_full_name' is deprecated, use 'full.create_name' instead")
         return self.full.create_name(keys, **keys_kwargs)
 
     def find_paths(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
 
@@ -430,7 +441,7 @@ class FileFinder:
         ----------
         keys : dict
             Dictionary containing keys to create the search pattern. Several names can
-            be passed for each key as list.
+            be passed for each key as list (interpreted as or). None is ignored.
         on_parse_error : "raise" | "warn" | "skip", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "skip" ignores the file.
@@ -472,7 +483,12 @@ class FileFinder:
         )
 
     def find_files(
-        self, keys=None, *, on_parse_error="raise", on_empty="raise", **keys_kwargs
+        self,
+        keys=None,
+        *,
+        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
+        on_empty: ON_EMPTY_OPTIONS = "raise",
+        **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file pattern
 
@@ -480,7 +496,7 @@ class FileFinder:
         ----------
         keys : dict
             Dictionary containing keys to create the search pattern. Several names can
-            be passed for each key as list.
+            be passed for each key as list (interpreted as or). None is ignored.
         on_parse_error : "raise" | "warn" | "skip", default: "raise"
             What to do if a path/file name cannot be parsed. If "raise" raises a ValueError,
             if "warn" raises a warning and if "skip" ignores the file.
@@ -577,7 +593,11 @@ class FileFinder:
         repr_keys = "', '".join(sorted(self.full.keys))
         repr_keys = f"'{repr_keys}'"
 
+        tp = self._test_paths
+        maybe_test_paths = "" if tp is None else f" ({len(tp)} test_paths)"
+
         msg = _FILE_FINDER_REPR.format(
+            maybe_test_paths=maybe_test_paths,
             path_pattern=self.path.pattern,
             file_pattern=self.file.pattern,
             repr_keys=repr_keys,
@@ -588,7 +608,7 @@ class FileFinder:
 
 class FileContainer:
 
-    def __init__(self, df: pd.DataFrame):
+    def __init__(self, df: pd.DataFrame) -> None:
         """FileContainer gathers paths and their metadata
 
         Parameters
@@ -613,7 +633,7 @@ class FileContainer:
 
     def __getitem__(self, key):
 
-        if isinstance(key, (int, np.integer)):
+        if isinstance(key, int | np.integer):
             # use iloc -> there can be more than one element with index 0
             element = self.df.iloc[key]
 
@@ -626,7 +646,9 @@ class FileContainer:
     @property
     def meta(self) -> list[dict[str, Any]]:
         """Return metadata as list of dictionaries"""
-        return self.df.to_dict("records")
+        records = self.df.to_dict("records")
+        records = cast(list[dict[str, Any]], records)
+        return records
 
     @property
     def paths(self) -> list[str]:
@@ -636,52 +658,8 @@ class FileContainer:
     def items(self) -> Generator[tuple[str, dict[str, Any]], None, None]:
         """Return a generator of (path, metadata) tuples"""
         for index, element in self.df.iterrows():
+            index = cast(str, index)
             yield index, element.to_dict()
-
-    def combine_by_key(self, keys=None, sep="."):
-        """combine columns
-
-        Parameters
-        ----------
-        keys : list[str], optional
-            List of keys to combine. If None, all keys are combined.
-        sep : str, default "."
-            Separator between the keys.
-
-        Returns
-        -------
-        pd.Series
-            pd.Series with combined columns where the keys are separated by `sep`.
-
-        """
-        warnings.warn(
-            "`combine_by_key` has been deprecated and will be removed in a future version",
-            FutureWarning,
-        )
-
-        return self._combine_by_keys(keys=keys, sep=sep)
-
-    def _combine_by_keys(self, keys=None, sep="."):
-        """combine columns
-
-        Parameters
-        ----------
-        keys : list[str], optional
-            List of keys to combine. If None, all keys are combined.
-        sep : str, default "."
-            Separator between the keys.
-
-        Returns
-        -------
-        pd.Series
-            pd.Series with combined columns where the keys are separated by `sep`.
-
-        """
-
-        if keys is None:
-            keys = list(self.df.columns)
-
-        return self.df[list(keys)].apply(lambda x: sep.join(x.map(str)), axis=1)
 
     def search(self, **query) -> "FileContainer":
         """subset paths given a search query
@@ -719,7 +697,7 @@ class FileContainer:
         -------
         search_result : FileContainer
 
-        See also
+        See Also
         --------
         FileContainer.search
         """
@@ -792,7 +770,7 @@ class FileContainer:
         df = self._get_subset(**{intersect_key: list(intersection)})
         return type(self)(df)
 
-    def concat(self, other, drop_duplicates=True):
+    def concat(self, other, drop_duplicates=True) -> "FileContainer":
         """concatenate two FileContainers
 
         Parameters
@@ -828,7 +806,7 @@ class FileContainer:
 
         return type(self)(df)
 
-    def _get_subset(self, **query):
+    def _get_subset(self, **query) -> pd.DataFrame:
         if not query:
             return pd.DataFrame(
                 [], columns=self.df.columns, index=pd.Index([], name="path")
@@ -846,12 +824,19 @@ class FileContainer:
 
         return self.df[sel]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return self.df.__len__()
 
-    def __repr__(self):
+    def __repr__(self) -> str:
 
         n_paths = len(self)
 
         msg = f"<FileContainer: {n_paths} paths>\n"
         return msg + self.df.__repr__()
+
+    def _repr_html_(self) -> str:
+
+        n_paths = len(self)
+
+        msg = f"<pre>&lt;FileContainer: {n_paths} paths&gt;</pre>"
+        return msg + self.df._repr_html_()  # type: ignore[operator]

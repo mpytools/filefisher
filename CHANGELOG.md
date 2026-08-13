@@ -1,5 +1,58 @@
 # Changelog
 
+## v1.4.0 - unreleased
+
+- Importing the deprecated `filefinder` now raises an `ImportError`, use `import filefisher` instead
+  ([#262](https://github.com/mpytools/filefisher/pull/262)).
+- Removed `combine_by_keys`, deprecated in v1.0.0 - use a `pd.MultiIndex` instead
+  ([#263](https://github.com/mpytools/filefisher/pull/263)).
+- Finalized the `_allow_empty` deprecation of the `FileFinder.find*` method deprecated in v1.0.0. Use
+  `on_empty` instead ([#264](https://github.com/mpytools/filefisher/pull/264)).
+
+## v1.3.0 - 12.08.2026
+
+Version v1.3.0 adds a html repr for `FileContainer`, improves typing, and updates the required dependencies.
+
+- Fix folder names when an empty string is passed as `file_pattern`. Now correctly sets it
+  as `folder/` while it was `folder` previously ([#254](https://github.com/mpytools/filefisher/pull/254)).
+
+- Added a html repr for `FileContainer` ([#144](https://github.com/mpytools/filefisher/issues/144)).
+
+- Added more type hints for filefisher and is now discoverable by type checkers ([#252](https://github.com/mpytools/filefisher/pull/252)).
+
+- Explicitly test on python 3.14 ([#257](https://github.com/mathause/filefinder/pull/257)).
+
+- Drop python 3.11 support ([#256](https://github.com/mathause/filefinder/pull/256)).
+
+- Bump minimum supported versions of the dependencies ([#259](https://github.com/mpytools/filefisher/pull/259)):
+
+  | Package | Old  | New  |
+  | ------- | ---- | ---- |
+  | numpy   | 1.26 | 2.2  |
+  | pandas  | 2.2  | 2.3  |
+
+## v1.2.0 - 17.11.2025
+
+Version v1.2.0 ignores `key=None` in all `find*` methods and bumps the required dependencies.
+
+- Passing `key=None` is now ignored in all `find*` methods, and is now equivalent to passing `key="*"` or not
+  passing the key. Previously this was interpreted as `"None"` ([#192](https://github.com/mpytools/filefisher/issues/192)).
+
+- Drop support for python 3.9 ([#195](https://github.com/mpytools/filefisher/pull/195)).
+
+- Bump minimum supported versions of the dependencies ([#197](https://github.com/mpytools/filefisher/pull/197)):
+
+  | Package | Old  | New  |
+  | ------- | -----| ---- |
+  | numpy   | 1.24 | 1.26 |
+  | pandas  | 2.0  | 2.2  |
+  | parse   | 1.19 | 1.20 |
+
+- Ensure warnings are raised for user code and not internally ([#199](https://github.com/mpytools/filefisher/pull/199)).
+- Consolidate package metadata and configuration in *pyproject.toml* ([#174](https://github.com/mpytools/filefisher/pull/174)).
+- The `repr` now indicates when `test_paths` were passed ([#202](https://github.com/mpytools/filefisher/pull/202)).
+- Enable "bugbear" linting rules ([#198](https://github.com/mpytools/filefisher/pull/198), and [#200](https://github.com/mpytools/filefisher/pull/200)).
+
 ## v1.1.0 - 19.03.2025
 
 Version v1.1.0 fixes a regression from v1.0.0 and adds `FileContainer.search_single`.
@@ -30,12 +83,14 @@ Version 1.0.0 renames the package to filefisher (from filefinder) and makes the 
   ([#110](https://github.com/mpytools/filefisher/pull/110))
 - The `FileFinder.find_files` arguments `on_parse_error` and `_allow_empty` can no
   longer be passed by position ([#99](https://github.com/mpytools/filefisher/pull/99)).
+- Renamed the `_allow_empty` keword of `FileFinder.find*` to `on_empty`
+   ([#112](https://github.com/mpytools/filefisher/pull/112)).
 - `FileFinder` now raises an error if an invalid `"{placeholder}"` is used
    ([#99](https://github.com/mpytools/filefisher/pull/99)).
 - Define and test the minimum supported versions of the dependencies ([#125](https://github.com/mpytools/filefisher/pull/125)).
 
-  | Package    | Old     | New    |
-  | ---------- | ------- | ------ |
+  | Package    | Old       | New  |
+  | ---------- | --------- | ---- |
   | numpy      | undefined | 1.24 |
   | pandas     | undefined |  2.0 |
   | parse      | undefined | 1.19 |

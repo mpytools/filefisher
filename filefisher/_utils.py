@@ -1,10 +1,12 @@
 import itertools
+import pathlib
 import re
+import warnings
 
 import pandas as pd
 
 
-def _find_keys(string):
+def _find_keys(string) -> tuple[str]:
     """find keys in a format string
 
     find all keys enclosed by curly brackets
@@ -30,11 +32,11 @@ def _find_keys(string):
     return keys
 
 
-def atoi(text):
+def atoi(text: str) -> int | str:
     return int(text) if text.isdigit() else text
 
 
-def natural_keys(text):
+def natural_keys(text: str) -> list[int | str]:
     """key for natural sorting order
 
     Examples
@@ -66,7 +68,7 @@ def product_dict(**kwargs):
 
     keys = kwargs.keys()
     for instance in itertools.product(*kwargs.values()):
-        yield dict(zip(keys, instance))
+        yield dict(zip(keys, instance, strict=True))
 
 
 def update_dict_with_kwargs(dictionary, /, **kwargs):
@@ -87,9 +89,19 @@ def update_dict_with_kwargs(dictionary, /, **kwargs):
     {'a': 1, 'b': 3, 'c': 5}
     """
 
-    if not isinstance(dictionary, (dict, type(None))):
+    if not isinstance(dictionary, dict | type(None)):
         raise TypeError(
             f"First argument must be a dict or None, got '{type(dictionary).__name__}'"
         )
 
     return (dictionary or {}) | kwargs
+
+
+def emit_user_level_warning(message: str, category=None) -> None:
+    """emit a warning at the user level"""
+
+    import filefisher
+
+    pkg_dir = pathlib.Path(filefisher.__file__).parent.as_posix()
+
+    warnings.warn(message, category=category, skip_file_prefixes=(pkg_dir,))

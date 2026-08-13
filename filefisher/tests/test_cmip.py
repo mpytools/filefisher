@@ -4,7 +4,7 @@ from filefisher import FileContainer
 from filefisher.cmip import create_ensnumber, ensure_unique_grid, parse_ens
 
 
-def test_parse_ens_cmip5():
+def test_parse_ens_cmip5() -> None:
 
     # pattern: "r{r}i{i}p{p}"
 
@@ -38,7 +38,7 @@ def test_parse_ens_cmip5():
     pd.testing.assert_frame_equal(result.df, expected_df)
 
 
-def test_parse_ens_cmip6():
+def test_parse_ens_cmip6() -> None:
 
     # pattern: "r{r}i{i}p{p}f{f}"
 
@@ -72,7 +72,7 @@ def test_parse_ens_cmip6():
     pd.testing.assert_frame_equal(result.df, expected_df)
 
 
-def test_create_ensnumber():
+def test_create_ensnumber() -> None:
     columns = ("path", "model", "exp", "table", "varn", "ens")
 
     common = ("exp", "table", "varn")
@@ -104,7 +104,7 @@ def test_create_ensnumber():
     pd.testing.assert_frame_equal(result.df, expected_df)
 
 
-def test_ensure_unique_grid():
+def test_ensure_unique_grid() -> None:
 
     columns = ("path", "model", "exp", "table", "varn", "ens", "grid")
 

@@ -9,7 +9,7 @@ from . import assert_no_warnings
 # ({"model": ["a", "a", "b", "c", "c", "d"], "res": ["d", "h", "h", "h", "d", "z"]})
 
 
-def test_priority_filter_errors():
+def test_priority_filter_errors() -> None:
 
     df = pd.DataFrame.from_records(
         [("a", "d")],
@@ -23,7 +23,7 @@ def test_priority_filter_errors():
         priority_filter(df, "res", ["a"], groupby=["model", "res"])
 
 
-def test_priority_filter_simple():
+def test_priority_filter_simple() -> None:
 
     df = pd.DataFrame.from_records(
         [("a", "d"), ("a", "h"), ("b", "h"), ("b", "d"), ("c", "d")],
@@ -39,7 +39,7 @@ def test_priority_filter_simple():
     pd.testing.assert_frame_equal(result, expected)
 
 
-def test_priority_filter_missing():
+def test_priority_filter_missing() -> None:
 
     df = pd.DataFrame.from_records(
         [("a", "d"), ("a", "h"), ("b", "d"), ("c", "z")], columns=("model", "res")
@@ -81,7 +81,7 @@ def test_priority_filter_missing():
     pd.testing.assert_frame_equal(res, expected)
 
 
-def test_priority_filter_duplicates():
+def test_priority_filter_duplicates() -> None:
 
     df = pd.DataFrame.from_records([("a", "d"), ("a", "d")], columns=("model", "res"))
 
@@ -89,7 +89,7 @@ def test_priority_filter_duplicates():
         priority_filter(df, "res", ["h", "d"])
 
 
-def test_priority_filter_multi():
+def test_priority_filter_multi() -> None:
 
     df = pd.DataFrame.from_records(
         [("a", 1, "d"), ("a", 2, "d"), ("a", 1, "h"), ("b", 1, "h")],
@@ -103,7 +103,7 @@ def test_priority_filter_multi():
     pd.testing.assert_frame_equal(result, expected)
 
 
-def test_priority_filter_groupby():
+def test_priority_filter_groupby() -> None:
 
     df = pd.DataFrame.from_records(
         [("a", 1, "d"), ("a", 2, "h"), ("b", 1, "h"), ("b", 2, "d")],
@@ -124,7 +124,7 @@ def test_priority_filter_groupby():
     pd.testing.assert_frame_equal(result, expected)
 
 
-def test_priority_filter_filename():
+def test_priority_filter_filename() -> None:
     """the filename is per default unique -> must be excluded from groupby"""
     df = pd.DataFrame.from_records(
         [
@@ -147,7 +147,7 @@ def test_priority_filter_filename():
     pd.testing.assert_frame_equal(result, expected)
 
 
-def test_priority_filter_filecontainer_simple():
+def test_priority_filter_filecontainer_simple() -> None:
     """the filename is per default unique -> must be excluded from groupby"""
     df = pd.DataFrame.from_records(
         [

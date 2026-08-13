@@ -1,7 +1,8 @@
 import functools
-import warnings
 
 import pandas as pd
+
+from filefisher._utils import emit_user_level_warning
 
 
 def _wrap_filecontainer(func):
@@ -48,7 +49,7 @@ def priority_filter(obj, column, order, *, on_missing="raise", groupby=None):
     """
 
     if on_missing == "error":
-        warnings.warn(
+        emit_user_level_warning(
             "on_missing value 'error' has been renamed to 'raise'", FutureWarning
         )
         on_missing = "raise"
@@ -119,7 +120,7 @@ def _prioritize(df, key, order, on_missing, multiindex):
                     f"Did not find any element from the priority list for\n{idx_string}"
                 )
             elif on_missing == "warn":
-                warnings.warn(
+                emit_user_level_warning(
                     f"Did not find any element from the priority list for\n{idx_string}"
                 )
             elif on_missing == "ignore":
