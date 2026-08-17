@@ -69,6 +69,9 @@ build-backend = "setuptools.build_meta"
 fallback_version = "999"
 version_scheme = "no-guess-dev"
 
+[tool.pytest.ini_options]
+doctest_optionflags = ["NORMALIZE_WHITESPACE"]
+
 [tool.ruff]
 
 [tool.ruff.lint]
