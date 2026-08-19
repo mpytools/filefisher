@@ -460,20 +460,33 @@ class FileFinder:
         --------
         >>> path_pattern = "/root/{category}"
         >>> file_pattern = "{category}_file_{number}"
-        >>> ff = FileFinder(path_pattern, file_pattern)
+        >>> test_paths = [
+        ...     "/root/foo/foo_file_1",
+        ...     "/root/foo/foo_file_2",
+        ...     "/root/bar/bar_file_1",
+        ...     "/root/baz/baz_file_1",
+        ... ]
+        >>> ff = FileFinder(path_pattern, file_pattern, test_paths=test_paths)
 
-        >>> ff.find_paths()   # doctest: +SKIP
-        Looks for
-        - "/root/*/"
+        >>> ff.find_paths()
+        <FileContainer: 3 paths>
+                    category
+        path
+        /root/bar/*      bar
+        /root/baz/*      baz
+        /root/foo/*      foo
+        >>> ff.find_paths(category="foo")
+        <FileContainer: 1 paths>
+                    category
+        path
+        /root/foo/*      foo
 
-        >>> ff.find_paths(category="foo")   # doctest: +SKIP
-        Looks for
-        - "/root/foo/"
-
-        >>> ff.find_paths(dict(category=["foo", "bar"]))   # doctest: +SKIP
-        Looks for
-        - "/root/foo/"
-        - "/root/bar/"
+        >>> ff.find_paths({"category": ["foo", "bar"]})
+        <FileContainer: 2 paths>
+                    category
+        path
+        /root/foo/*      foo
+        /root/bar/*      bar
         """
         return self.path.find(
             keys,
@@ -515,23 +528,41 @@ class FileFinder:
         --------
         >>> path_pattern = "/root/{category}"
         >>> file_pattern = "{category}_file_{number}"
-        >>> ff = FileFinder(path_pattern, file_pattern)
+        >>> test_paths = [
+        ...     "/root/foo/foo_file_1",
+        ...     "/root/foo/foo_file_2",
+        ...     "/root/foo/foo_file_3",
+        ...     "/root/bar/bar_file_1",
+        ...     "/root/baz/baz_file_1",
+        ... ]
+        >>> ff = FileFinder(path_pattern, file_pattern, test_paths=test_paths)
 
-        >>> ff.find_files()   # doctest: +SKIP
-        Looks for
-        - "/root/*/*_file_*"
+        >>> ff.find_files()  # searches "/root/*/*_file_*"
+        <FileContainer: 5 paths>
+                            category number
+        path
+        /root/bar/bar_file_1      bar      1
+        /root/baz/baz_file_1      baz      1
+        /root/foo/foo_file_1      foo      1
+        /root/foo/foo_file_2      foo      2
+        /root/foo/foo_file_3      foo      3
 
-        >>> ff.find_files(number=[1, 2])   # doctest: +SKIP
-        Looks for
-        - "/root/*/*_file_1"
-        - "/root/*/*_file_2"
+        >>> ff.find_files(number=[1, 2]) # searches /root/*/*_file_1 and /root/*/*_file_2
+        <FileContainer: 4 paths>
+                            category number
+        path
+        /root/bar/bar_file_1      bar      1
+        /root/baz/baz_file_1      baz      1
+        /root/foo/foo_file_1      foo      1
+        /root/foo/foo_file_2      foo      2
 
         >>> meta = {"category": "foo", "number": [1, 2]}
-        >>> ff.find_files(meta, category="bar")   # doctest: +SKIP
-        Looks for
-        - "/root/bar/bar_file_1"
-        - "/root/bar/bar_file_2"
-
+        >>> ff.find_files(meta, category="foo") # searcges /root/foo/foo_file_1 /root/foo/foo_file_2
+        <FileContainer: 2 paths>
+                            category number
+        path
+        /root/foo/foo_file_1      foo      1
+        /root/foo/foo_file_2      foo      2
         """
         return self.full.find(
             keys,
