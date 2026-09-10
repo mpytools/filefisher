@@ -400,6 +400,29 @@ def test_find_paths_simple(tmp_path, test_paths) -> None:
     pd.testing.assert_frame_equal(result.df, expected)
 
 
+def test_find_paths_on_empty():
+
+    ff = FileFinder("{foo}", "{bar}", test_paths=["a/a"])
+
+    with pytest.warns(match="Explicitly searched keys/ key combinations not found"):
+        ff.find_paths(foo=["a", "b"])
+
+    with pytest.warns(match="Explicitly searched keys/ key combinations not found"):
+        ff.find_paths(foo=["a", "b"], on_missing="warn")
+
+    with pytest.raises(
+        ValueError, match="Explicitly searched keys/ key combinations not found"
+    ):
+        ff.find_paths(foo=["a", "b"], on_missing="raise")
+
+    result = ff.find_paths(foo=["a", "b"], on_missing="ignore")
+
+    expected = {"path": {0: "a/*"}, "foo": {0: "a"}}
+    expected = pd.DataFrame.from_dict(expected).set_index("path")
+
+    pd.testing.assert_frame_equal(result.df, expected)
+
+
 def test_find_paths_none_key_ignored() -> None:
 
     ff = FileFinder("{folder}", "", test_paths=["a/"])
@@ -458,13 +481,13 @@ def test_find_paths_several(tmp_path, test_paths, find_kwargs) -> None:
     }
     expected = pd.DataFrame.from_dict(expected).set_index("path")
 
-    result = ff.find_paths(**find_kwargs)
+    result = ff.find_paths(**find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_paths(find_kwargs)
+    result = ff.find_paths(find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_paths({"a": "XXX", "b": "XXX"}, **find_kwargs)
+    result = ff.find_paths({"a": "XXX", "b": "XXX"}, **find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
 
@@ -488,13 +511,13 @@ def test_find_paths_one_of_several(tmp_path, test_paths, find_kwargs) -> None:
     }
     expected = pd.DataFrame.from_dict(expected).set_index("path")
 
-    result = ff.find_paths(**find_kwargs)
+    result = ff.find_paths(**find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_paths(find_kwargs)
+    result = ff.find_paths(find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_paths({"a": "XXX"}, **find_kwargs)
+    result = ff.find_paths({"a": "XXX"}, **find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
 
@@ -621,6 +644,29 @@ def test_find_file_simple(tmp_path, test_paths) -> None:
     pd.testing.assert_frame_equal(result.df, expected)
 
 
+def test_find_files_on_empty():
+
+    ff = FileFinder("{foo}", "{bar}", test_paths=["a/a"])
+
+    with pytest.warns(match="Explicitly searched keys/ key combinations not found"):
+        ff.find_files(foo=["a", "b"])
+
+    with pytest.warns(match="Explicitly searched keys/ key combinations not found"):
+        ff.find_files(foo=["a", "b"], on_missing="warn")
+
+    with pytest.raises(
+        ValueError, match="Explicitly searched keys/ key combinations not found"
+    ):
+        ff.find_files(foo=["a", "b"], on_missing="raise")
+
+    result = ff.find_files(foo=["a", "b"], on_missing="ignore")
+
+    expected = {"path": {0: "a/a"}, "foo": {0: "a"}, "bar": {0: "a"}}
+    expected = pd.DataFrame.from_dict(expected).set_index("path")
+
+    pd.testing.assert_frame_equal(result.df, expected)
+
+
 def test_find_file_none_key_ignored() -> None:
 
     ff = FileFinder("", "{file}", test_paths=["a"])
@@ -686,13 +732,13 @@ def test_find_files_several(tmp_path, test_paths, find_kwargs) -> None:
     }
     expected = pd.DataFrame.from_dict(expected).set_index("path")
 
-    result = ff.find_files(**find_kwargs)
+    result = ff.find_files(**find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_files(find_kwargs)
+    result = ff.find_files(find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_files({"a": "XXX", "b": "XXX"}, **find_kwargs)
+    result = ff.find_files({"a": "XXX", "b": "XXX"}, **find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
 
@@ -716,13 +762,13 @@ def test_find_files_one_of_several(tmp_path, test_paths, find_kwargs) -> None:
     }
     expected = pd.DataFrame.from_dict(expected).set_index("path")
 
-    result = ff.find_files(**find_kwargs)
+    result = ff.find_files(**find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_files(find_kwargs)
+    result = ff.find_files(find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
-    result = ff.find_files({"a": "XXX"}, **find_kwargs)
+    result = ff.find_files({"a": "XXX"}, **find_kwargs, on_missing="ignore")
     pd.testing.assert_frame_equal(result.df, expected)
 
 
