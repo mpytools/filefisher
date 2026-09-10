@@ -310,7 +310,15 @@ def test_create_name_kwargs_priority() -> None:
     assert result == "a/b/b_c"
 
 
-def test_find_path_none_found(tmp_path, test_paths) -> None:
+def test_find_paths_warn_superfluous_keys():
+    ff = FileFinder(path_pattern="{key}", file_pattern="{bar}")
+
+    # NOTE: baz currently not listed - but bar is!
+    with pytest.warns(match="superfluous keys passed: bar, foo"):
+        ff.find_paths(foo="a", bar="*", baz=None)
+
+
+def test_find_paths_none_found(tmp_path, test_paths) -> None:
 
     path_pattern = tmp_path / "{a}/foo/"
     file_pattern = "file_pattern"
@@ -500,7 +508,15 @@ def test_find_single_path(tmp_path, test_paths) -> None:
     pd.testing.assert_frame_equal(result.df, expected)
 
 
-def test_find_file_none_found(tmp_path, test_paths) -> None:
+def test_find_files_warn_superfluous_keys():
+    ff = FileFinder(path_pattern="{key}", file_pattern="{bar}")
+
+    # NOTE: bar & baz not listed
+    with pytest.warns(match="superfluous keys passed: foo"):
+        ff.find_files(foo="a", bar="*", baz=None)
+
+
+def test_find_files_none_found(tmp_path, test_paths) -> None:
 
     path_pattern = tmp_path / "{a}/foo/"
     file_pattern = "{file_pattern}"
