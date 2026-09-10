@@ -348,6 +348,23 @@ def test_find_paths_none_found(tmp_path, test_paths) -> None:
     assert_filecontainer_empty(result, columns="a")
 
 
+@pytest.mark.filterwarnings("ignore:superfluous keys passed")
+def test_find_paths_ensure_deduplicated():
+
+    ff = FileFinder("{model}", "{cat}", test_paths=["a/1", "b/2"])
+
+    expected = {"path": {0: "a/*", 1: "b/*"}, "model": {0: "a", 1: "b"}}
+    expected = pd.DataFrame.from_dict(expected).set_index("path")
+
+    # NOTE: intentionally wrong keyword
+    result = ff.find_paths(baz=["a", "b"])
+    pd.testing.assert_frame_equal(result.df, expected)
+
+    # NOTE: intentionally duplicated 'a'
+    result = ff.find_paths(model=["a", "a", "b"])
+    pd.testing.assert_frame_equal(result.df, expected)
+
+
 def test_find_paths_non_unique() -> None:
 
     # ensure find_paths works for duplicated folder names (made unique by the file name)
@@ -547,6 +564,27 @@ def test_find_files_none_found(tmp_path, test_paths) -> None:
 
     result = ff.find_files({"a": "XXX"}, on_empty="allow", a="XXX")
     assert_filecontainer_empty(result, columns=("a", "file_pattern"))
+
+
+@pytest.mark.filterwarnings("ignore:superfluous keys passed")
+def test_find_files_ensure_deduplicated():
+
+    ff = FileFinder("{model}", "{cat}", test_paths=["a/1", "b/2"])
+
+    expected = {
+        "path": {0: "a/1", 1: "b/2"},
+        "model": {0: "a", 1: "b"},
+        "cat": {0: "1", 1: "2"},
+    }
+    expected = pd.DataFrame.from_dict(expected).set_index("path")
+
+    # NOTE: intentionally wrong keyword
+    result = ff.find_files(baz=["a", "b"])
+    pd.testing.assert_frame_equal(result.df, expected)
+
+    # NOTE: intentionally duplicated 'a'
+    result = ff.find_files(model=["a", "a", "b"])
+    pd.testing.assert_frame_equal(result.df, expected)
 
 
 def test_find_files_non_unique() -> None:
