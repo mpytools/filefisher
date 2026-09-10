@@ -42,9 +42,9 @@ def _assert_valid_keys(keys) -> None:
             raise ValueError(f"'{key}' is not a valid placeholder")
 
 
-def _assert_unique(df) -> None:
+def _assert_unique(df: pd.DataFrame) -> None:
 
-    duplicates = df.duplicated()
+    duplicates = df.duplicated(keep=False)
 
     if duplicates.any():
         duplicated = df[duplicates].head()
@@ -93,13 +93,6 @@ class _FinderBase:
 
 
 class _Finder(_FinderBase):
-    def _create_condition_dict(self, **kwargs):
-
-        # add wildcard for all undefined keys
-        cond_dict = dict.fromkeys(self.keys, "*")
-        cond_dict.update(**kwargs)
-
-        return cond_dict
 
     def find(
         self,
@@ -161,8 +154,13 @@ class _Finder(_FinderBase):
         all_patterns: list[str] = list()
         for one_search_dict in product_dict(**keys):
 
-            cond_dict = self._create_condition_dict(**one_search_dict)
+            # add wildcard for all undefined keys
+            cond_dict = dict.fromkeys(self.keys, "*") | one_search_dict
             full_pattern = self.create_name(**cond_dict)
+
+            # avoid searching one pattern twice
+            if full_pattern in all_patterns:
+                continue
 
             paths = sorted(self._glob(full_pattern), key=natural_keys)
 
