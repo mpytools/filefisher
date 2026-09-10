@@ -137,6 +137,11 @@ class _Finder(_FinderBase):
         # ignore None values
         keys = {key: value for key, value in keys.items() if value is not None}
 
+        if superfluous := keys.keys() - set(self.keys):
+            superfluous = ", ".join(sorted(superfluous))
+            msg = f"superfluous keys passed: {superfluous}"
+            emit_user_level_warning(msg)
+
         if on_parse_error not in ("raise", "warn", "ignore"):
             raise ValueError(
                 f"Unknown value for 'on_parse_error': '{on_parse_error}'. Must be one of 'raise', 'warn' or 'ignore'."
