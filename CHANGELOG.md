@@ -4,6 +4,8 @@
 
 - Passing a non-existing key to `find` (e.g., `models` instead of `model`) now raises a warning
   ([#272](https://github.com/mpytools/filefisher/pull/272)).
+- Ensure search patterns are deduplicated in `find`, when passing a key twice (e.g., `foo=["a", "a"]`)
+  ([#273](https://github.com/mpytools/filefisher/pull/273)).
 - Importing the deprecated `filefinder` now raises an `ImportError`, use `import filefisher` instead
   ([#262](https://github.com/mpytools/filefisher/pull/262)).
 - Removed `combine_by_keys`, deprecated in v1.0.0 - use a `pd.MultiIndex` instead
