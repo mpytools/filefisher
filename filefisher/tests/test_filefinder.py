@@ -309,14 +309,13 @@ def test_create_name_kwargs_priority() -> None:
     result = ff.create_full_name(dict(a="XXX", b="b"), a="a", c="c")
     assert result == "a/b/b_c"
 
+
 def test_find_paths_warn_superfluous_keys():
     ff = FileFinder(path_pattern="{key}", file_pattern="{bar}")
 
     # NOTE: baz currently not listed - but bar is!
     with pytest.warns(match="superfluous keys passed: bar, foo"):
         ff.find_paths(foo="a", bar="*", baz=None)
-
-
 
 
 def test_find_paths_none_found(tmp_path, test_paths) -> None:
