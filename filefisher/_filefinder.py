@@ -171,11 +171,12 @@ class _Finder(_FinderBase):
         if len(all_paths) == 0:
             msg = "Found no files matching criteria. Tried the following pattern(s):"
             msg += "".join(f"\n- '{pattern}'" for pattern in all_patterns)
+            msg += "\nDisable this {kind} with `on_empty`."
 
             if on_empty == "raise":
-                raise ValueError(msg)
+                raise ValueError(msg.format(kind="error"))
             elif on_empty == "warn":
-                emit_user_level_warning(msg)
+                emit_user_level_warning(msg.format(kind="warning"))
 
         # NOTE: also creates the correct (empty) df if no paths are found
         df = self._parse_paths(all_paths, on_parse_error=on_parse_error)
@@ -241,12 +242,12 @@ class _Finder(_FinderBase):
                 if on_parse_error == "raise":
                     raise ValueError(
                         f"Could not parse '{path}' with the pattern '{self.pattern}' - are"
-                        " there contradictory values?"
+                        " there contradictory values? Disable this error with `on_parse_error`."
                     )
                 elif on_parse_error == "warn":
                     emit_user_level_warning(
                         f"Could not parse '{path}' with the pattern '{self.pattern}' - are"
-                        " there contradictory values?"
+                        " there contradictory values? Disable this warning with `on_parse_error`."
                     )
                 elif on_parse_error == "ignore":
                     pass
