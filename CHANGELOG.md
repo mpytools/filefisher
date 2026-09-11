@@ -4,6 +4,9 @@
 
 - Passing a non-existing key to `find` (e.g., `models` instead of `model`) now raises a warning
   ([#272](https://github.com/mpytools/filefisher/pull/272)).
+- Issue a warning when an explicitely passed `find` key is not found, e.g. when querying `foo=["a", "b"]`
+  but only `"a"` can be found. This behavior can be configured with `on_missing`
+  ([#276](https://github.com/mpytools/filefisher/pull/276)).
 - Ensure search patterns are deduplicated in `find`, when passing a key twice (e.g., `foo=["a", "a"]`)
   ([#273](https://github.com/mpytools/filefisher/pull/273)).
 - Importing the deprecated `filefinder` now raises an `ImportError`, use `import filefisher` instead

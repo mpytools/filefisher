@@ -28,11 +28,11 @@ file_pattern: '{file_pattern}'
 keys: {repr_keys}
 """
 
-ON_PARSE_ERROR_OPTIONS = Literal["raise", "warn", "ignore"]
-ON_EMPTY_OPTIONS = Literal["raise", "warn", "allow"]
+RAISE_WARN_IGNORE = Literal["raise", "warn", "ignore"]
+RAISE_WARN_ALLOW = Literal["raise", "warn", "allow"]
 
 
-_RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "on_empty"}
+_RESERVED_PLACEHOLDERS = {"keys", "on_parse_error", "on_empty", "on_missing"}
 
 
 def _assert_valid_keys(keys) -> None:
@@ -98,8 +98,9 @@ class _Finder(_FinderBase):
         self,
         keys=None,
         *,
-        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
-        on_empty: ON_EMPTY_OPTIONS = "raise",
+        on_parse_error: RAISE_WARN_IGNORE = "raise",
+        on_empty: RAISE_WARN_ALLOW = "raise",
+        on_missing: RAISE_WARN_IGNORE = "warn",
         **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
@@ -115,6 +116,10 @@ class _Finder(_FinderBase):
         on_empty : "raise" | "warn" | "allow", default: "raise"
             Behaviour when no files are found: "raise" (default) raises a ValueError,
             "warn" raises a warning. For "warn" and "allow" an empty FileContainer is returned.
+        on_missing :  "raise" | "warn" | "ignore", default: "warn"
+            Behaviour when no files are found for a subset of search keys, e.g., when
+            searching for `foo=["a", "b"]` and only `"a"` is found. "warn" (default)
+             raises a warning, "raise" raises a ValueError.
         **keys_kwargs : {key: indexer, ...}, optional
             The keyword arguments form of ``keys``. When the same key is passed in
             ``keys`` and ``keys_kwargs`` the latter takes priority.
@@ -152,6 +157,7 @@ class _Finder(_FinderBase):
 
         all_paths: list[str] = list()
         all_patterns: list[str] = list()
+        pattern_not_found: list[str] = list()
         for one_search_dict in product_dict(**keys):
 
             # add wildcard for all undefined keys
@@ -163,6 +169,9 @@ class _Finder(_FinderBase):
                 continue
 
             paths = sorted(self._glob(full_pattern), key=natural_keys)
+
+            if len(paths) == 0:
+                pattern_not_found.append(full_pattern)
 
             all_paths += paths
 
@@ -176,6 +185,15 @@ class _Finder(_FinderBase):
             if on_empty == "raise":
                 raise ValueError(msg.format(kind="error"))
             elif on_empty == "warn":
+                emit_user_level_warning(msg.format(kind="warning"))
+        elif pattern_not_found:
+            msg = "Explicitly searched keys/ key combinations not found for the following pattern(s):"
+            msg += "".join(f"\n- '{pattern}'" for pattern in pattern_not_found)
+            msg += "\nConfigure this {kind} with `on_missing`."
+
+            if on_missing == "raise":
+                raise ValueError(msg.format(kind="error"))
+            elif on_missing == "warn":
                 emit_user_level_warning(msg.format(kind="warning"))
 
         # NOTE: also creates the correct (empty) df if no paths are found
@@ -229,9 +247,7 @@ class _Finder(_FinderBase):
 
         return glob.glob(pattern)
 
-    def _parse_paths(
-        self, paths, on_parse_error: ON_PARSE_ERROR_OPTIONS
-    ) -> pd.DataFrame:
+    def _parse_paths(self, paths, on_parse_error: RAISE_WARN_IGNORE) -> pd.DataFrame:
 
         valid_paths: list[str] = list()
         out = list()
@@ -435,8 +451,9 @@ class FileFinder:
         self,
         keys=None,
         *,
-        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
-        on_empty: ON_EMPTY_OPTIONS = "raise",
+        on_parse_error: RAISE_WARN_IGNORE = "raise",
+        on_empty: RAISE_WARN_ALLOW = "raise",
+        on_missing: RAISE_WARN_IGNORE = "warn",
         **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file and path (folder) pattern
@@ -452,6 +469,10 @@ class FileFinder:
         on_empty : "raise" | "warn" | "allow", default: "raise"
             Behaviour when no files are found: "raise" (default) raises a ValueError,
             "warn" raises a warning. For "warn" and "allow" an empty FileContainer is returned.
+        on_missing :  "raise" | "warn" | "ignore", default: "warn"
+            Behaviour when no files are found for a subset of search keys, e.g., when
+            searching for `foo=["a", "b"]` and only `"a"` is found. "warn" (default)
+             raises a warning, "raise" raises a ValueError.
         **keys_kwargs : {key: indexer, ...}, optional
             The keyword arguments form of ``keys``. When the same key is passed in
             ``keys`` and ``keys_kwargs`` the latter takes priority.
@@ -496,6 +517,7 @@ class FileFinder:
             keys,
             on_parse_error=on_parse_error,
             on_empty=on_empty,
+            on_missing=on_missing,
             **keys_kwargs,
         )
 
@@ -503,8 +525,9 @@ class FileFinder:
         self,
         keys=None,
         *,
-        on_parse_error: ON_PARSE_ERROR_OPTIONS = "raise",
-        on_empty: ON_EMPTY_OPTIONS = "raise",
+        on_parse_error: RAISE_WARN_IGNORE = "raise",
+        on_empty: RAISE_WARN_ALLOW = "raise",
+        on_missing: RAISE_WARN_IGNORE = "warn",
         **keys_kwargs,
     ) -> "FileContainer":
         """find files in the file system using the file pattern
@@ -520,6 +543,10 @@ class FileFinder:
         on_empty : "raise" | "warn" | "allow", default: "raise"
             Behaviour when no files are found: "raise" (default) raises a ValueError,
             "warn" raises a warning. For "warn" and "allow" an empty FileContainer is returned.
+        on_missing :  "raise" | "warn" | "ignore", default: "warn"
+            Behaviour when no files are found for a subset of search keys, e.g., when
+            searching for `foo=["a", "b"]` and only `"a"` is found. "warn" (default)
+             raises a warning, "raise" raises a ValueError.
         **keys_kwargs : {key: indexer, ...}, optional
             The keyword arguments form of ``keys``. When the same key is passed in
             ``keys`` and ``keys_kwargs`` the latter takes priority.
@@ -572,6 +599,7 @@ class FileFinder:
             keys,
             on_parse_error=on_parse_error,
             on_empty=on_empty,
+            on_missing=on_missing,
             **keys_kwargs,
         )
 
