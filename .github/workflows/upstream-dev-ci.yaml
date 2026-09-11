@@ -48,7 +48,7 @@ jobs:
       - name: Install upstream dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install pytest pytest-cov
+          python -m pip install pytest pytest-cov pytest-reportlog
           python -m pip install python-dateutil six
           python -m pip install -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --pre --upgrade numpy pandas
           python -m pip install git+https://github.com/r1chardj0n3s/parse
