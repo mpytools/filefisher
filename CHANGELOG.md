@@ -1,6 +1,9 @@
 # Changelog
 
-## v1.4.0 - unreleased
+## v1.4.0 - 11.09.2026
+
+Version v1.4.0 improves the handling of superfluous, duplicated and not-found keys of the `find*`
+methods.
 
 - Passing a non-existing key to `find` (e.g., `models` instead of `model`) now raises a warning
   ([#272](https://github.com/mpytools/filefisher/pull/272)).
