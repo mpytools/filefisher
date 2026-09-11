@@ -1,0 +1,92 @@
+name: CI Upstream
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize, labeled]
+  schedule:
+    - cron: "0 0 * * *" # Daily “At 00:00” UTC
+    # TODO: switch to weekly once I know this works
+    # - cron: "0 17 * * 1" # “At 17:00 on Monday” UTC
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  upstream-dev:
+    name: upstream-dev
+    runs-on: ubuntu-latest
+    if: |
+        always()
+        && (
+            github.event_name == 'schedule'
+            || contains( github.event.pull_request.labels.*.name, 'run-upstream')
+        )
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.14"]
+    steps:
+
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags.
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install upstream dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install pytest pytest-cov pytest-reportlog
+          python -m pip install python-dateutil six
+          python -m pip install -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --pre --upgrade numpy pandas
+          python -m pip install git+https://github.com/r1chardj0n3s/parse
+          python -m pip install --no-deps -e .
+
+      - name: List dependencies
+        run: |
+          python -m pip list
+
+      - name: Import filefisher
+        run: |
+          python -c 'import filefisher'
+
+      - name: Test with pytest
+        if: success()
+        id: status
+        run: python -m pytest
+          --cov=filefisher
+          --cov-report=xml
+          --junitxml=test-results/${{ runner.os }}-${{ matrix.python-version }}.xml
+          --report-log output-${{ matrix.python-version }}-log.jsonl
+
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v7
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+            flags: unittests
+            env_vars: RUNNER_OS,PYTHON_VERSION
+            name: codecov-umbrella
+            fail_ci_if_error: false
+
+      - name: Generate and publish the report
+        if: |
+          failure()
+          && steps.status.outcome == 'failure'
+          && github.event_name == 'schedule'
+          && github.repository_owner == 'regionmask'
+        uses: xarray-contrib/issue-from-pytest-log@v1
+        with:
+          log-path: output-${{ matrix.python-version }}-log.jsonl
