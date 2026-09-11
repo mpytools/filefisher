@@ -4,7 +4,7 @@
 
 - Passing a non-existing key to `find` (e.g., `models` instead of `model`) now raises a warning
   ([#272](https://github.com/mpytools/filefisher/pull/272)).
-- Issue a warning when an explicitely passed `find` key is not found, e.g. when querying `foo=["a", "b"]`
+- Issue a warning when an explicitly passed `find` key is not found, e.g. when querying `foo=["a", "b"]`
   but only `"a"` can be found. This behavior can be configured with `on_missing`
   ([#276](https://github.com/mpytools/filefisher/pull/276)).
 - Ensure search patterns are deduplicated in `find`, when passing a key twice (e.g., `foo=["a", "a"]`)
@@ -90,7 +90,7 @@ Version 1.0.0 renames the package to filefisher (from filefinder) and makes the 
   ([#110](https://github.com/mpytools/filefisher/pull/110))
 - The `FileFinder.find_files` arguments `on_parse_error` and `_allow_empty` can no
   longer be passed by position ([#99](https://github.com/mpytools/filefisher/pull/99)).
-- Renamed the `_allow_empty` keword of `FileFinder.find*` to `on_empty`
+- Renamed the `_allow_empty` keyword of `FileFinder.find*` to `on_empty`
    ([#112](https://github.com/mpytools/filefisher/pull/112)).
 - `FileFinder` now raises an error if an invalid `"{placeholder}"` is used
    ([#99](https://github.com/mpytools/filefisher/pull/99)).

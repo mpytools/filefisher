@@ -116,7 +116,7 @@ class _Finder(_FinderBase):
         on_empty : "raise" | "warn" | "allow", default: "raise"
             Behaviour when no files are found: "raise" (default) raises a ValueError,
             "warn" raises a warning. For "warn" and "allow" an empty FileContainer is returned.
-        on_missing :  "raise" | "warn" | "ignore", default: "warn"
+        on_missing : "raise" | "warn" | "ignore", default: "warn"
             Behaviour when no files are found for a subset of search keys, e.g., when
             searching for `foo=["a", "b"]` and only `"a"` is found. "warn" (default)
              raises a warning, "raise" raises a ValueError.
@@ -469,7 +469,7 @@ class FileFinder:
         on_empty : "raise" | "warn" | "allow", default: "raise"
             Behaviour when no files are found: "raise" (default) raises a ValueError,
             "warn" raises a warning. For "warn" and "allow" an empty FileContainer is returned.
-        on_missing :  "raise" | "warn" | "ignore", default: "warn"
+        on_missing : "raise" | "warn" | "ignore", default: "warn"
             Behaviour when no files are found for a subset of search keys, e.g., when
             searching for `foo=["a", "b"]` and only `"a"` is found. "warn" (default)
              raises a warning, "raise" raises a ValueError.
@@ -543,7 +543,7 @@ class FileFinder:
         on_empty : "raise" | "warn" | "allow", default: "raise"
             Behaviour when no files are found: "raise" (default) raises a ValueError,
             "warn" raises a warning. For "warn" and "allow" an empty FileContainer is returned.
-        on_missing :  "raise" | "warn" | "ignore", default: "warn"
+        on_missing : "raise" | "warn" | "ignore", default: "warn"
             Behaviour when no files are found for a subset of search keys, e.g., when
             searching for `foo=["a", "b"]` and only `"a"` is found. "warn" (default)
              raises a warning, "raise" raises a ValueError.
